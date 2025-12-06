@@ -2,12 +2,20 @@ package com.tukangencrypt.stegasaurus.presentation.screen.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.tukangencrypt.stegasaurus.domain.use_case.EmbedUseCase
-import com.tukangencrypt.stegasaurus.domain.use_case.ExtractUseCase
+import com.tukangencrypt.stegasaurus.domain.model.KeyPair
+import com.tukangencrypt.stegasaurus.domain.use_case.EncryptAndEmbedUseCase
+import com.tukangencrypt.stegasaurus.domain.use_case.ExtractAndDecryptUseCase
+import com.tukangencrypt.stegasaurus.domain.use_case.GenerateKeyPairUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+
+// ===== States =====
+sealed class KeyState {
+    object Idle : KeyState()
+    data class Generated(val keyPair: KeyPair) : KeyState()
+}
 
 sealed class EmbedState {
     object Idle : EmbedState()
@@ -18,10 +26,7 @@ sealed class EmbedState {
             if (other !is Success) return false
             return bytes.contentEquals(other.bytes)
         }
-
-        override fun hashCode(): Int {
-            return bytes.contentHashCode()
-        }
+        override fun hashCode(): Int = bytes.contentHashCode()
     }
     data class Error(val message: String) : EmbedState()
 }
@@ -33,33 +38,68 @@ sealed class ExtractState {
     data class Error(val message: String) : ExtractState()
 }
 
+// ===== ViewModel =====
 class HomeViewModel(
-    private val embedUseCase: EmbedUseCase,
-    private val extractUseCase: ExtractUseCase
+    private val generateKeyPairUseCase: GenerateKeyPairUseCase,
+    private val encryptAndEmbedUseCase: EncryptAndEmbedUseCase,
+    private val extractAndDecryptUseCase: ExtractAndDecryptUseCase
 ) : ViewModel() {
 
-    // Embed State
+    // Key Management States
+    private val _keyState = MutableStateFlow<KeyState>(KeyState.Idle)
+    val keyState: StateFlow<KeyState> = _keyState.asStateFlow()
+
+    private val _myKeyPair = MutableStateFlow<KeyPair?>(null)
+    val myKeyPair: StateFlow<KeyPair?> = _myKeyPair.asStateFlow()
+
+    private val _recipientPublicKey = MutableStateFlow("")
+    val recipientPublicKey: StateFlow<String> = _recipientPublicKey.asStateFlow()
+
+    // Encrypt & Embed States
     private val _embedState = MutableStateFlow<EmbedState>(EmbedState.Idle)
     val embedState: StateFlow<EmbedState> = _embedState.asStateFlow()
 
-    // Extract State
+    // Extract & Decrypt States
     private val _extractState = MutableStateFlow<ExtractState>(ExtractState.Idle)
     val extractState: StateFlow<ExtractState> = _extractState.asStateFlow()
 
-    // Loading indicator untuk UI
+    // Loading indicator
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
 
     /**
-     * Embed message ke dalam image
-     * @param imageBytes bytes dari image file
-     * @param message text message yang ingin disembunyikan
+     * Generate key pair untuk user
      */
-    fun embedImage(
+    fun generateMyKeyPair() {
+        viewModelScope.launch {
+            try {
+                _isLoading.value = true
+                val keyPair = generateKeyPairUseCase()
+                _myKeyPair.value = keyPair
+                _keyState.value = KeyState.Generated(keyPair)
+            } catch (e: Exception) {
+                _keyState.value = KeyState.Idle
+            } finally {
+                _isLoading.value = false
+            }
+        }
+    }
+
+    /**
+     * Set recipient public key
+     */
+    fun setRecipientPublicKey(publicKey: String) {
+        _recipientPublicKey.value = publicKey
+    }
+
+    /**
+     * Encrypt message dan embed ke image
+     */
+    fun encryptAndEmbed(
         imageBytes: ByteArray,
         message: String
     ) {
-        // Validate inputs
+        // Validasi
         if (imageBytes.isEmpty()) {
             _embedState.value = EmbedState.Error("Image cannot be empty")
             return
@@ -70,9 +110,15 @@ class HomeViewModel(
             return
         }
 
-        // Check message length (max 65KB)
-        if (message.length > 65536) {
-            _embedState.value = EmbedState.Error("Message too long (max 65KB)")
+        val myKeyPair = _myKeyPair.value
+        if (myKeyPair == null) {
+            _embedState.value = EmbedState.Error("Generate your key pair first")
+            return
+        }
+
+        val recipientKey = _recipientPublicKey.value
+        if (recipientKey.isBlank()) {
+            _embedState.value = EmbedState.Error("Enter recipient public key")
             return
         }
 
@@ -81,16 +127,18 @@ class HomeViewModel(
                 _embedState.value = EmbedState.Loading
                 _isLoading.value = true
 
-                val result = embedUseCase(
+                val result = encryptAndEmbedUseCase(
                     imageBytes = imageBytes,
-                    message = message.encodeToByteArray()
+                    plainMessage = message,
+                    recipientPublicKey = recipientKey,
+                    senderPrivateKey = myKeyPair.privateKey
                 )
 
                 _embedState.value = EmbedState.Success(result)
             } catch (e: IllegalArgumentException) {
                 _embedState.value = EmbedState.Error(e.message ?: "Invalid input")
             } catch (e: Exception) {
-                _embedState.value = EmbedState.Error("Failed to embed message: ${e.message}")
+                _embedState.value = EmbedState.Error("Failed: ${e.message}")
             } finally {
                 _isLoading.value = false
             }
@@ -98,27 +146,32 @@ class HomeViewModel(
     }
 
     /**
-     * Extract message dari image
-     * @param imageBytes bytes dari image file
-     * @param msgSize size dari message yang disembunyikan (dalam bytes)
+     * Extract dan decrypt message dari image
      */
-    fun extractMessage(
+    fun extractAndDecrypt(
         imageBytes: ByteArray,
-        msgSize: Int
+        messageSizeBytes: Int,
+        senderPublicKey: String
     ) {
-        // Validate inputs
+        // Validasi
         if (imageBytes.isEmpty()) {
             _extractState.value = ExtractState.Error("Image cannot be empty")
             return
         }
 
-        if (msgSize <= 0) {
+        if (messageSizeBytes <= 0) {
             _extractState.value = ExtractState.Error("Message size must be positive")
             return
         }
 
-        if (msgSize > 65536) {
-            _extractState.value = ExtractState.Error("Message size too large (max 65KB)")
+        val myKeyPair = _myKeyPair.value
+        if (myKeyPair == null) {
+            _extractState.value = ExtractState.Error("Generate your key pair first")
+            return
+        }
+
+        if (senderPublicKey.isBlank()) {
+            _extractState.value = ExtractState.Error("Enter sender public key")
             return
         }
 
@@ -127,42 +180,28 @@ class HomeViewModel(
                 _extractState.value = ExtractState.Loading
                 _isLoading.value = true
 
-                val result = extractUseCase(
+                val result = extractAndDecryptUseCase(
                     imageBytes = imageBytes,
-                    msgSize = msgSize
-                ).decodeToString()
+                    messageSizeBytes = messageSizeBytes,
+                    senderPublicKey = senderPublicKey,
+                    recipientPrivateKey = myKeyPair.privateKey
+                )
 
                 _extractState.value = ExtractState.Success(result)
             } catch (e: IllegalArgumentException) {
                 _extractState.value = ExtractState.Error(e.message ?: "Invalid input")
-            } catch (_: CharacterCodingException) {
-                _extractState.value = ExtractState.Error("Extracted data is not valid UTF-8 text")
             } catch (e: Exception) {
-                _extractState.value = ExtractState.Error("Failed to extract message: ${e.message}")
+                _extractState.value = ExtractState.Error("Failed: ${e.message}")
             } finally {
                 _isLoading.value = false
             }
         }
     }
 
-    /**
-     * Reset state untuk clear error/success messages
-     */
-    fun resetStates() {
-        _embedState.value = EmbedState.Idle
-        _extractState.value = ExtractState.Idle
-    }
-
-    /**
-     * Clear embed result setelah ditampilkan
-     */
     fun clearEmbedResult() {
         _embedState.value = EmbedState.Idle
     }
 
-    /**
-     * Clear extract result setelah ditampilkan
-     */
     fun clearExtractResult() {
         _extractState.value = ExtractState.Idle
     }

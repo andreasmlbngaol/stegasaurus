@@ -3,17 +3,24 @@ package com.tukangencrypt.stegasaurus.data.repository
 import com.tukangencrypt.stegasaurus.domain.model.KeyPair
 import com.tukangencrypt.stegasaurus.domain.repository.CryptoRepository
 
-expect class CryptoRepositoryImpl(): CryptoRepository {
-    override suspend fun generateKeyPair(): KeyPair
-    override suspend fun encrypt(
+actual class CryptoRepositoryImpl : CryptoRepository {
+    actual override suspend fun generateKeyPair(): KeyPair {
+        TODO("Not yet implemented")
+    }
+
+    actual override suspend fun encrypt(
         plainMessage: String,
         recipientPublicKey: String,
         senderPrivateKey: String
-    ): ByteArray
+    ): ByteArray {
+        TODO("Not yet implemented")
+    }
 
-    override suspend fun decrypt(
+    actual override suspend fun decrypt(
         encryptedData: ByteArray,
         senderPublicKey: String,
         recipientPrivateKey: String
-    ): String
+    ): String {
+        TODO("Not yet implemented")
+    }
 }

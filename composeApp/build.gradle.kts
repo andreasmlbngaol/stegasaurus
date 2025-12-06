@@ -47,8 +47,9 @@ kotlin {
     
     sourceSets {
         androidMain.dependencies {
-            implementation(compose.preview)
+            implementation(libs.compose.components.ui.tooling.preview)
             implementation(libs.androidx.activity.compose)
+            implementation(libs.bouncycastle)
         }
         commonMain.dependencies {
             implementation(libs.compose.runtime)
@@ -91,6 +92,7 @@ kotlin {
         jvmMain.dependencies {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutinesSwing)
+            implementation(libs.bouncycastle)
         }
     }
 }
@@ -109,6 +111,10 @@ android {
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            excludes += listOf(
+                "META-INF/versions/9/OSGI-INF/MANIFEST.MF"
+            )
+
         }
     }
     buildTypes {

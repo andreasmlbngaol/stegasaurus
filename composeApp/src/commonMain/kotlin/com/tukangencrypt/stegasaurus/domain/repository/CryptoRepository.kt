@@ -10,11 +10,11 @@ interface CryptoRepository {
     suspend fun generateKeyPair(): KeyPair
 
     /**
-     * Encrypt message menggunakan X25519 + HKDF + ChaCha20-Poly1305
+     * Encrypt message menggunakan X25519 + HKDF-SHA256 + ChaCha20-Poly1305
      * @param plainMessage message yang ingin diencrypt
      * @param recipientPublicKey public key recipient (hex encoded)
      * @param senderPrivateKey private key sender (hex encoded)
-     * @return encrypted data dengan nonce dan auth tag
+     * @return encrypted data dengan format: nonce (12 bytes) + ciphertext + authTag
      */
     suspend fun encrypt(
         plainMessage: String,
@@ -24,7 +24,7 @@ interface CryptoRepository {
 
     /**
      * Decrypt message
-     * @param encryptedData encrypted bytes
+     * @param encryptedData encrypted bytes (nonce + ciphertext + authTag)
      * @param senderPublicKey public key sender (hex encoded)
      * @param recipientPrivateKey private key recipient (hex encoded)
      * @return plain message

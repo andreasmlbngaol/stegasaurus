@@ -1,19 +1,27 @@
 package com.tukangencrypt.stegasaurus.presentation.screen.home
 
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
@@ -23,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import com.tukangencrypt.stegasaurus.domain.model.KeyPair
 import com.tukangencrypt.stegasaurus.presentation.component.TopBar
 import com.tukangencrypt.stegasaurus.presentation.component.TopBarType
 import io.github.vinceglb.filekit.FileKit
@@ -44,14 +53,21 @@ fun HomeScreen(
     var selectedImageName by remember { mutableStateOf<String?>(null) }
     var selectedImageBytes by remember { mutableStateOf<ByteArray?>(null) }
     var messageText by remember { mutableStateOf("") }
-    var msgSizeForExtract by remember { mutableStateOf("") }
+    var recipientPublicKey by remember { mutableStateOf("") }
+    var senderPublicKey by remember { mutableStateOf("") }
+    var messageSizeForExtract by remember { mutableStateOf("") }
     var activeTab by remember { mutableStateOf(0) }
 
+    val snackbarHostState = remember { SnackbarHostState() }
+
+    val keyState by viewModel.keyState.collectAsState()
     val embedState by viewModel.embedState.collectAsState()
     val extractState by viewModel.extractState.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
+    val myKeyPair by viewModel.myKeyPair.collectAsState()
 
-    // FileKit launcher untuk pick image
+    val coroutineScope = rememberCoroutineScope()
+
     suspend fun pickImage() {
         val imageFile = FileKit.openFilePicker(type = FileKitType.Image)
         if (imageFile != null) {
@@ -60,8 +76,6 @@ fun HomeScreen(
         }
     }
 
-    val coroutineScope = rememberCoroutineScope()
-
     Scaffold(
         topBar = {
             TopBar(
@@ -69,27 +83,41 @@ fun HomeScreen(
                 type = TopBarType.Centered,
                 containerColor = Color.Transparent
             )
-        }
+        },
+        snackbarHost = { SnackbarHost(snackbarHostState) }
     ) { paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
                 .verticalScroll(rememberScrollState())
-                .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .padding(16.dp)
         ) {
+            // Key Management Section
+            KeyManagementSection(
+                myKeyPair = myKeyPair,
+                isLoading = isLoading,
+                onGenerateKey = { viewModel.generateMyKeyPair() },
+                recipientPublicKey = recipientPublicKey,
+                onRecipientKeyChange = {
+                    recipientPublicKey = it
+                    viewModel.setRecipientPublicKey(it)
+                }
+            )
+
+            Spacer(modifier = Modifier.height(24.dp))
+
             // Tabs
             TabRow(selectedTabIndex = activeTab) {
                 Tab(
                     selected = activeTab == 0,
                     onClick = { activeTab = 0 },
-                    text = { Text("Embed") }
+                    text = { Text("Encrypt & Embed") }
                 )
                 Tab(
                     selected = activeTab == 1,
                     onClick = { activeTab = 1 },
-                    text = { Text("Extract") }
+                    text = { Text("Extract & Decrypt") }
                 )
             }
 
@@ -138,30 +166,33 @@ fun HomeScreen(
 
             // Tab Content
             when (activeTab) {
-                0 -> EmbedTabContent(
+                0 -> EncryptEmbedTabContent(
                     messageText = messageText,
                     onMessageChange = { messageText = it },
                     selectedImageBytes = selectedImageBytes,
                     embedState = embedState,
                     isLoading = isLoading,
-                    onEmbed = {
+                    onEncryptEmbed = {
                         if (selectedImageBytes != null) {
-                            viewModel.embedImage(selectedImageBytes!!, messageText)
+                            viewModel.encryptAndEmbed(selectedImageBytes!!, messageText)
                         }
                     },
-                    onClearResult = { viewModel.clearEmbedResult() }
+                    onClearResult = { viewModel.clearEmbedResult() },
+                    coroutineScope = coroutineScope
                 )
 
-                1 -> ExtractTabContent(
-                    msgSize = msgSizeForExtract,
-                    onMsgSizeChange = { msgSizeForExtract = it },
+                1 -> ExtractDecryptTabContent(
+                    senderPublicKey = senderPublicKey,
+                    onSenderKeyChange = { senderPublicKey = it },
+                    messageSizeForExtract = messageSizeForExtract,
+                    onMessageSizeChange = { messageSizeForExtract = it },
                     selectedImageBytes = selectedImageBytes,
                     extractState = extractState,
                     isLoading = isLoading,
-                    onExtract = {
-                        val size = msgSizeForExtract.toIntOrNull()
+                    onExtractDecrypt = {
+                        val size = messageSizeForExtract.toIntOrNull()
                         if (selectedImageBytes != null && size != null && size > 0) {
-                            viewModel.extractMessage(selectedImageBytes!!, size)
+                            viewModel.extractAndDecrypt(selectedImageBytes!!, size, senderPublicKey)
                         }
                     },
                     onClearResult = { viewModel.clearExtractResult() }
@@ -172,22 +203,131 @@ fun HomeScreen(
 }
 
 @Composable
-fun Card(modifier: Modifier, colors: Color, content: @Composable () -> Unit) {
-    TODO("Not yet implemented")
+private fun KeyManagementSection(
+    myKeyPair: KeyPair?,
+    isLoading: Boolean,
+    onGenerateKey: () -> Unit,
+    recipientPublicKey: String,
+    onRecipientKeyChange: (String) -> Unit
+) {
+    val coroutineScope = rememberCoroutineScope()
+    val snackbarHostState = remember { SnackbarHostState() }
+
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceVariant
+        )
+    ) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            Text(
+                "Key Management",
+                style = MaterialTheme.typography.titleMedium
+            )
+            Spacer(modifier = Modifier.height(12.dp))
+
+            // Generate Key Button
+            Button(
+                onClick = onGenerateKey,
+                modifier = Modifier.fillMaxWidth(),
+                enabled = !isLoading
+            ) {
+                if (isLoading) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(20.dp),
+                        color = Color.White,
+                        strokeWidth = 2.dp
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                }
+                Text("Generate My Key Pair")
+            }
+
+            // My Public Key Display
+            if (myKeyPair != null) {
+                Spacer(modifier = Modifier.height(16.dp))
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.surface
+                    )
+                ) {
+                    Column(modifier = Modifier.padding(12.dp)) {
+                        Text(
+                            "My Public Key:",
+                            style = MaterialTheme.typography.labelSmall
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            SelectionContainer(
+                                modifier = Modifier.weight(1f)
+                            ) {
+                                Text(
+                                    myKeyPair.publicKey,
+                                    style = MaterialTheme.typography.bodySmall,
+                                    modifier = Modifier
+                                        .weight(1f)
+                                        .padding(8.dp)
+                                )
+                            }
+
+                            val platformContext = androidx.compose.ui.platform.LocalClipboardManager.current
+
+                            IconButton(
+                                onClick = {
+                                    coroutineScope.launch {
+                                        // Copy to clipboard
+                                        platformContext.setText(
+                                            androidx.compose.ui.text.AnnotatedString(myKeyPair.publicKey)
+                                        )
+                                        snackbarHostState.showSnackbar(
+                                            "Public key copied to clipboard",
+                                            duration = SnackbarDuration.Short
+                                        )
+                                    }
+                                }
+                            ) {
+                                Icon(
+                                    Icons.Default.ContentCopy,
+                                    contentDescription = "Copy"
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Recipient Public Key Input
+            Spacer(modifier = Modifier.height(16.dp))
+            OutlinedTextField(
+                value = recipientPublicKey,
+                onValueChange = onRecipientKeyChange,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .heightIn(min = 80.dp),
+                label = { Text("Recipient Public Key") },
+                placeholder = { Text("Paste recipient's public key here...") },
+                maxLines = 3,
+                enabled = !isLoading
+            )
+        }
+    }
 }
 
 @Composable
-private fun EmbedTabContent(
+private fun EncryptEmbedTabContent(
     messageText: String,
     onMessageChange: (String) -> Unit,
     selectedImageBytes: ByteArray?,
     embedState: EmbedState,
     isLoading: Boolean,
-    onEmbed: () -> Unit,
-    onClearResult: () -> Unit
+    onEncryptEmbed: () -> Unit,
+    onClearResult: () -> Unit,
+    coroutineScope: kotlinx.coroutines.CoroutineScope
 ) {
-    val scope = rememberCoroutineScope()
-
     Column(modifier = Modifier.fillMaxWidth()) {
         // Message Input
         Card(
@@ -198,7 +338,7 @@ private fun EmbedTabContent(
         ) {
             Column(modifier = Modifier.padding(16.dp)) {
                 Text(
-                    "Enter Message",
+                    "Message to Hide",
                     style = MaterialTheme.typography.titleMedium
                 )
                 Spacer(modifier = Modifier.height(12.dp))
@@ -213,14 +353,21 @@ private fun EmbedTabContent(
                     maxLines = 5,
                     enabled = !isLoading
                 )
+
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    "Length: ${messageText.length} characters",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
             }
         }
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Embed Button
+        // Encrypt & Embed Button
         Button(
-            onClick = onEmbed,
+            onClick = onEncryptEmbed,
             modifier = Modifier.fillMaxWidth(),
             enabled = selectedImageBytes != null && messageText.isNotBlank() && !isLoading
         ) {
@@ -232,7 +379,7 @@ private fun EmbedTabContent(
                 )
                 Spacer(modifier = Modifier.width(8.dp))
             }
-            Text("Embed Message")
+            Text("Encrypt & Embed")
         }
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -240,16 +387,14 @@ private fun EmbedTabContent(
         // Result
         when (embedState) {
             is EmbedState.Success -> {
-                EmbedSuccessCard(
-                    fileName = "stega_image.png",
+                EncryptEmbedSuccessCard(
+                    bytes = embedState.bytes,
                     onClear = onClearResult,
                     onDownload = { bytes ->
-                        // Download logic with FileKit
-                        scope.launch {
-                            FileKit.openFileSaver(bytes, "stega_image", "png")
+                        coroutineScope.launch {
+                            FileKit.openFileSaver(bytes, "stega_encrypted", "png")
                         }
-                    },
-                    bytes = embedState.bytes
+                    }
                 )
             }
 
@@ -266,16 +411,47 @@ private fun EmbedTabContent(
 }
 
 @Composable
-private fun ExtractTabContent(
-    msgSize: String,
-    onMsgSizeChange: (String) -> Unit,
+private fun ExtractDecryptTabContent(
+    senderPublicKey: String,
+    onSenderKeyChange: (String) -> Unit,
+    messageSizeForExtract: String,
+    onMessageSizeChange: (String) -> Unit,
     selectedImageBytes: ByteArray?,
     extractState: ExtractState,
     isLoading: Boolean,
-    onExtract: () -> Unit,
+    onExtractDecrypt: () -> Unit,
     onClearResult: () -> Unit
 ) {
     Column(modifier = Modifier.fillMaxWidth()) {
+        // Sender Public Key Input
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.surfaceVariant
+            )
+        ) {
+            Column(modifier = Modifier.padding(16.dp)) {
+                Text(
+                    "Sender's Public Key",
+                    style = MaterialTheme.typography.titleMedium
+                )
+                Spacer(modifier = Modifier.height(12.dp))
+
+                OutlinedTextField(
+                    value = senderPublicKey,
+                    onValueChange = onSenderKeyChange,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .heightIn(min = 80.dp),
+                    placeholder = { Text("Paste sender's public key here...") },
+                    maxLines = 3,
+                    enabled = !isLoading
+                )
+            }
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
         // Message Size Input
         Card(
             modifier = Modifier.fillMaxWidth(),
@@ -285,23 +461,23 @@ private fun ExtractTabContent(
         ) {
             Column(modifier = Modifier.padding(16.dp)) {
                 Text(
-                    "Message Size",
+                    "Encrypted Message Size",
                     style = MaterialTheme.typography.titleMedium
                 )
                 Spacer(modifier = Modifier.height(12.dp))
 
                 OutlinedTextField(
-                    value = msgSize,
-                    onValueChange = onMsgSizeChange,
+                    value = messageSizeForExtract,
+                    onValueChange = onMessageSizeChange,
                     modifier = Modifier.fillMaxWidth(),
-                    placeholder = { Text("Enter message size in bytes...") },
+                    placeholder = { Text("Enter size in bytes...") },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     enabled = !isLoading
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    "Enter the exact size of the hidden message",
+                    "This is the encrypted message size (original + encryption overhead)",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -310,11 +486,13 @@ private fun ExtractTabContent(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Extract Button
+        // Extract & Decrypt Button
         Button(
-            onClick = onExtract,
+            onClick = onExtractDecrypt,
             modifier = Modifier.fillMaxWidth(),
-            enabled = selectedImageBytes != null && msgSize.toIntOrNull() != null && !isLoading
+            enabled = selectedImageBytes != null &&
+                    messageSizeForExtract.toIntOrNull() != null &&
+                    !isLoading
         ) {
             if (isLoading) {
                 CircularProgressIndicator(
@@ -324,7 +502,7 @@ private fun ExtractTabContent(
                 )
                 Spacer(modifier = Modifier.width(8.dp))
             }
-            Text("Extract Message")
+            Text("Extract & Decrypt")
         }
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -332,7 +510,7 @@ private fun ExtractTabContent(
         // Result
         when (extractState) {
             is ExtractState.Success -> {
-                ExtractSuccessCard(
+                ExtractDecryptSuccessCard(
                     message = extractState.message,
                     onClear = onClearResult
                 )
@@ -351,8 +529,7 @@ private fun ExtractTabContent(
 }
 
 @Composable
-private fun EmbedSuccessCard(
-    fileName: String,
+private fun EncryptEmbedSuccessCard(
     bytes: ByteArray,
     onClear: () -> Unit,
     onDownload: (ByteArray) -> Unit
@@ -368,13 +545,13 @@ private fun EmbedSuccessCard(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                "✓ Message embedded successfully!",
+                "✓ Message Encrypted & Embedded!",
                 style = MaterialTheme.typography.titleMedium,
                 color = Color.Green
             )
             Spacer(modifier = Modifier.height(12.dp))
             Text(
-                "File size: ${bytes.size} Bytes",
+                "File size: ${bytes.size} bytes",
                 style = MaterialTheme.typography.bodySmall
             )
             Spacer(modifier = Modifier.height(16.dp))
@@ -401,7 +578,7 @@ private fun EmbedSuccessCard(
 }
 
 @Composable
-private fun ExtractSuccessCard(
+private fun ExtractDecryptSuccessCard(
     message: String,
     onClear: () -> Unit
 ) {
@@ -413,7 +590,7 @@ private fun ExtractSuccessCard(
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(
-                "✓ Message extracted successfully!",
+                "✓ Message Decrypted!",
                 style = MaterialTheme.typography.titleMedium,
                 color = Color.Green
             )

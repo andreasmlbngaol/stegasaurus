@@ -21,6 +21,7 @@ koinBom = "4.2.0-alpha3"
 material3 = "1.10.0-alpha05"
 materialIcons = "1.7.3"
 crypto = "0.5.0"
+bouncycastle = "1.83"
 korim = "4.0.10"
 filekit = "0.12.0"
 
@@ -62,6 +63,8 @@ koin-navigation3 = { module = "io.insert-koin:koin-compose-navigation3" }
 crypto-core = { module = "dev.whyoleg.cryptography:cryptography-core", version.ref = "crypto" }
 crypto-provider = { module = "dev.whyoleg.cryptography:cryptography-provider-optimal", version.ref = "crypto" }
 crypto-random = { module = "dev.whyoleg.cryptography:cryptography-random", version.ref = "crypto" }
+
+bouncycastle = { module = "org.bouncycastle:bcprov-jdk18on", version.ref = "bouncycastle" }
 
 korim = { module = "com.soywiz.korlibs.korim:korim", version.ref = "korim" }
 filekit-core = { module = "io.github.vinceglb:filekit-core", version.ref = "filekit" }
