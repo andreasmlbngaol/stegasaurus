@@ -45,26 +45,33 @@ actual class CryptoRepositoryImpl : CryptoRepository {
             agreement.init(senderPrivKeyParams)
             agreement.calculateAgreement(recipientPubKeyParams, sharedSecret, 0)
 
+            // 🔍 DEBUG: Print shared secret
+            println("ENCRYPT - Shared Secret: ${sharedSecret.toHex()}")
+
             // Derive encryption key and nonce using HKDF-SHA256
             val hkdf = HKDFBytesGenerator(SHA256Digest())
             hkdf.init(
                 org.bouncycastle.crypto.params.HKDFParameters(
                     sharedSecret,
-                    null, // no salt
+                    null,
                     "stegasaurus-encryption".encodeToByteArray()
                 )
             )
 
-            val derivedKey = ByteArray(32 + 12) // 32 bytes key + 12 bytes nonce
+            val derivedKey = ByteArray(32 + 12)
             hkdf.generateBytes(derivedKey, 0, derivedKey.size)
 
             val encryptionKey = derivedKey.copyOfRange(0, 32)
             val nonce = derivedKey.copyOfRange(32, 44)
 
+            // 🔍 DEBUG: Print key dan nonce
+            println("ENCRYPT - Key: ${encryptionKey.toHex()}")
+            println("ENCRYPT - Nonce: ${nonce.toHex()}")
+
             // Encrypt using ChaCha20-Poly1305
             val cipher = ChaCha20Poly1305()
             cipher.init(
-                true, // encrypt
+                true,
                 ParametersWithIV(
                     KeyParameter(encryptionKey),
                     nonce
@@ -76,8 +83,12 @@ actual class CryptoRepositoryImpl : CryptoRepository {
             val len = cipher.processBytes(plainBytes, 0, plainBytes.size, ciphertext, 0)
             cipher.doFinal(ciphertext, len)
 
-            // Return: nonce (12 bytes) + ciphertext (dengan auth tag 16 bytes)
-            return nonce + ciphertext
+            // 🔍 DEBUG: Print ciphertext
+            println("ENCRYPT - Plaintext length: ${plainBytes.size}")
+            println("ENCRYPT - Ciphertext length: ${ciphertext.size}")
+            println("ENCRYPT - Ciphertext: ${ciphertext.toHex()}")
+
+            return ciphertext
         } catch (e: Exception) {
             throw IllegalStateException("Encryption failed: ${e.message}", e)
         }
@@ -90,13 +101,13 @@ actual class CryptoRepositoryImpl : CryptoRepository {
     ): String {
         try {
             // Validate size
-            if (encryptedData.size < 28) { // 12 bytes nonce + 16 bytes auth tag minimum
+            if (encryptedData.size < 16) {
                 throw IllegalArgumentException("Encrypted data too short")
             }
 
-            // Extract nonce and ciphertext
-            val nonce = encryptedData.copyOfRange(0, 12)
-            val ciphertext = encryptedData.copyOfRange(12, encryptedData.size)
+            // 🔍 DEBUG: Print input
+            println("DECRYPT - Input length: ${encryptedData.size}")
+            println("DECRYPT - Input data: ${encryptedData.toHex()}")
 
             // Parse keys
             val recipientPrivKeyParams = X25519PrivateKeyParameters(recipientPrivateKey.fromHex())
@@ -108,12 +119,15 @@ actual class CryptoRepositoryImpl : CryptoRepository {
             agreement.init(recipientPrivKeyParams)
             agreement.calculateAgreement(senderPubKeyParams, sharedSecret, 0)
 
-            // Derive encryption key using HKDF-SHA256 (same as encrypt)
+            // 🔍 DEBUG: Print shared secret
+            println("DECRYPT - Shared Secret: ${sharedSecret.toHex()}")
+
+            // Derive encryption key using HKDF-SHA256
             val hkdf = HKDFBytesGenerator(SHA256Digest())
             hkdf.init(
                 org.bouncycastle.crypto.params.HKDFParameters(
                     sharedSecret,
-                    null, // no salt
+                    null,
                     "stegasaurus-encryption".encodeToByteArray()
                 )
             )
@@ -122,19 +136,24 @@ actual class CryptoRepositoryImpl : CryptoRepository {
             hkdf.generateBytes(derivedKey, 0, derivedKey.size)
 
             val encryptionKey = derivedKey.copyOfRange(0, 32)
+            val nonce = derivedKey.copyOfRange(32, 44)
+
+            // 🔍 DEBUG: Print key dan nonce
+            println("DECRYPT - Key: ${encryptionKey.toHex()}")
+            println("DECRYPT - Nonce: ${nonce.toHex()}")
 
             // Decrypt using ChaCha20-Poly1305
             val cipher = ChaCha20Poly1305()
             cipher.init(
-                false, // decrypt
+                false,
                 ParametersWithIV(
                     KeyParameter(encryptionKey),
                     nonce
                 )
             )
 
-            val plainBytes = ByteArray(cipher.getOutputSize(ciphertext.size))
-            val len = cipher.processBytes(ciphertext, 0, ciphertext.size, plainBytes, 0)
+            val plainBytes = ByteArray(cipher.getOutputSize(encryptedData.size))
+            val len = cipher.processBytes(encryptedData, 0, encryptedData.size, plainBytes, 0)
             cipher.doFinal(plainBytes, len)
 
             return plainBytes.decodeToString()

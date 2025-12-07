@@ -14,7 +14,7 @@ fun main() {
     application {
         Window(
             onCloseRequest = ::exitApplication,
-            title = "Rabin",
+            title = "Stegasaurus",
             state = rememberWindowState(
                 placement = WindowPlacement.Maximized
             ),
