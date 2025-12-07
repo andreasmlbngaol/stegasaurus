@@ -3,7 +3,8 @@ package com.tukangencrypt.stegasaurus.data.repository
 import com.tukangencrypt.stegasaurus.domain.model.KeyPair
 import com.tukangencrypt.stegasaurus.domain.repository.CryptoRepository
 
-actual class CryptoRepositoryImpl : CryptoRepository {
+actual class CryptoRepositoryImpl actual constructor() :
+    CryptoRepository {
     actual override suspend fun generateKeyPair(): KeyPair {
         TODO("Not yet implemented")
     }

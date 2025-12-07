@@ -34,7 +34,7 @@ kotlin {
     
     jvm()
     
-    js {
+    js(IR) {
         browser()
         binaries.executable()
     }
@@ -94,6 +94,18 @@ kotlin {
             implementation(libs.kotlinx.coroutinesSwing)
             implementation(libs.bouncycastle)
         }
+
+        val jsMain by getting {
+            dependencies {
+                dependencies {
+                    implementation(npm("@stablelib/chacha20poly1305", "2.0.1"))
+                    implementation(npm("@stablelib/x25519", "2.0.1"))
+                    implementation(npm("@stablelib/hkdf", "2.0.1"))
+                    implementation(npm("@stablelib/sha256", "2.0.1"))
+                    implementation(npm("@stablelib/hex", "2.0.1"))
+                }
+            }
+        }
     }
 }
 
@@ -129,7 +141,7 @@ android {
 }
 
 dependencies {
-    debugImplementation(compose.uiTooling)
+    debugImplementation(libs.ui.tooling)
 }
 
 compose.desktop {

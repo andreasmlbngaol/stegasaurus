@@ -1,7 +1,11 @@
+// jvmMain/kotlin/com/tukangencrypt/stegasaurus/data/repository/CryptoRepositoryImpl.kt
+
 package com.tukangencrypt.stegasaurus.data.repository
 
 import com.tukangencrypt.stegasaurus.domain.model.KeyPair
 import com.tukangencrypt.stegasaurus.domain.repository.CryptoRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.bouncycastle.crypto.agreement.X25519Agreement
 import org.bouncycastle.crypto.digests.SHA256Digest
 import org.bouncycastle.crypto.generators.HKDFBytesGenerator
@@ -15,12 +19,12 @@ import java.security.SecureRandom
 actual class CryptoRepositoryImpl : CryptoRepository {
     private val secureRandom = SecureRandom()
 
-    actual override suspend fun generateKeyPair(): KeyPair {
+    actual override suspend fun generateKeyPair(): KeyPair = withContext(Dispatchers.Default) {
         try {
             val privKeyParams = X25519PrivateKeyParameters(secureRandom)
             val pubKeyParams = privKeyParams.generatePublicKey()
 
-            return KeyPair(
+            return@withContext KeyPair(
                 publicKey = pubKeyParams.encoded.toHex(),
                 privateKey = privKeyParams.encoded.toHex()
             )
@@ -33,7 +37,7 @@ actual class CryptoRepositoryImpl : CryptoRepository {
         plainMessage: String,
         recipientPublicKey: String,
         senderPrivateKey: String
-    ): ByteArray {
+    ): ByteArray = withContext(Dispatchers.Default) {
         try {
             val senderPriv = parsePrivateKey(senderPrivateKey)
             val recipientPub = parsePublicKey(recipientPublicKey)
@@ -41,12 +45,10 @@ actual class CryptoRepositoryImpl : CryptoRepository {
                 .also { println("ENCRYPT - Shared Secret: ${it.toHex()}") }
             val (encryptionKey, nonce) = deriveKeyAndNonce(sharedSecret)
                 .also {
-                    // 🔍 DEBUG: Print key dan nonce
                     println("ENCRYPT - Key: ${it.first.toHex()}")
                     println("ENCRYPT - Nonce: ${it.second.toHex()}")
                 }
 
-            // Encrypt using ChaCha20-Poly1305
             val cipher = ChaCha20Poly1305()
             cipher.init(
                 true,
@@ -62,9 +64,10 @@ actual class CryptoRepositoryImpl : CryptoRepository {
             val len = cipher.processBytes(plainBytes, 0, plainBytes.size, ciphertext, 0)
             cipher.doFinal(ciphertext, len)
 
-            println("ENCRYPT - Ciphertext (${ciphertext.size}): ${ciphertext.toHex()}")
+            println("ENCRYPT - Ciphertext length: ${ciphertext.size}")
+            println("ENCRYPT - Ciphertext hex: ${ciphertext.toHex()}")
 
-            return ciphertext
+            return@withContext ciphertext
         } catch (e: Exception) {
             throw IllegalStateException("Encryption failed: ${e.message}", e)
         }
@@ -74,14 +77,12 @@ actual class CryptoRepositoryImpl : CryptoRepository {
         encryptedData: ByteArray,
         senderPublicKey: String,
         recipientPrivateKey: String
-    ): String {
+    ): String = withContext(Dispatchers.Default) {
         try {
-            // Validate size
             if (encryptedData.size < 16) {
                 throw IllegalArgumentException("Encrypted data too short")
             }
 
-            // 🔍 DEBUG: Print input
             println("DECRYPT - Ciphertext (${encryptedData.size}): ${encryptedData.toHex()}")
 
             val recipientPriv = parsePrivateKey(recipientPrivateKey)
@@ -103,21 +104,18 @@ actual class CryptoRepositoryImpl : CryptoRepository {
 
             println("DECRYPT - Plaintext (${plainBytes.size}): ${plainBytes.toHex()}")
 
-            return plainBytes.decodeToString()
+            return@withContext plainBytes.decodeToString()
         } catch (e: Exception) {
             throw IllegalStateException("Decryption failed: ${e.message}", e)
         }
     }
 
-    /** Parse private key hex → X25519PrivateKeyParameters */
     private fun parsePrivateKey(hex: String) =
         X25519PrivateKeyParameters(hex.fromHex())
 
-    /** Parse public key hex → X25519PublicKeyParameters */
     private fun parsePublicKey(hex: String) =
         X25519PublicKeyParameters(hex.fromHex())
 
-    /** Generate shared secret using X25519 */
     private fun generateSharedSecret(
         privateKey: X25519PrivateKeyParameters,
         publicKey: X25519PublicKeyParameters
@@ -129,7 +127,6 @@ actual class CryptoRepositoryImpl : CryptoRepository {
         return secret
     }
 
-    /** Derive encryption key + nonce using HKDF-SHA256 */
     private fun deriveKeyAndNonce(sharedSecret: ByteArray): Pair<ByteArray, ByteArray> {
         val hkdf = HKDFBytesGenerator(SHA256Digest())
         hkdf.init(
