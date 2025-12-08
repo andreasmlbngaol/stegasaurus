@@ -9,6 +9,9 @@ plugins {
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.composeHotReload)
     alias(libs.plugins.jetbrains.kotlin.serialization)
+//    alias(libs.plugins.sqldelight)
+//    alias(libs.plugins.ksp)
+//    alias(libs.plugins.androidx.room)
 }
 
 kotlin {
@@ -50,6 +53,8 @@ kotlin {
             implementation(libs.compose.components.ui.tooling.preview)
             implementation(libs.androidx.activity.compose)
             implementation(libs.bouncycastle)
+            implementation(libs.sqldelight.android.driver)
+//            implementation(libs.androidx.room.sqlite.wrapper)
         }
         commonMain.dependencies {
             implementation(libs.compose.runtime)
@@ -85,16 +90,34 @@ kotlin {
             implementation(libs.filekit.core)
             implementation(libs.filekit.dialogs.compose)
             implementation(libs.filekit.coil)
+
+            implementation(libs.sqldelight.runtime)
+            implementation(libs.sqldelight.coroutines.extensions)
+            implementation(libs.kotlinx.coroutines.core)
+
+//            api(libs.datastore)
+//            api(libs.datastore.preferences)
+
+//            implementation(libs.androidx.room.runtime)
+//            implementation(libs.androidx.sqlite.bundled)
+            implementation(libs.kotlinx.coroutines.core)
+
+            implementation(libs.multiplatform.settings)
+            implementation(libs.multiplatform.settings.no.arg)
+            implementation(libs.multiplatform.settings.serialization)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
         }
         jvmMain.dependencies {
             implementation(compose.desktop.currentOs)
-            implementation(libs.kotlinx.coroutinesSwing)
+            implementation(libs.kotlinx.coroutines.swing)
             implementation(libs.bouncycastle)
+            implementation(libs.sqldelight.sqlite.driver)
         }
-
+        nativeMain.dependencies {
+            implementation(libs.sqldelight.native.driver)
+        }
         val jsMain by getting {
             dependencies {
                 dependencies {
@@ -142,6 +165,13 @@ android {
 
 dependencies {
     debugImplementation(libs.ui.tooling)
+//    add("kspAndroid", libs.androidx.room.compiler)
+//    add("kspJvm", libs.androidx.room.compiler)
+//    add("kspJs", libs.androidx.room.compiler)
+//    add("kspWasmJs", libs.androidx.room.compiler)
+//    add("kspIosArm64", libs.androidx.room.compiler)
+//    add("kspIosSimulatorArm64", libs.androidx.room.compiler)
+//    add("kspIosX64", libs.androidx.room.compiler)
 }
 
 compose.desktop {
@@ -155,3 +185,15 @@ compose.desktop {
         }
     }
 }
+
+//room {
+//    schemaDirectory("$projectDir/schemas")
+//}
+
+//sqldelight {
+//    databases {
+//        create("StegasaurusDatabase") {
+//            packageName = "com.tukangencrypt.stegasaurus.data.db"
+//        }
+//    }
+//}

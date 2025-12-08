@@ -18,8 +18,6 @@ fun main() {
             state = rememberWindowState(
                 placement = WindowPlacement.Maximized
             ),
-//            undecorated = true
-//            resizable = false
         ) {
             App()
         }

@@ -1,6 +1,7 @@
 package com.tukangencrypt.stegasaurus.domain.use_case
 
 import com.tukangencrypt.stegasaurus.domain.repository.CryptoRepository
+import com.tukangencrypt.stegasaurus.domain.repository.KeyRepository
 
 /**
  * Encrypt message, kemudian embed ke image
@@ -8,20 +9,20 @@ import com.tukangencrypt.stegasaurus.domain.repository.CryptoRepository
  */
 class EncryptAndEmbedUseCase(
     private val cryptoRepository: CryptoRepository,
+    private val keyRepository: KeyRepository,
     private val embedUseCase: EmbedUseCase
 ) {
     suspend operator fun invoke(
         imageBytes: ByteArray,
         plainMessage: String,
-        recipientPublicKey: String,
-        senderPrivateKey: String
+        recipientPublicKey: String
     ): ByteArray {
         try {
             // Step 1: Encrypt message
             val encryptedMessage = cryptoRepository.encrypt(
                 plainMessage = plainMessage,
                 recipientPublicKey = recipientPublicKey,
-                senderPrivateKey = senderPrivateKey
+                senderPrivateKey = keyRepository.getPrivateKey() ?: throw IllegalStateException("Private key not found")
             )
 
             // Step 2: Embed encrypted message ke image

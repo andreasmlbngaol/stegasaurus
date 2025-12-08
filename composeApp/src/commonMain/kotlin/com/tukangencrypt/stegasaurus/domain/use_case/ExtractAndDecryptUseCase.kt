@@ -1,6 +1,7 @@
 package com.tukangencrypt.stegasaurus.domain.use_case
 
 import com.tukangencrypt.stegasaurus.domain.repository.CryptoRepository
+import com.tukangencrypt.stegasaurus.domain.repository.KeyRepository
 
 /**
  * Extract encrypted message dari image, kemudian decrypt
@@ -8,13 +9,13 @@ import com.tukangencrypt.stegasaurus.domain.repository.CryptoRepository
  */
 class ExtractAndDecryptUseCase(
     private val cryptoRepository: CryptoRepository,
+    private val keyRepository: KeyRepository,
     private val extractUseCase: ExtractUseCase
 ) {
     suspend operator fun invoke(
         imageBytes: ByteArray,
         messageSizeBytes: Int,
-        senderPublicKey: String,
-        recipientPrivateKey: String
+        senderPublicKey: String
     ): String {
         try {
             // Step 1: Extract encrypted message dari image
@@ -27,7 +28,7 @@ class ExtractAndDecryptUseCase(
             val decryptedMessage = cryptoRepository.decrypt(
                 encryptedData = encryptedMessage,
                 senderPublicKey = senderPublicKey,
-                recipientPrivateKey = recipientPrivateKey
+                recipientPrivateKey = keyRepository.getPrivateKey() ?: throw IllegalStateException("Private key not found")
             )
 
             return decryptedMessage

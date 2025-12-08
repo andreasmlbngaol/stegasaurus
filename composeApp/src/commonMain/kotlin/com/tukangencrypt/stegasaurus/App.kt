@@ -21,12 +21,12 @@ import org.koin.core.annotation.KoinExperimentalAPI
 @Composable
 @Preview
 fun App() {
-    StegasaurusTheme {
+    StegasaurusTheme(false) {
         val entryProvider = koinEntryProvider()
         val navigator = koinInject<Navigator>()
 
         Surface(
-            color = MaterialTheme.colorScheme.background,
+            color = MaterialTheme.colorScheme.primaryContainer,
             modifier = Modifier.fillMaxSize()
         ) {
             NavDisplay(

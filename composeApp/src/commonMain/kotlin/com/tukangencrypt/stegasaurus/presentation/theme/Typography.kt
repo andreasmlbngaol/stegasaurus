@@ -12,23 +12,18 @@ import stegasaurus.composeapp.generated.resources.*
 private val GoogleSansCode
     @Composable
     get() = FontFamily(
-        Font(Res.font.GoogleSansCode_Regular, FontWeight.Normal),
-        Font(Res.font.GoogleSansCode_Italic, FontWeight.Normal, FontStyle.Italic),
+        Font(Res.font.Arimo_Regular, FontWeight.Normal),
+        Font(Res.font.Arimo_Italic, FontWeight.Normal, FontStyle.Italic),
 
-        Font(Res.font.GoogleSansCode_Light, FontWeight.Light),
-        Font(Res.font.GoogleSansCode_LightItalic, FontWeight.Light, FontStyle.Italic),
+        Font(Res.font.Arimo_Medium, FontWeight.Medium),
+        Font(Res.font.Arimo_MediumItalic, FontWeight.Medium, FontStyle.Italic),
 
-        Font(Res.font.GoogleSansCode_Medium, FontWeight.Medium),
-        Font(Res.font.GoogleSansCode_MediumItalic, FontWeight.Medium, FontStyle.Italic),
+        Font(Res.font.Arimo_SemiBold, FontWeight.SemiBold),
+        Font(Res.font.Arimo_SemiBoldItalic, FontWeight.SemiBold, FontStyle.Italic),
 
-        Font(Res.font.GoogleSansCode_SemiBold, FontWeight.SemiBold),
-        Font(Res.font.GoogleSansCode_SemiBoldItalic, FontWeight.SemiBold, FontStyle.Italic),
+        Font(Res.font.Arimo_Bold, FontWeight.Bold),
+        Font(Res.font.Arimo_BoldItalic, FontWeight.Bold, FontStyle.Italic),
 
-        Font(Res.font.GoogleSansCode_Bold, FontWeight.Bold),
-        Font(Res.font.GoogleSansCode_BoldItalic, FontWeight.Bold, FontStyle.Italic),
-
-        Font(Res.font.GoogleSansCode_ExtraBold, FontWeight.ExtraBold),
-        Font(Res.font.GoogleSansCode_ExtraBoldItalic, FontWeight.ExtraBold, FontStyle.Italic),
     )
 
 

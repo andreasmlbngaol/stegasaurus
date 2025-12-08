@@ -1,7 +1,9 @@
 package com.tukangencrypt.stegasaurus.data.repository
 
+import com.tukangencrypt.stegasaurus.domain.repository.KeyRepository
 import com.tukangencrypt.stegasaurus.domain.model.KeyPair
 import com.tukangencrypt.stegasaurus.domain.repository.CryptoRepository
+import kotlinx.coroutines.coroutineScope
 import org.khronos.webgl.Uint8Array
 
 // ───── JS module imports ─────
@@ -25,7 +27,7 @@ external val sha256: dynamic
 @JsNonModule
 external val chacha20: dynamic
 
-actual class CryptoRepositoryImpl : CryptoRepository {
+actual class CryptoRepositoryImpl actual constructor(private val keyRepository: KeyRepository) : CryptoRepository {
 
     private fun ByteArray.toUint8Array(): dynamic = Uint8Array(toTypedArray())
     private fun toByteArray(dynamicArr: dynamic): ByteArray {
@@ -36,10 +38,15 @@ actual class CryptoRepositoryImpl : CryptoRepository {
     /** Generate X25519 key pair */
     actual override suspend fun generateKeyPair(): KeyPair {
         val keyPair = X25519.generateKeyPair()
-        return KeyPair(
-            publicKey = hex.encode(keyPair.publicKey),
-            privateKey = hex.encode(keyPair.secretKey)
-        )
+
+        val publicKey = hex.encode(keyPair.publicKey)
+        val privateKey = hex.encode(keyPair.secretKey)
+
+        coroutineScope {
+            keyRepository.saveKeyPair(KeyPair(publicKey, privateKey))
+        }
+
+        return KeyPair(publicKey, privateKey)
     }
 
     /** Derive shared secret using X25519 */

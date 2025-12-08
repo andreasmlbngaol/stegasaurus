@@ -1,7 +1,9 @@
 package com.tukangencrypt.stegasaurus.data.repository
 
+import com.tukangencrypt.stegasaurus.domain.repository.KeyRepository
 import com.tukangencrypt.stegasaurus.domain.model.KeyPair
 import com.tukangencrypt.stegasaurus.domain.repository.CryptoRepository
+import kotlinx.coroutines.coroutineScope
 import org.bouncycastle.crypto.agreement.X25519Agreement
 import org.bouncycastle.crypto.digests.SHA256Digest
 import org.bouncycastle.crypto.generators.HKDFBytesGenerator
@@ -12,7 +14,7 @@ import org.bouncycastle.crypto.params.X25519PrivateKeyParameters
 import org.bouncycastle.crypto.params.X25519PublicKeyParameters
 import java.security.SecureRandom
 
-actual class CryptoRepositoryImpl : CryptoRepository {
+actual class CryptoRepositoryImpl actual constructor(private val keyRepository: KeyRepository) : CryptoRepository {
     private val secureRandom = SecureRandom()
 
     actual override suspend fun generateKeyPair(): KeyPair {
@@ -20,9 +22,21 @@ actual class CryptoRepositoryImpl : CryptoRepository {
             val privKeyParams = X25519PrivateKeyParameters(secureRandom)
             val pubKeyParams = privKeyParams.generatePublicKey()
 
+            val publicKey = pubKeyParams.encoded.toHex()
+            val privateKey = privKeyParams.encoded.toHex()
+
+            coroutineScope {
+                keyRepository.saveKeyPair(
+                    KeyPair(
+                        publicKey = publicKey,
+                        privateKey = privateKey
+                    )
+                )
+            }
+
             return KeyPair(
-                publicKey = pubKeyParams.encoded.toHex(),
-                privateKey = privKeyParams.encoded.toHex()
+                publicKey = publicKey,
+                privateKey = privateKey
             )
         } catch (e: Exception) {
             throw IllegalStateException("Failed to generate key pair: ${e.message}", e)

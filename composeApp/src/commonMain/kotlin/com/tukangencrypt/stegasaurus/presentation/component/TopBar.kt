@@ -26,7 +26,7 @@ import org.koin.compose.koinInject
 @Composable
 @Preview
 fun TopBar(
-    title: String,
+    title: String = "",
     scrollBehavior: TopAppBarScrollBehavior? = null,
     type: TopBarType = TopBarType.Default,
     navigator: Navigator = koinInject(),
