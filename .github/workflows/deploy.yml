@@ -56,6 +56,10 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
+      - name: Make gradlew executable
+        if: runner.os == 'Linux'
+        run: chmod +x ./gradlew
+
       - name: Build DEB (Linux)
         if: runner.os == 'Linux'
         run: ./gradlew packageDeb
@@ -68,13 +72,13 @@ jobs:
 
       - name: Build MSI (Windows)
         if: runner.os == 'Windows'
-        run: ./gradlew packageMsi
+        run: .\gradlew packageMsi
 
       - name: Rename MSI
         if: runner.os == 'Windows'
         run: |
           $VERSION = $env:GITHUB_REF -replace 'refs/tags/', ''
-          Get-ChildItem "composeApp/build/compose/binaries/main/msi/*.msi" | Rename-Item -NewName "stegasaurus-${VERSION}.msi"
+          Get-ChildItem "composeApp\build\compose\binaries\main\msi\*.msi" | Rename-Item -NewName "stegasaurus-${VERSION}.msi"
 
       - name: Upload artifacts to Release
         uses: softprops/action-gh-release@v2
