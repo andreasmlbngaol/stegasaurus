@@ -14,6 +14,7 @@ import com.tukangencrypt.stegasaurus.domain.use_case.ExtractUseCase
 import com.tukangencrypt.stegasaurus.domain.use_case.GenerateKeyPairUseCase
 import com.tukangencrypt.stegasaurus.domain.use_case.KeyPairUseCase
 import com.tukangencrypt.stegasaurus.presentation.navigation.navigationModule
+import com.tukangencrypt.stegasaurus.presentation.screen.decrypt.DecryptViewModel
 import com.tukangencrypt.stegasaurus.presentation.screen.encrypt.EncryptViewModel
 import com.tukangencrypt.stegasaurus.presentation.screen.home.HomeViewModel
 import org.koin.core.KoinApplication
@@ -38,6 +39,7 @@ val mainModules = module {
 
     factory { HomeViewModel(get()) }
     factory { EncryptViewModel(get(), get()) }
+    factory { DecryptViewModel(get(), get()) }
 }
 
 fun initKoin(

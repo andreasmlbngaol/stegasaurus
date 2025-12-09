@@ -18,11 +18,14 @@ class ExtractAndDecryptUseCase(
         senderPublicKey: String
     ): String {
         try {
+            println("Extract and decrypt started")
             // Step 1: Extract encrypted message dari image
             val encryptedMessage = extractUseCase(
                 imageBytes = imageBytes,
                 msgSize = messageSizeBytes
             )
+
+            println("Extracted encrypted message size: ${encryptedMessage.size}")
 
             // Step 2: Decrypt message
             val decryptedMessage = cryptoRepository.decrypt(
@@ -30,6 +33,8 @@ class ExtractAndDecryptUseCase(
                 senderPublicKey = senderPublicKey,
                 recipientPrivateKey = keyRepository.getPrivateKey() ?: throw IllegalStateException("Private key not found")
             )
+
+            println("Decrypted message: $decryptedMessage")
 
             return decryptedMessage
         } catch (e: Exception) {

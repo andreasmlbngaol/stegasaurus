@@ -259,14 +259,14 @@ fun NonAndroidStegasaurusTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
-//    val colorScheme = when {
-//        darkTheme -> darkScheme
-//        else -> lightScheme
-//    }
     val colorScheme = when {
-        darkTheme -> darkColorScheme()
-        else -> lightColorScheme()
+        darkTheme -> darkScheme
+        else -> lightScheme
     }
+//    val colorScheme = when {
+//        darkTheme -> darkColorScheme()
+//        else -> lightColorScheme()
+//    }
 
     MaterialTheme(
         colorScheme = colorScheme,

@@ -10,11 +10,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.tukangencrypt.stegasaurus.presentation.component.Center
+import com.tukangencrypt.stegasaurus.presentation.component.IconCard
+import com.tukangencrypt.stegasaurus.utils.formatFileSize
 
 @Composable
 fun EncryptedImageDownloadCard(
     enabled: Boolean,
     isLoading: Boolean = false,
+    hasEncryptedImage: Boolean = false,
+    encryptedImageSize: Long? = null,
     onDownload: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -25,38 +29,78 @@ fun EncryptedImageDownloadCard(
         ),
         shape = MaterialTheme.shapes.extraLarge
     ) {
-        AnimatedContent(isLoading) { loading ->
-            if(!loading) {
+        AnimatedContent(hasEncryptedImage) { encrypted ->
+            if(!encrypted) {
                 Column(
                     modifier = Modifier
+                        .fillMaxWidth()
                         .padding(24.dp),
-                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                    verticalArrangement = Arrangement.spacedBy(16.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text(
-                        text = "Encrypted Image",
-                        style = MaterialTheme.typography.titleMedium
+                    IconCard(
+                        imageVector = Icons.Outlined.Download,
+                        containerColor = MaterialTheme.colorScheme.primaryContainer,
+                        contentColor = MaterialTheme.colorScheme.primary,
+                        enabled = false
                     )
 
-                    Button(
-                        enabled = enabled,
-                        onClick = onDownload,
-                        modifier = Modifier.fillMaxWidth(),
-                        shape = MaterialTheme.shapes.large
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(4.dp)
                     ) {
-                        Row(
-                            horizontalArrangement = Arrangement.spacedBy(8.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Icon(
-                                imageVector = Icons.Outlined.Download,
-                                contentDescription = "Download"
-                            )
-                            Text("Download Image")
-                        }
+                        Text(
+                            text = "Encrypted Image",
+                            style = MaterialTheme.typography.titleMedium
+                        )
+                        Text(
+                            text = "Encrypted image akan muncul disini",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
                     }
                 }
             } else {
-                Center(modifier = Modifier.padding(24.dp)) { CircularProgressIndicator() }
+                if(!isLoading) {
+                    Column(
+                        modifier = Modifier
+                            .padding(24.dp),
+                        verticalArrangement = Arrangement.spacedBy(16.dp)
+                    ) {
+                        Text(
+                            text = "Encrypted Image",
+                            style = MaterialTheme.typography.titleMedium
+                        )
+
+                        Button(
+                            enabled = enabled,
+                            onClick = onDownload,
+                            modifier = Modifier.fillMaxWidth(),
+                            shape = MaterialTheme.shapes.large
+                        ) {
+                            Row(
+                                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Outlined.Download,
+                                    contentDescription = "Download"
+                                )
+                                Text("Download Image")
+                            }
+                        }
+
+                        if (encryptedImageSize != null) {
+                            Text(
+                                text = formatFileSize(encryptedImageSize),
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                    }
+                } else {
+                    Center(modifier = Modifier.padding(24.dp)) { CircularProgressIndicator() }
+                }
             }
         }
     }

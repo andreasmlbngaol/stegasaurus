@@ -1,4 +1,4 @@
-package com.tukangencrypt.stegasaurus.presentation.screen.encrypt.component
+package com.tukangencrypt.stegasaurus.presentation.screen.decrypt.component
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.border
@@ -22,7 +22,7 @@ import com.tukangencrypt.stegasaurus.presentation.component.IconCard
 import com.tukangencrypt.stegasaurus.utils.formatFileSize
 
 @Composable
-fun UploadImageCard(
+fun UploadEncryptedImageCard(
     selectedImageName: String?,
     selectedImageSize: Long?,
     onUploadImage: () -> Unit,
@@ -42,7 +42,7 @@ fun UploadImageCard(
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             Text(
-                text = "Select Image for Steganography",
+                text = "Select Encrypted Image",
                 style = MaterialTheme.typography.titleMedium
             )
 
@@ -56,7 +56,7 @@ fun UploadImageCard(
                     )
                     .clip(MaterialTheme.shapes.extraLarge)
                     .clickable {
-                        if(!enabled) return@clickable
+                        if (!enabled) return@clickable
                         onUploadImage()
                     }
                     .padding(16.dp),
@@ -65,8 +65,8 @@ fun UploadImageCard(
             ) {
                 IconCard(
                     imageVector = Icons.Outlined.Upload,
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    contentColor = MaterialTheme.colorScheme.primary,
+                    containerColor = MaterialTheme.colorScheme.tertiaryContainer,
+                    contentColor = MaterialTheme.colorScheme.tertiary,
                     onClick = onUploadImage,
                     enabled = true
                 )
@@ -77,7 +77,7 @@ fun UploadImageCard(
                     ) {
                         if (imageName == null) {
                             Text(
-                                text = "Upload Image",
+                                text = "Upload Encrypted Image",
                                 style = MaterialTheme.typography.titleMedium
                             )
                             Text(
@@ -107,4 +107,3 @@ fun UploadImageCard(
         }
     }
 }
-

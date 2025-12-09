@@ -1,4 +1,4 @@
-package com.tukangencrypt.stegasaurus.presentation.screen.encrypt.component
+package com.tukangencrypt.stegasaurus.presentation.screen.decrypt.component
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -15,10 +15,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun EncryptMessageCard(
-    message: String,
-    onMessageChange: (String) -> Unit,
-    modifier: Modifier = Modifier
+fun MessageSizeCard(
+    messageSize: String,
+    onMessageSizeChange: (String) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Card(
         modifier = modifier,
@@ -33,33 +33,26 @@ fun EncryptMessageCard(
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             Text(
-                text = "Message",
+                text = "Message Length (Character)",
                 style = MaterialTheme.typography.titleMedium
             )
 
-            val containerColor = MaterialTheme.colorScheme.primaryContainer
+            val containerColor = MaterialTheme.colorScheme.tertiaryContainer
             val contentColor = MaterialTheme.colorScheme.onBackground
 
             OutlinedTextField(
-                value = message,
-                onValueChange = onMessageChange,
-                placeholder = { Text("Write the message you want to encrypt...") },
+                value = messageSize,
+                onValueChange = onMessageSizeChange,
+                placeholder = { Text("Enter message size in bytes...") },
                 colors = OutlinedTextFieldDefaults.colors().copy(
                     unfocusedContainerColor = containerColor,
                     focusedContainerColor = containerColor,
                     unfocusedTextColor = contentColor,
                     focusedTextColor = contentColor
                 ),
-                minLines = 5,
-                maxLines = 5,
+                singleLine = true,
                 shape = MaterialTheme.shapes.large,
                 modifier = Modifier.fillMaxWidth()
-            )
-
-            Text(
-                text = "${message.length} characters",
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
     }

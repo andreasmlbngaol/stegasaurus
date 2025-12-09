@@ -49,13 +49,33 @@ actual class CryptoRepositoryImpl actual constructor(private val keyRepository: 
         return KeyPair(publicKey, privateKey)
     }
 
+    private fun clampSecretKey(key: Uint8Array) {
+        val dyn = key.asDynamic()
+
+        dyn[0] = (dyn[0] as Int and 248)
+        dyn[31] = ((dyn[31] as Int and 127) or 64)
+    }
+
     /** Derive shared secret using X25519 */
-    private fun sharedSecret(senderPrivHex: String, recipientPubHex: String): ByteArray {
+    private fun sharedSecret(myPrivHex: String, otherPubHex: String): ByteArray {
         println("Derive shared secret using X25519")
-        val senderPriv = hex.decode(senderPrivHex) as Uint8Array
-        val recipientPub = hex.decode(recipientPubHex) as Uint8Array
-        val shared = X25519.sharedKey(senderPriv, recipientPub)
-        console.log("shared:", shared)
+//        val senderPriv = hex.decode(senderPrivHex) as Uint8Array
+//        val recipientPub = hex.decode(recipientPubHex) as Uint8Array
+        val myPriv = hex.decode(myPrivHex)
+        clampSecretKey(myPriv)
+
+
+        val otherPub = hex.decode(otherPubHex)
+
+        val otherPubHex = hex.encode(otherPub)
+        console.log("otherPubHex:", otherPubHex)
+
+        console.log("senderPriv:", myPriv)
+        console.log("recipientPub:", otherPub)
+
+        val shared = X25519.sharedKey(myPriv, otherPub)
+        val sharedHex = hex.encode(shared)
+        console.log("sharedHex:", sharedHex)
         return dynamicToByteArray(shared)
     }
 

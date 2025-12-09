@@ -1,11 +1,29 @@
-package com.tukangencrypt.stegasaurus.presentation.screen.encrypt
+package com.tukangencrypt.stegasaurus.presentation.screen.decrypt
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Lock
-import androidx.compose.material3.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -17,17 +35,18 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.tukangencrypt.stegasaurus.presentation.component.TopBar
-import com.tukangencrypt.stegasaurus.presentation.screen.encrypt.component.*
-import io.github.vinceglb.filekit.FileKit
-import io.github.vinceglb.filekit.dialogs.deprecated.openFileSaver
-import kotlinx.coroutines.launch
+import com.tukangencrypt.stegasaurus.presentation.screen.decrypt.component.DecryptTitleSection
+import com.tukangencrypt.stegasaurus.presentation.screen.decrypt.component.DecryptedMessageCard
+import com.tukangencrypt.stegasaurus.presentation.screen.decrypt.component.MessageSizeCard
+import com.tukangencrypt.stegasaurus.presentation.screen.decrypt.component.SenderPublicKeyCard
+import com.tukangencrypt.stegasaurus.presentation.screen.decrypt.component.UploadEncryptedImageCard
 import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class, ExperimentalMaterial3Api::class)
 @Composable
-fun EncryptScreen(
+fun DecryptScreen(
     modifier: Modifier = Modifier,
-    viewModel: EncryptViewModel = koinViewModel()
+    viewModel: DecryptViewModel = koinViewModel()
 ) {
     val scope = rememberCoroutineScope()
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -39,9 +58,9 @@ fun EncryptScreen(
         }
     }
 
-    LaunchedEffect(state.isEncrypted) {
-        if (state.isEncrypted) {
-            snackbarHostState.showSnackbar("Message encrypted successfully!")
+    LaunchedEffect(state.isDecrypted) {
+        if (state.isDecrypted) {
+            snackbarHostState.showSnackbar("Message decrypted successfully!")
         }
     }
 
@@ -49,7 +68,7 @@ fun EncryptScreen(
         snackbarHost = {
             SnackbarHost(snackbarHostState)
         },
-        containerColor = MaterialTheme.colorScheme.primaryContainer,
+        containerColor = MaterialTheme.colorScheme.tertiaryContainer,
         contentColor = MaterialTheme.colorScheme.onBackground,
         modifier = modifier,
         topBar = {
@@ -73,7 +92,7 @@ fun EncryptScreen(
                     .fillMaxWidth(),
                 verticalArrangement = Arrangement.spacedBy(32.dp)
             ) {
-                EncryptTitleSection()
+                DecryptTitleSection()
 
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(16.dp),
@@ -85,14 +104,14 @@ fun EncryptScreen(
                             .weight(1f),
                         verticalArrangement = Arrangement.spacedBy(16.dp)
                     ) {
-                        RecipientPublicKeyCard(
-                            publicKey = state.recipientPublicKey,
-                            onPublicKeyChange = viewModel::onRecipientPublicKeyChanged,
+                        SenderPublicKeyCard(
+                            publicKey = state.senderPublicKey,
+                            onPublicKeyChange = viewModel::onSenderPublicKeyChanged,
                             modifier = Modifier
                                 .fillMaxWidth(),
                         )
 
-                        UploadImageCard(
+                        UploadEncryptedImageCard(
                             selectedImageSize = state.selectedImageBytes?.size?.toLong() ?: 0L,
                             selectedImageName = state.selectedImageName,
                             onUploadImage = viewModel::pickImage,
@@ -107,23 +126,17 @@ fun EncryptScreen(
                             .weight(1f),
                         verticalArrangement = Arrangement.spacedBy(16.dp)
                     ) {
-                        EncryptMessageCard(
-                            message = state.message,
-                            onMessageChange = viewModel::onMessageChanged,
+                        MessageSizeCard(
+                            messageSize = state.messageSize,
+                            onMessageSizeChange = viewModel::onMessageSizeChanged,
                             modifier = Modifier
                                 .fillMaxWidth(),
                         )
 
-                        EncryptedImageDownloadCard(
-                            enabled = state.embeddedImageBytes != null && !state.isLoading,
+                        DecryptedMessageCard(
+                            decryptedMessage = state.decryptedMessage,
+                            hasDecryptedMessage = state.decryptedMessage != null,
                             isLoading = state.isLoading,
-                            onDownload = {
-                                scope.launch {
-                                    FileKit.openFileSaver(state.embeddedImageBytes, "stega_encrypted", "png")
-                                }
-                            },
-                            hasEncryptedImage = state.embeddedImageBytes != null,
-                            encryptedImageSize = state.embeddedImageBytes?.size?.toLong(),
                             modifier = Modifier
                                 .fillMaxWidth()
                         )
@@ -134,12 +147,12 @@ fun EncryptScreen(
             Spacer(Modifier.size(16.dp))
 
             Button(
-                onClick = viewModel::encryptAndEmbed,
+                onClick = viewModel::extractAndDecrypt,
                 modifier = Modifier
                     .widthIn(max = 1000.dp)
                     .fillMaxWidth(),
                 shapes = ButtonDefaults.shapes(),
-                enabled = state.encryptButtonEnabled && !state.isLoading
+                enabled = state.decryptButtonEnabled && !state.isLoading
             ) {
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(16.dp),
@@ -149,16 +162,16 @@ fun EncryptScreen(
                         CircularProgressIndicator(
                             modifier = Modifier.size(20.dp),
                             strokeWidth = 2.dp,
-                            color = MaterialTheme.colorScheme.onPrimary
+                            color = MaterialTheme.colorScheme.onTertiary
                         )
                     } else {
                         Icon(
                             imageVector = Icons.Outlined.Lock,
-                            contentDescription = "Encrypt"
+                            contentDescription = "Decrypt"
                         )
                     }
 
-                    Text(if (state.isLoading) "Encrypting..." else "Encrypt & Hide Message")
+                    Text(if (state.isLoading) "Decrypting..." else "Extract & Decrypt Message")
                 }
             }
         }

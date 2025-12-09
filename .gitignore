@@ -17,3 +17,7 @@ captures
 !*.xcworkspace/contents.xcworkspacedata
 **/xcshareddata/WorkspaceSettings.xcsettings
 node_modules/
+/composeApp/release/*
+keystore.jks
+keystore.b64
+/composeApp/keystore.jks

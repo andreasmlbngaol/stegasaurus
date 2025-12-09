@@ -21,7 +21,7 @@ import org.koin.core.annotation.KoinExperimentalAPI
 @Composable
 @Preview
 fun App() {
-    StegasaurusTheme(false) {
+    StegasaurusTheme {
         val entryProvider = koinEntryProvider()
         val navigator = koinInject<Navigator>()
 

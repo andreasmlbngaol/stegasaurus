@@ -25,11 +25,16 @@ class EncryptAndEmbedUseCase(
                 senderPrivateKey = keyRepository.getPrivateKey() ?: throw IllegalStateException("Private key not found")
             )
 
+            println("Image Size: ${imageBytes.size.toLong()}")
+            println("Encrypted Message Size: ${encryptedMessage.size.toLong()}")
+
             // Step 2: Embed encrypted message ke image
             val result = embedUseCase(
                 imageBytes = imageBytes,
                 message = encryptedMessage
             )
+
+            println("Result Size: ${result.size.toLong()}")
 
             return result
         } catch (e: Exception) {

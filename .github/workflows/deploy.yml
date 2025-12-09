@@ -1,0 +1,87 @@
+name: Build Release
+
+on:
+  push:
+    tags:
+      - 'v*'  # Trigger ketika push tag v1.0.0, v2.0.0, dll
+
+jobs:
+  build-android:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Setup JDK 21
+        uses: actions/setup-java@v5
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Decode Keystore
+        run: |
+          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > composeApp/keystore.jks
+
+      - name: Build APK Release (Signed)
+        run: ./gradlew assembleRelease
+        env:
+          KEYSTORE_FILE: keystore.jks
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+
+      - name: Rename APK
+        run: |
+          VERSION=${GITHUB_REF#refs/tags/}
+          mv composeApp/build/outputs/apk/release/*.apk "composeApp/build/outputs/apk/release/stegasaurus-${VERSION}.apk"
+
+      - name: Upload APK to Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: composeApp/build/outputs/apk/release/stegasaurus-*.apk
+          tag_name: ${{ github.ref_name }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  build-desktop:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Setup JDK 21
+        uses: actions/setup-java@v5
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Build DEB (Linux)
+        if: runner.os == 'Linux'
+        run: ./gradlew packageDeb
+
+      - name: Rename DEB
+        if: runner.os == 'Linux'
+        run: |
+          VERSION=${GITHUB_REF#refs/tags/}
+          mv composeApp/build/compose/binaries/main/deb/*.deb "composeApp/build/compose/binaries/main/deb/stegasaurus-${VERSION}.deb"
+
+      - name: Build MSI (Windows)
+        if: runner.os == 'Windows'
+        run: ./gradlew packageMsi
+
+      - name: Rename MSI
+        if: runner.os == 'Windows'
+        run: |
+          $VERSION = $env:GITHUB_REF -replace 'refs/tags/', ''
+          Get-ChildItem "composeApp/build/compose/binaries/main/msi/*.msi" | Rename-Item -NewName "stegasaurus-${VERSION}.msi"
+
+      - name: Upload artifacts to Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            composeApp/build/compose/binaries/main/deb/stegasaurus-*.deb
+            composeApp/build/compose/binaries/main/msi/stegasaurus-*.msi
+          tag_name: ${{ github.ref_name }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

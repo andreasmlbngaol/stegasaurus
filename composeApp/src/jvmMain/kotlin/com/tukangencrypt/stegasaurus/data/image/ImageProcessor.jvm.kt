@@ -33,5 +33,4 @@ private class JvmBitmap(
         ImageIO.write(image, "png", baos)
         return baos.toByteArray()
     }
-
 }
