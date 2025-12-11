@@ -98,7 +98,7 @@ fun HomeScreen(
             Spacer(Modifier.size(16.dp))
 
             Text(
-                text = "Steganosaurus",
+                text = "Stegasaurus",
                 style = MaterialTheme.typography.displayMedium,
                 textAlign = TextAlign.Center
             )
