@@ -3,12 +3,12 @@
 ## Table of Contents
 
 * [Features](#features)
+* [Installation](#installation)
 * [Usage Flow](#usage-flow)
-* [Platform Notes](#platform-notes)
 * [Technical Overview](#technical-overview)
+* [Platform Notes](#platform-notes)
 * [Limitations & Known Issues](#limitations--known-issues)
 * [Build Instructions (Developers)](#build-instructions-developers)
-* [Installation](#installation)
 
 Stegasaurus is a Kotlin Multiplatform and Compose Multiplatform application designed to demonstrate practical steganography combined with hybrid cryptography. It supports the following platforms:
 
@@ -39,6 +39,23 @@ Encrypt a text message using hybrid cryptography and hide it inside an image.
 ### 2. **Extract & Decrypt**
 
 Extract an embedded ciphertext from an image and decrypt it using the shared key.
+
+---
+
+## Installation
+
+Download installers from the Releases page:
+
+[**Releases**](https://github.com/andreasmlbngaol/stegasaurus/releases)
+
+Available builds:
+
+* `.apk` — Android
+* `.deb` — Linux/Ubuntu Desktop
+* `.msi` — Windows Desktop
+
+**Web version:**
+[**Stegasaurus**](`https://stegasaurus.pages.dev/`)
 
 ---
 
@@ -73,34 +90,11 @@ If the shared key and the provided message length match, the app reveals the ori
 
 ---
 
-## Installation
-
-Download installers from the Releases page:
-
-**Releases:**
-`https://github.com/andreasmlbngaol/stegasaurus/releases`
-
-Available builds:
-
-* `.apk` — Android
-* `.deb` — Linux/Ubuntu Desktop
-* `.msi` — Windows Desktop
-
-**Web version:**
-`https://stegasaurus.pages.dev/`
-
----
-
 ## Project Structure
 
 Built using **Kotlin Multiplatform** with **Compose Multiplatform** UI. Cryptographic logic is shared across platforms, while each target uses its own cryptography provider.
 
 ---
-
-## Platform Notes
-
-* **Desktop** is the most stable and optimal distribution. Its PNG encoding performance is significantly better than Android.
-* **Web** is far behind both Android and Desktop in stability and performance.
 
 ## Technical Overview
 
@@ -109,11 +103,22 @@ Built using **Kotlin Multiplatform** with **Compose Multiplatform** UI. Cryptogr
 * **ChaCha20-Poly1305** encrypts the message using the derived key and nonce.
 * **Steganography** uses **LSB (Least Significant Bit)** embedding.
 
+---
+
+## Platform Notes
+
+* **Desktop** is the most stable and optimal distribution. Its PNG encoding performance is significantly better than Android.
+* **Web** is far behind both Android and Desktop in stability and performance.
+
+---
+
 ## Limitations & Known Issues
 
 * The Web version has bugs in shared secret computation due to interoperability issues between Kotlin and JS.
 * Desktop encoding is significantly faster due to the mature ecosystem and better default PNG encoders compared to Android, and much faster than Web.
 * Cross-platform compatibility works reliably for: desktop→desktop, desktop→android, android→android, android→desktop. Web remains unreliable.
+
+---
 
 ## Build Instructions (Developers)
 

@@ -56,7 +56,6 @@ kotlin {
             implementation(libs.compose.foundation)
             implementation(libs.compose.material3)
             implementation(libs.compose.ui)
-//            implementation(libs.compose.ui.util)
             implementation(libs.compose.components.resources)
             implementation(libs.compose.components.ui.tooling.preview)
             implementation(libs.material.icons)
@@ -68,7 +67,6 @@ kotlin {
             implementation(libs.kotlinx.serialization.json)
 
             implementation(libs.navigation3.ui)
-//            implementation(libs.navigation3.runtime)
             implementation(libs.navigation3.viewmodel)
 
             implementation(project.dependencies.platform(libs.koin.bom))
@@ -81,7 +79,6 @@ kotlin {
             implementation(libs.crypto.provider)
             implementation(libs.crypto.random)
 
-//            implementation(libs.korim)
             implementation(libs.filekit.core)
             implementation(libs.filekit.dialogs.compose)
             implementation(libs.filekit.coil)
@@ -172,17 +169,24 @@ compose.desktop {
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
             packageName = "Stegasaurus"
-            packageVersion = "1.0.3"
+            packageVersion = "1.0.0"
 
             description = "Stegasaurus — Steganography encryption tool"
             vendor = "TukangEncrypt"
             copyright = "© 2025"
 
-
+            linux {
+                iconFile.set(project.file("src/commonMain/composeResources/drawable/ic_launcher.png"))
+                shortcut = true
+                menuGroup = "Stegasaurus"
+                debMaintainer = "Andreas M Lbn Gaol <lgandre45@gmail.com>"
+                appCategory = "Utility"
+            }
 
             windows {
                 menuGroup = "Stegasaurus"
                 shortcut = true
+                iconFile.set(project.file("src/commonMain/composeResources/drawable/ic_launcher.png"))
             }
         }
     }

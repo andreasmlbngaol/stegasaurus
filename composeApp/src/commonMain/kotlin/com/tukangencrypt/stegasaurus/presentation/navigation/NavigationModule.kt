@@ -1,6 +1,5 @@
 package com.tukangencrypt.stegasaurus.presentation.navigation
 
-import androidx.compose.runtime.Composable
 import com.tukangencrypt.stegasaurus.presentation.screen.decrypt.DecryptScreen
 import com.tukangencrypt.stegasaurus.presentation.screen.encrypt.EncryptScreen
 import com.tukangencrypt.stegasaurus.presentation.screen.home.HomeScreen

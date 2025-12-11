@@ -2,6 +2,7 @@ package com.tukangencrypt.stegasaurus.presentation.screen.home
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -43,9 +44,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalClipboard
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -63,7 +66,10 @@ import com.tukangencrypt.stegasaurus.presentation.screen.home.component.HomeMain
 import com.tukangencrypt.stegasaurus.presentation.screen.home.component.PublicKeyDialog
 import com.tukangencrypt.stegasaurus.utils.toClipEntry
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
+import stegasaurus.composeapp.generated.resources.Res
+import stegasaurus.composeapp.generated.resources.ic_launcher
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -94,7 +100,15 @@ fun HomeScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            IconCard(imageVector = Icons.Outlined.Lock)
+            Image(
+                painter = painterResource(Res.drawable.ic_launcher),
+                contentDescription = "Stegasaurus Logo",
+                modifier = Modifier
+                    .size(80.dp)
+                    .clip(MaterialTheme.shapes.extraLarge),
+                contentScale = ContentScale.Crop
+            )
+//            IconCard(imageVector = Icons.Outlined.Lock)
             Spacer(Modifier.size(16.dp))
 
             Text(
