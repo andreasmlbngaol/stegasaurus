@@ -2,7 +2,7 @@ package com.tukangencrypt.stegasaurus.presentation.screen.decrypt
 
 @Suppress("ArrayInDataClass")
 data class DecryptState(
-    val senderPublicKey: String = "",
+//    val senderPublicKey: String = "",
     val myPrivateKey: String = "",
     val messageSize: String = "",
     val selectedImageName: String? = null,
@@ -12,9 +12,14 @@ data class DecryptState(
     val isDecrypted: Boolean = false,
     val isLoading: Boolean = false
 ) {
+//    val decryptButtonEnabled: Boolean
+//        get() = senderPublicKey.isNotBlank()
+//                && myPrivateKey.isNotBlank()
+//                && messageSize.isNotBlank()
+//                && selectedImageName != null
+//
     val decryptButtonEnabled: Boolean
-        get() = senderPublicKey.isNotBlank()
-                && myPrivateKey.isNotBlank()
+        get() = myPrivateKey.isNotBlank()
                 && messageSize.isNotBlank()
                 && selectedImageName != null
 //    override fun equals(other: Any?): Boolean {

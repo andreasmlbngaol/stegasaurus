@@ -25,12 +25,6 @@ class HomeViewModel(
         }
     }
 
-    fun toggleFab() {
-        _state.value = _state.value.copy(
-            fabExpanded = !_state.value.fabExpanded
-        )
-    }
-
     fun showPubKeyDialog() {
         _state.value = _state.value.copy(
             pubKeyDialogVisible = true

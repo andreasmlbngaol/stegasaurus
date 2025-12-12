@@ -50,7 +50,7 @@ fun EncryptScreen(
             SnackbarHost(snackbarHostState)
         },
         containerColor = MaterialTheme.colorScheme.primaryContainer,
-        contentColor = MaterialTheme.colorScheme.onBackground,
+        contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
         modifier = modifier,
         topBar = {
             TopBar(

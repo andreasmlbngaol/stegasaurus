@@ -22,6 +22,11 @@ interface CryptoRepository {
         senderPrivateKey: String
     ): ByteArray
 
+    suspend fun decrypt(
+        encryptedData: ByteArray,
+        recipientPrivateKey: String
+    ): String
+
     /**
      * Decrypt message
      * @param encryptedData encrypted bytes (nonce + ciphertext + authTag)

@@ -38,7 +38,11 @@ fun TopBar(
         AnimatedVisibility(navigator.canGoBack) {
             FilledIconButton(
                 onClick = navigator::goBack,
-                shapes = IconButtonDefaults.shapes()
+                shapes = IconButtonDefaults.shapes(),
+                colors = IconButtonDefaults.filledIconButtonColors().copy(
+                    containerColor = MaterialTheme.colorScheme.background,
+                    contentColor = MaterialTheme.colorScheme.onBackground
+                )
             ) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.ArrowBack,

@@ -69,7 +69,7 @@ fun DecryptScreen(
             SnackbarHost(snackbarHostState)
         },
         containerColor = MaterialTheme.colorScheme.tertiaryContainer,
-        contentColor = MaterialTheme.colorScheme.onBackground,
+        contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
         modifier = modifier,
         topBar = {
             TopBar(
@@ -104,13 +104,6 @@ fun DecryptScreen(
                             .weight(1f),
                         verticalArrangement = Arrangement.spacedBy(16.dp)
                     ) {
-                        SenderPublicKeyCard(
-                            publicKey = state.senderPublicKey,
-                            onPublicKeyChange = viewModel::onSenderPublicKeyChanged,
-                            modifier = Modifier
-                                .fillMaxWidth(),
-                        )
-
                         UploadEncryptedImageCard(
                             selectedImageSize = state.selectedImageBytes?.size?.toLong() ?: 0L,
                             selectedImageName = state.selectedImageName,

@@ -15,7 +15,7 @@ class ExtractAndDecryptUseCase(
     suspend operator fun invoke(
         imageBytes: ByteArray,
         messageSizeBytes: Int,
-        senderPublicKey: String
+//        senderPublicKey: String
     ): String {
         try {
             println("Extract and decrypt started")
@@ -30,7 +30,7 @@ class ExtractAndDecryptUseCase(
             // Step 2: Decrypt message
             val decryptedMessage = cryptoRepository.decrypt(
                 encryptedData = encryptedMessage,
-                senderPublicKey = senderPublicKey,
+//                senderPublicKey = senderPublicKey,
                 recipientPrivateKey = keyRepository.getPrivateKey() ?: throw IllegalStateException("Private key not found")
             )
 

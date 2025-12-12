@@ -70,8 +70,7 @@ fun DecryptedMessageCard(
                         if (decryptedMessage != null) {
                             Text(
                                 text = decryptedMessage,
-                                minLines = 5,
-                                maxLines = 5,
+                                minLines = 1,
                                 style = MaterialTheme.typography.bodyMedium,
                                 modifier = Modifier
                                     .fillMaxWidth()

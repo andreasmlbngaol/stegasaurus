@@ -125,6 +125,13 @@ actual class CryptoRepositoryImpl actual constructor(private val keyRepository: 
         return toByteArray(ciphertext)
     }
 
+    actual override suspend fun decrypt(
+        encryptedData: ByteArray,
+        recipientPrivateKey: String
+    ): String {
+        TODO("Not yet implemented")
+    }
+
     /** Decrypt using ChaCha20-Poly1305 */
     actual override suspend fun decrypt(
         encryptedData: ByteArray,

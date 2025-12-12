@@ -28,11 +28,11 @@ class DecryptViewModel(
         }
     }
 
-    fun onSenderPublicKeyChanged(publicKey: String) {
-        _state.value = _state.value.copy(
-            senderPublicKey = publicKey.trim()
-        )
-    }
+//    fun onSenderPublicKeyChanged(publicKey: String) {
+//        _state.value = _state.value.copy(
+//            senderPublicKey = publicKey.trim()
+//        )
+//    }
 
     fun onMessageSizeChanged(size: String) {
         _state.value = _state.value.copy(
@@ -63,7 +63,7 @@ class DecryptViewModel(
             ?: return
         val messageSizeStr = _state.value.messageSize
         val myPrivateKey = _state.value.myPrivateKey
-        val senderPublicKey = _state.value.senderPublicKey
+//        val senderPublicKey = _state.value.senderPublicKey
 
         if (imageBytes.isEmpty()) {
             _state.value = _state.value.copy(
@@ -81,9 +81,10 @@ class DecryptViewModel(
             return
         }
 
-        /* Message Size + 16 bytes of tag */
-        val messageSize = messageSizeStr.toIntOrNull()?.plus(16)
-        if (messageSize == null || messageSize <= 16) {
+        /* Message Size + 32 bytes of sender's public key + 12 bytes of nonce + 16 bytes of tag */
+        val paddingSize = 32 + 12 + 16
+        val messageSize = messageSizeStr.toIntOrNull()?.plus(paddingSize)
+        if (messageSize == null || messageSize <= paddingSize) {
             _state.value = _state.value.copy(
                 errorMessage = "Message size must be a positive number",
                 isLoading = false
@@ -99,15 +100,6 @@ class DecryptViewModel(
             return
         }
 
-        if (senderPublicKey.isBlank()) {
-            _state.value = _state.value.copy(
-                errorMessage = "Sender public key cannot be empty",
-                isLoading = false
-            )
-            return
-        }
-
-        println("Extract and decrypt validation passed")
 
         viewModelScope.launch {
             try {
@@ -116,7 +108,7 @@ class DecryptViewModel(
                 val result = extractAndDecryptUseCase(
                     imageBytes = imageBytes,
                     messageSizeBytes = messageSize,
-                    senderPublicKey = senderPublicKey
+//                    senderPublicKey = senderPublicKey
                 )
 
                 println("Result: $result")

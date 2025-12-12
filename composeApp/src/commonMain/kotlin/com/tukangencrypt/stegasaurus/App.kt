@@ -38,7 +38,8 @@ fun App() {
                     rememberViewModelStoreNavEntryDecorator()
                 ),
                 transitionSpec = { pushAnimation },
-                popTransitionSpec = { popAnimation }
+                popTransitionSpec = { popAnimation },
+                predictivePopTransitionSpec = { popAnimation }
             )
         }
     }
