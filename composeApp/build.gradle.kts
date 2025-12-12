@@ -122,7 +122,7 @@ android {
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 2
-        versionName = "2.0.0"
+        versionName = "2.0.1"
     }
     packaging {
         resources {
@@ -167,7 +167,9 @@ compose.desktop {
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
             packageName = "Stegasaurus"
-            packageVersion = "2.0.0"
+            packageVersion = "2.0.1"
+
+            modules("jdk.security.auth")
 
             description = "Stegasaurus — Steganography signcryption tool"
             vendor = "TukangEncrypt"
