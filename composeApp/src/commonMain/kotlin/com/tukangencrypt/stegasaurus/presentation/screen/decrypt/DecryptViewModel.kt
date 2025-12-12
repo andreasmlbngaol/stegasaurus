@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
 
 class DecryptViewModel(
     private val keyPairUseCase: KeyPairUseCase,
-    private val extractAndDecryptUseCase: ExtractAndDecryptUseCase
+    private val extractAndDecryptUseCase: ExtractAndDecryptUseCase,
 ) : ViewModel() {
     private val _state = MutableStateFlow(DecryptState())
     val state = _state.asStateFlow()

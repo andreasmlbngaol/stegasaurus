@@ -92,64 +92,19 @@ private class JsBitmap(
     }
 }
 
+@JsModule("./base64Utils.js")
+@JsNonModule
+external object Base64Utils {
+    fun bytesToBase64(bytes: IntArray): String
+    fun base64ToBytes(base64: String): IntArray
+}
+
 private fun bytesToBase64(bytes: ByteArray): String {
-    val chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
-    val result = StringBuilder()
-
-    var i = 0
-    while (i < bytes.size) {
-        val b1 = bytes[i++].toInt() and 0xFF
-        val b2 = if (i < bytes.size) bytes[i++].toInt() and 0xFF else 0
-        val b3 = if (i < bytes.size) bytes[i++].toInt() and 0xFF else 0
-
-        val c1 = (b1 shr 2) and 0x3F
-        val c2 = ((b1 and 0x03) shl 4) or ((b2 shr 4) and 0x0F)
-        val c3 = ((b2 and 0x0F) shl 2) or ((b3 shr 6) and 0x03)
-        val c4 = b3 and 0x3F
-
-        result.append(chars[c1])
-        result.append(chars[c2])
-        result.append(if (i - 1 < bytes.size) chars[c3] else '=')
-        result.append(if (i < bytes.size) chars[c4] else '=')
-    }
-
-    return result.toString()
+    val intArray = IntArray(bytes.size) { i -> bytes[i].toInt() and 0xFF }
+    return Base64Utils.bytesToBase64(intArray)
 }
 
 private fun base64ToBytes(base64: String): ByteArray {
-    val chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
-    val result = mutableListOf<Byte>()
-
-    var i = 0
-    while (i < base64.length) {
-        val char1 = base64.getOrNull(i) ?: break
-        val char2 = base64.getOrNull(i + 1) ?: break
-
-        val c1 = chars.indexOf(char1)
-        val c2 = chars.indexOf(char2)
-
-        if (c1 < 0 || c2 < 0) break
-
-        result.add(((c1 shl 2) or (c2 shr 4)).toByte())
-
-        val char3 = base64.getOrNull(i + 2)
-        if (char3 != null && char3 != '=') {
-            val c3 = chars.indexOf(char3)
-            if (c3 >= 0) {
-                result.add((((c2 and 0x0F) shl 4) or (c3 shr 2)).toByte())
-
-                val char4 = base64.getOrNull(i + 3)
-                if (char4 != null && char4 != '=') {
-                    val c4 = chars.indexOf(char4)
-                    if (c4 >= 0) {
-                        result.add((((c3 and 0x03) shl 6) or c4).toByte())
-                    }
-                }
-            }
-        }
-
-        i += 4
-    }
-
-    return result.toByteArray()
+    val intArray = Base64Utils.base64ToBytes(base64)
+    return ByteArray(intArray.size) { i -> (intArray[i] and 0xFF).toByte() }
 }
