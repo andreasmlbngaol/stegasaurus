@@ -3,7 +3,6 @@ package com.tukangencrypt.stegasaurus.data.image
 import com.tukangencrypt.stegasaurus.domain.model.PlatformBitmap
 import kotlinx.browser.document
 import kotlinx.coroutines.suspendCancellableCoroutine
-import org.khronos.webgl.Uint8ClampedArray
 import org.khronos.webgl.get
 import org.w3c.dom.CanvasRenderingContext2D
 import org.w3c.dom.HTMLCanvasElement
@@ -55,7 +54,7 @@ actual suspend fun loadActual(bytes: ByteArray): PlatformBitmap {
 @OptIn(ExperimentalWasmJsInterop::class)
 private class WasmBitmap(
     val canvas: HTMLCanvasElement,
-    val ctx: CanvasRenderingContext2D,
+    ctx: CanvasRenderingContext2D,
     override val width: Int,
     override val height: Int
 ): PlatformBitmap {
@@ -75,18 +74,6 @@ private class WasmBitmap(
     @OptIn(ExperimentalWasmJsInterop::class)
     override fun setPixel(x: Int, y: Int, argb: Int) {
         TODO()
-    //        val index = (y * width + x) * 4
-//        val data = imageData.data
-//
-//        val r = ((argb shr 16) and 0xFF).toByte()
-//        val g = ((argb shr 8) and 0xFF).toByte()
-//        val b = (argb and 0xFF).toByte()
-//        val a = ((argb shr 24) and 0xFF).toByte()
-//
-//        val pixelBytes: Array<Byte> = arrayOf(r, g, b, a)
-//        data.set(pixelBytes, index)
-//
-//        ctx.putImageData(imageData, 0.0, 0.0)
     }
 
     override fun encodePng(): ByteArray {

@@ -85,8 +85,6 @@ kotlin {
 
             implementation(libs.kotlinx.coroutines.core)
 
-            implementation(libs.kotlinx.coroutines.core)
-
             implementation(libs.multiplatform.settings)
             implementation(libs.multiplatform.settings.no.arg)
             implementation(libs.multiplatform.settings.serialization)
@@ -123,8 +121,8 @@ android {
         applicationId = "com.tukangencrypt.stegasaurus"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 2
+        versionName = "2.0.0"
     }
     packaging {
         resources {
@@ -169,9 +167,9 @@ compose.desktop {
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
             packageName = "Stegasaurus"
-            packageVersion = "1.0.0"
+            packageVersion = "2.0.0"
 
-            description = "Stegasaurus — Steganography encryption tool"
+            description = "Stegasaurus — Steganography signcryption tool"
             vendor = "TukangEncrypt"
             copyright = "© 2025"
 

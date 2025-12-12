@@ -6,7 +6,26 @@ on:
       - 'v*'  # Trigger ketika push tag v1.0.0, v2.0.0, dll
 
 jobs:
+  check-release-type:
+    runs-on: ubuntu-latest
+    outputs:
+      is-prerelease: ${{ steps.check.outputs.is-prerelease }}
+    steps:
+      - name: Check if Pre-release
+        id: check
+        run: |
+          VERSION=${GITHUB_REF#refs/tags/v}
+          # Cek apakah format adalah X.Y.Z (hanya angka dan titik)
+          if [[ $VERSION =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "is-prerelease=false" >> $GITHUB_OUTPUT
+            echo "✓ Release version: $VERSION"
+          else
+            echo "is-prerelease=true" >> $GITHUB_OUTPUT
+            echo "⚠ Pre-release version: $VERSION"
+          fi
+
   build-android:
+    needs: check-release-type
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -42,10 +61,12 @@ jobs:
         with:
           files: composeApp/build/outputs/apk/release/stegasaurus-*.apk
           tag_name: ${{ github.ref_name }}
+          prerelease: ${{ needs.check-release-type.outputs.is-prerelease }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   build-desktop:
+    needs: check-release-type
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -90,5 +111,6 @@ jobs:
             composeApp/build/compose/binaries/main/deb/stegasaurus-*.deb
             composeApp/build/compose/binaries/main/msi/stegasaurus-*.msi
           tag_name: ${{ github.ref_name }}
+          prerelease: ${{ needs.check-release-type.outputs.is-prerelease }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

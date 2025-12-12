@@ -1,44 +1,27 @@
 package com.tukangencrypt.stegasaurus.presentation.screen.decrypt
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Lock
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.tukangencrypt.stegasaurus.presentation.component.TopBar
+import com.tukangencrypt.stegasaurus.presentation.component.calculateWindowSize
 import com.tukangencrypt.stegasaurus.presentation.screen.decrypt.component.DecryptTitleSection
 import com.tukangencrypt.stegasaurus.presentation.screen.decrypt.component.DecryptedMessageCard
 import com.tukangencrypt.stegasaurus.presentation.screen.decrypt.component.MessageSizeCard
-import com.tukangencrypt.stegasaurus.presentation.screen.decrypt.component.SenderPublicKeyCard
 import com.tukangencrypt.stegasaurus.presentation.screen.decrypt.component.UploadEncryptedImageCard
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -48,9 +31,12 @@ fun DecryptScreen(
     modifier: Modifier = Modifier,
     viewModel: DecryptViewModel = koinViewModel()
 ) {
-    val scope = rememberCoroutineScope()
     val state by viewModel.state.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
+    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+
+    val windowSizeClass = calculateWindowSize()
+    val isCompactWidth = windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact
 
     LaunchedEffect(state.errorMessage) {
         state.errorMessage?.let {
@@ -73,13 +59,15 @@ fun DecryptScreen(
         modifier = modifier,
         topBar = {
             TopBar(
-                containerColor = Color.Transparent
+                containerColor = Color.Transparent,
+                scrollBehavior = scrollBehavior
             )
         }
     ) { innerPadding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .nestedScroll(scrollBehavior.nestedScrollConnection)
                 .verticalScroll(rememberScrollState())
                 .padding(innerPadding)
                 .padding(16.dp),
@@ -94,14 +82,9 @@ fun DecryptScreen(
             ) {
                 DecryptTitleSection()
 
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(16.dp),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                ) {
+                if(isCompactWidth) {
                     Column(
-                        modifier = Modifier
-                            .weight(1f),
+                        modifier = Modifier.fillMaxWidth(),
                         verticalArrangement = Arrangement.spacedBy(16.dp)
                     ) {
                         UploadEncryptedImageCard(
@@ -112,13 +95,7 @@ fun DecryptScreen(
                                 .fillMaxWidth(),
                             enabled = !state.isLoading
                         )
-                    }
 
-                    Column(
-                        modifier = Modifier
-                            .weight(1f),
-                        verticalArrangement = Arrangement.spacedBy(16.dp)
-                    ) {
                         MessageSizeCard(
                             messageSize = state.messageSize,
                             onMessageSizeChange = viewModel::onMessageSizeChanged,
@@ -133,6 +110,49 @@ fun DecryptScreen(
                             modifier = Modifier
                                 .fillMaxWidth()
                         )
+
+                    }
+                } else {
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(16.dp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                    ) {
+                        Column(
+                            modifier = Modifier
+                                .weight(1f),
+                            verticalArrangement = Arrangement.spacedBy(16.dp)
+                        ) {
+                            UploadEncryptedImageCard(
+                                selectedImageSize = state.selectedImageBytes?.size?.toLong() ?: 0L,
+                                selectedImageName = state.selectedImageName,
+                                onUploadImage = viewModel::pickImage,
+                                modifier = Modifier
+                                    .fillMaxWidth(),
+                                enabled = !state.isLoading
+                            )
+                        }
+
+                        Column(
+                            modifier = Modifier
+                                .weight(1f),
+                            verticalArrangement = Arrangement.spacedBy(16.dp)
+                        ) {
+                            MessageSizeCard(
+                                messageSize = state.messageSize,
+                                onMessageSizeChange = viewModel::onMessageSizeChanged,
+                                modifier = Modifier
+                                    .fillMaxWidth(),
+                            )
+
+                            DecryptedMessageCard(
+                                decryptedMessage = state.decryptedMessage,
+                                hasDecryptedMessage = state.decryptedMessage != null,
+                                isLoading = state.isLoading,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                            )
+                        }
                     }
                 }
             }

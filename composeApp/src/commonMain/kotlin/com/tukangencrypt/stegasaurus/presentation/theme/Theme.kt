@@ -263,10 +263,6 @@ fun NonAndroidStegasaurusTheme(
         darkTheme -> darkScheme
         else -> lightScheme
     }
-//    val colorScheme = when {
-//        darkTheme -> darkColorScheme()
-//        else -> lightColorScheme()
-//    }
 
     MaterialTheme(
         colorScheme = colorScheme,

@@ -18,10 +18,4 @@ expect class CryptoRepositoryImpl(
         encryptedData: ByteArray,
         recipientPrivateKey: String
     ): String
-
-    override suspend fun decrypt(
-        encryptedData: ByteArray,
-        senderPublicKey: String,
-        recipientPrivateKey: String
-    ): String
 }

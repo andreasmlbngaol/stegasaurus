@@ -109,7 +109,6 @@ actual class CryptoRepositoryImpl actual constructor(private val keyRepository: 
             // 3. Derive key
             val kdfInfo = senderPub.encoded + recipientPub.encoded
             val (key, _) = deriveKeyAndNonce(sharedSecret, kdfInfo)
-
             val cipher = ChaCha20Poly1305()
             cipher.init(
                 false,
@@ -122,48 +121,6 @@ actual class CryptoRepositoryImpl actual constructor(private val keyRepository: 
             val plainBytes = ByteArray(cipher.getOutputSize(ciphertext.size))
             val len = cipher.processBytes(ciphertext, 0, ciphertext.size, plainBytes, 0)
             cipher.doFinal(plainBytes, len)
-
-            return@withContext plainBytes.decodeToString()
-        } catch (e: Exception) {
-            throw IllegalStateException("Decryption failed: ${e.message}", e)
-        }
-    }
-
-    actual override suspend fun decrypt(
-        encryptedData: ByteArray,
-        senderPublicKey: String,
-        recipientPrivateKey: String
-    ): String = withContext(Dispatchers.Default) {
-        try {
-            if (encryptedData.size < 16) {
-                throw IllegalArgumentException("Encrypted data too short")
-            }
-
-            println("DECRYPT - Ciphertext (${encryptedData.size}): ${encryptedData.toHex()}")
-
-            val recipientPriv = parsePrivateKey(recipientPrivateKey)
-            val senderPub = parsePublicKey(senderPublicKey)
-            val recipientPub = recipientPriv.generatePublicKey()
-
-            val kdfInfo = senderPub.encoded + recipientPub.encoded
-
-            val sharedSecret = generateSharedSecret(recipientPriv, senderPub)
-                .also { println("DECRYPT - Shared Secret: ${it.toHex()}") }
-
-            val (key, nonce) = deriveKeyAndNonce(sharedSecret, kdfInfo)
-                .also {
-                    println("DECRYPT - Key: ${it.first.toHex()}")
-                    println("DECRYPT - Nonce: ${it.second.toHex()}")
-                }
-
-            val cipher = ChaCha20Poly1305()
-            cipher.init(false, ParametersWithIV(KeyParameter(key), nonce))
-
-            val plainBytes = ByteArray(cipher.getOutputSize(encryptedData.size))
-            val len = cipher.processBytes(encryptedData, 0, encryptedData.size, plainBytes, 0)
-            cipher.doFinal(plainBytes, len)
-
-            println("DECRYPT - Plaintext (${plainBytes.size}): ${plainBytes.toHex()}")
 
             return@withContext plainBytes.decodeToString()
         } catch (e: Exception) {

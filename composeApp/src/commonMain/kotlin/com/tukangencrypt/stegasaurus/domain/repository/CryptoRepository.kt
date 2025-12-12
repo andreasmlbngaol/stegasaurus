@@ -22,21 +22,14 @@ interface CryptoRepository {
         senderPrivateKey: String
     ): ByteArray
 
-    suspend fun decrypt(
-        encryptedData: ByteArray,
-        recipientPrivateKey: String
-    ): String
-
     /**
      * Decrypt message
      * @param encryptedData encrypted bytes (nonce + ciphertext + authTag)
-     * @param senderPublicKey public key sender (hex encoded)
      * @param recipientPrivateKey private key recipient (hex encoded)
      * @return plain message
      */
     suspend fun decrypt(
         encryptedData: ByteArray,
-        senderPublicKey: String,
         recipientPrivateKey: String
     ): String
 }

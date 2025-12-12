@@ -6,13 +6,11 @@ android-targetSdk = "36"
 androidx-activity = "1.12.1"
 androidx-lifecycle = "2.9.6"
 composeHotReload = "1.0.0"
-composeMultiplatform = "1.10.0-rc01"
+composeMultiplatform = "1.10.0-rc02"
 kotlin = "2.2.21"
 kotlinx-coroutines = "1.10.2"
 navigation3 = "1.0.0-alpha06"
 navigation3ViewModel = "2.10.0-alpha06"
-navigation3Androidx = "1.0.0"
-navigation3ViewModelAndroidx = "2.10.0"
 kotlinxSerializationCore = "1.9.0"
 koinBom = "4.2.0-alpha3"
 material3 = "1.10.0-alpha05"
@@ -44,11 +42,6 @@ kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serializa
 
 navigation3-ui = { module = "org.jetbrains.androidx.navigation3:navigation3-ui", version.ref = "navigation3" }
 navigation3-viewmodel = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-navigation3", version.ref = "navigation3ViewModel" }
-
-
-navigation3-ui-androidx = { module = "androidx.navigation3:navigation3-ui", version.ref = "navigation3Androidx" }
-navigation3-viewmodel-androidx = { module = "androidx.lifecycle:lifecycle-viewmodel-navigation3", version.ref = "navigation3ViewModelAndroidx" }
-navigation3-runtime-androidx = { module = "androidx.navigation3:navigation3-runtime", version.ref = "navigation3Androidx" }
 
 koin-bom = { module = "io.insert-koin:koin-bom", version.ref = "koinBom" }
 koin-core = { module = "io.insert-koin:koin-core" }

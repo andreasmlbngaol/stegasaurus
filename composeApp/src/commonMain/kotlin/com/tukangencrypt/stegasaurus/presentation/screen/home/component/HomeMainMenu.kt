@@ -1,7 +1,9 @@
 package com.tukangencrypt.stegasaurus.presentation.screen.home.component
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.icons.Icons
@@ -17,6 +19,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
@@ -25,92 +29,122 @@ import com.tukangencrypt.stegasaurus.presentation.component.IconCard
 @Composable
 fun HomeMainMenu(
     onNavigateToEncrypt: () -> Unit,
-    onNavigateToDecrypt: () -> Unit
+    onNavigateToDecrypt: () -> Unit,
+    isCompactWidth: Boolean = false
 ) {
     val density = LocalDensity.current
     var maxClickableContentCardHeight by remember { mutableStateOf(0.dp) }
 
-    Row(
-        modifier = Modifier
-            .widthIn(max = 850.dp),
-        horizontalArrangement = Arrangement.spacedBy(24.dp)
-    ) {
-        ClickableContentCard(
-            modifier = Modifier
-                .weight(1f)
-                .heightIn(min = maxClickableContentCardHeight)
-                .onGloballyPositioned { coordinates ->
-                    val height = with(density) { coordinates.size.height.toDp() }
-                    if (height > maxClickableContentCardHeight) maxClickableContentCardHeight = height
-                },
+    val layoutModifier = Modifier.widthIn(max = 850.dp)
 
-            onClick = onNavigateToEncrypt,
-            colors = CardDefaults.cardColors().copy(
-                containerColor = MaterialTheme.colorScheme.background
-            )
+    if (isCompactWidth) {
+        Column(
+            modifier = layoutModifier,
+            verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {
-            IconCard(
-                imageVector = Icons.Outlined.Lock,
-                containerColor = MaterialTheme.colorScheme.primary,
-                contentColor = MaterialTheme.colorScheme.background,
-                iconSize = 64.dp,
-                shape = MaterialTheme.shapes.large
+            MenuCard(
+                modifier = Modifier.fillMaxWidth(),
+                onClick = onNavigateToEncrypt,
+                icon = Icons.Outlined.Lock,
+                iconContainer = MaterialTheme.colorScheme.primary,
+                title = "Encrypt",
+                desc = "Encrypt and hide your messages in images securely",
+                buttonText = "Start encryption"
             )
 
-            Text(
-                text = "Encrypt",
-                style = MaterialTheme.typography.headlineSmall
+            MenuCard(
+                modifier = Modifier.fillMaxWidth(),
+                onClick = onNavigateToDecrypt,
+                icon = Icons.Outlined.LockOpen,
+                iconContainer = MaterialTheme.colorScheme.tertiary,
+                title = "Decrypt",
+                desc = "Extract and decrypt messages hidden inside images",
+                buttonText = "Start decryption"
             )
-
-            Text(
-                text = "Encrypt and hide your messages in images securely",
-                style = MaterialTheme.typography.bodyLarge
-            )
-
-            TextButton(
-                onClick = onNavigateToEncrypt
-            ) {
-                Text("Start encryption")
-            }
         }
-
-        ClickableContentCard(
-            modifier = Modifier
-                .weight(1f)
-                .heightIn(min = maxClickableContentCardHeight)
-                .onGloballyPositioned { coordinates ->
-                    val height = with(density) { coordinates.size.height.toDp() }
-                    if (height > maxClickableContentCardHeight) maxClickableContentCardHeight = height
-                },
-
-            onClick = onNavigateToDecrypt,
-            colors = CardDefaults.cardColors().copy(
-                containerColor = MaterialTheme.colorScheme.background
-            )
+    } else {
+        Row(
+            modifier = layoutModifier,
+            horizontalArrangement = Arrangement.spacedBy(24.dp)
         ) {
-            IconCard(
-                imageVector = Icons.Outlined.LockOpen,
-                containerColor = MaterialTheme.colorScheme.tertiary,
-                contentColor = MaterialTheme.colorScheme.background,
-                iconSize = 64.dp,
-                shape = MaterialTheme.shapes.large
+            MenuCard(
+                modifier = Modifier
+                    .weight(1f)
+                    .heightIn(min = maxClickableContentCardHeight)
+                    .onGloballyPositioned { coordinates ->
+                        val height = with(density) { coordinates.size.height.toDp() }
+                        if (height > maxClickableContentCardHeight) {
+                            maxClickableContentCardHeight = height
+                        }
+                    },
+                onClick = onNavigateToEncrypt,
+                icon = Icons.Outlined.Lock,
+                iconContainer = MaterialTheme.colorScheme.primary,
+                title = "Encrypt",
+                desc = "Encrypt and hide your messages in images securely",
+                buttonText = "Start encryption"
             )
 
-            Text(
-                text = "Decrypt",
-                style = MaterialTheme.typography.headlineSmall
+            MenuCard(
+                modifier = Modifier
+                    .weight(1f)
+                    .heightIn(min = maxClickableContentCardHeight)
+                    .onGloballyPositioned { coordinates ->
+                        val height = with(density) { coordinates.size.height.toDp() }
+                        if (height > maxClickableContentCardHeight) {
+                            maxClickableContentCardHeight = height
+                        }
+                    },
+                onClick = onNavigateToDecrypt,
+                icon = Icons.Outlined.LockOpen,
+                iconContainer = MaterialTheme.colorScheme.tertiary,
+                title = "Decrypt",
+                desc = "Extract and decrypt messages hidden inside images",
+                buttonText = "Start decryption"
             )
+        }
+    }
+}
 
-            Text(
-                text = "Extract and decrypt messages hidden inside images",
-                style = MaterialTheme.typography.bodyLarge
-            )
+@Composable
+private fun MenuCard(
+    modifier: Modifier,
+    onClick: () -> Unit,
+    icon: ImageVector,
+    iconContainer: Color,
+    title: String,
+    desc: String,
+    buttonText: String
+) {
+    ClickableContentCard(
+        modifier = modifier,
+        onClick = onClick,
+        colors = CardDefaults.cardColors().copy(
+            containerColor = MaterialTheme.colorScheme.background
+        )
+    ) {
+        IconCard(
+            imageVector = icon,
+            containerColor = iconContainer,
+            contentColor = MaterialTheme.colorScheme.background,
+            iconSize = 64.dp,
+            shape = MaterialTheme.shapes.large,
+            onClick = onClick,
+            enabled = true
+        )
 
-            TextButton(
-                onClick = onNavigateToDecrypt
-            ) {
-                Text("Start decryption")
-            }
+        Text(
+            text = title,
+            style = MaterialTheme.typography.headlineSmall
+        )
+
+        Text(
+            text = desc,
+            style = MaterialTheme.typography.bodyLarge
+        )
+
+        TextButton(onClick = onClick) {
+            Text(buttonText)
         }
     }
 }

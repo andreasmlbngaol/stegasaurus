@@ -133,22 +133,22 @@ actual class CryptoRepositoryImpl actual constructor(private val keyRepository: 
     }
 
     /** Decrypt using ChaCha20-Poly1305 */
-    actual override suspend fun decrypt(
-        encryptedData: ByteArray,
-        senderPublicKey: String,
-        recipientPrivateKey: String
-    ): String {
-        val shared = sharedSecret(recipientPrivateKey, senderPublicKey)
-        val (key, nonce) = deriveKeyAndNonce(shared)
-
-        val ChaCha20Poly1305Ctor = chacha20.ChaCha20Poly1305
-        val cipher = js("new ChaCha20Poly1305Ctor(key)")
-
-        val ciphertext = encryptedData.toUint8Array()
-        val plaintext = cipher.open(nonce.toUint8Array(), ciphertext) ?: throw IllegalStateException("Decryption failed")
-
-        return toByteArray(plaintext).decodeToString()
-    }
+//    actual override suspend fun decrypt(
+//        encryptedData: ByteArray,
+//        senderPublicKey: String,
+//        recipientPrivateKey: String
+//    ): String {
+//        val shared = sharedSecret(recipientPrivateKey, senderPublicKey)
+//        val (key, nonce) = deriveKeyAndNonce(shared)
+//
+//        val ChaCha20Poly1305Ctor = chacha20.ChaCha20Poly1305
+//        val cipher = js("new ChaCha20Poly1305Ctor(key)")
+//
+//        val ciphertext = encryptedData.toUint8Array()
+//        val plaintext = cipher.open(nonce.toUint8Array(), ciphertext) ?: throw IllegalStateException("Decryption failed")
+//
+//        return toByteArray(plaintext).decodeToString()
+//    }
 }
 
 private fun dynamicToByteArray(dynamicArr: dynamic): ByteArray {

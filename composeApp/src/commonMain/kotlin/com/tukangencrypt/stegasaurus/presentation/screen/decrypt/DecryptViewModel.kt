@@ -28,12 +28,6 @@ class DecryptViewModel(
         }
     }
 
-//    fun onSenderPublicKeyChanged(publicKey: String) {
-//        _state.value = _state.value.copy(
-//            senderPublicKey = publicKey.trim()
-//        )
-//    }
-
     fun onMessageSizeChanged(size: String) {
         _state.value = _state.value.copy(
             messageSize = size
@@ -53,8 +47,6 @@ class DecryptViewModel(
     }
 
     fun extractAndDecrypt() {
-        println("Extract and decrypt clicked")
-
         _state.value = _state.value.copy(
             isLoading = true
         )
@@ -63,7 +55,6 @@ class DecryptViewModel(
             ?: return
         val messageSizeStr = _state.value.messageSize
         val myPrivateKey = _state.value.myPrivateKey
-//        val senderPublicKey = _state.value.senderPublicKey
 
         if (imageBytes.isEmpty()) {
             _state.value = _state.value.copy(
@@ -103,15 +94,11 @@ class DecryptViewModel(
 
         viewModelScope.launch {
             try {
-                println("Extract and decrypt started")
-
                 val result = extractAndDecryptUseCase(
                     imageBytes = imageBytes,
                     messageSizeBytes = messageSize,
 //                    senderPublicKey = senderPublicKey
                 )
-
-                println("Result: $result")
 
                 _state.value = _state.value.copy(
                     decryptedMessage = result,
@@ -119,17 +106,14 @@ class DecryptViewModel(
                     isDecrypted = true
                 )
             } catch (e: IllegalArgumentException) {
-                println("Invalid input: ${e.message}")
                 _state.value = _state.value.copy(
                     errorMessage = e.message ?: "Invalid input",
                 )
             } catch (e: Exception) {
-                println("Failed: ${e.message}")
                 _state.value = _state.value.copy(
                     errorMessage = "Failed: ${e.message}",
                 )
             } finally {
-                println("Extract and decrypt finished")
                 _state.value = _state.value.copy(
                     isLoading = false
                 )
