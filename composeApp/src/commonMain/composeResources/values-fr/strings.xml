@@ -1,0 +1,72 @@
+<resources>
+    <string name="app_name">Stegasaurus</string>
+
+    <!-- Home Screen -->
+    <string name="home_subtitle">Sécurisez vos messages grâce à des technologies avancées de stéganographie et de chiffrement.</string>
+    <string name="home_fab_text">Afficher la clé publique</string>
+
+    <string name="encrypt">Chiffrer</string>
+    <string name="home_encrypt_menu_desc">Chiffrer et dissimuler des messages dans des images en toute sécurité.</string>
+    <string name="home_encrypt_menu_button_text">Démarrer le chiffrement</string>
+
+    <string name="decrypt">Déchiffrer</string>
+    <string name="home_decrypt_menu_desc">Extraire et déchiffrer les messages cachés dans des images.</string>
+    <string name="home_decrypt_menu_button_text">Démarrer le déchiffrement</string>
+
+    <string name="home_generate_key_title">Générer une paire de clés</string>
+    <string name="home_generate_key_subtitle">Créer une clé publique et une clé privée pour une communication sécurisée.</string>
+
+    <string name="home_info_card_1_title">Chiffrement robuste</string>
+    <string name="home_info_card_1_desc">Algorithmes cryptographiques modernes pour une sécurité maximale.</string>
+
+    <string name="home_info_card_2_title">Stéganographie</string>
+    <string name="home_info_card_2_desc">Dissimuler des messages dans des images sans être détecté.</string>
+
+    <string name="home_info_card_3_title">Gestion des clés</string>
+    <string name="home_info_card_3_desc">Générer et gérer facilement les clés de chiffrement.</string>
+
+    <string name="public_key_dialog_title">Votre clé publique</string>
+    <string name="public_key_dialog_content">Partagez cette clé publique avec les personnes souhaitant vous envoyer des messages chiffrés.</string>
+    <string name="public_key_dialog_copy_button_text">Copier dans le presse-papiers</string>
+
+    <!-- Encrypt Screen -->
+    <string name="encrypt_title">Chiffrer et intégrer un message</string>
+    <string name="encrypt_subtitle">Chiffrer et dissimuler des messages dans des images en toute sécurité.</string>
+    <string name="encrypt_button_text_loading">Chiffrement en cours...</string>
+    <string name="encrypt_button_text">Chiffrer et masquer</string>
+    <string name="encrypt_snackbar_success">Message chiffré et intégré avec succès.</string>
+
+    <string name="recipient_public_key_label">Clé publique du destinataire</string>
+    <string name="recipient_public_key_placeholder">Entrez la clé publique du destinataire...</string>
+
+    <string name="encrypt_upload_image_label">Image pour la stéganographie</string>
+    <string name="encrypt_upload_image_title">Téléverser une image</string>
+    <string name="encrypt_upload_image_types">PNG, JPG (max. 10 Mo)</string>
+    <string name="encrypt_change_image_title">Modifier l’image</string>
+
+    <string name="encrypt_message_label">Message</string>
+    <string name="encrypt_message_placeholder">Saisissez le message à chiffrer...</string>
+    <string name="encrypt_message_support_text">%1$d caractères</string>
+
+    <string name="encrypt_download_title">Image chiffrée</string>
+    <string name="encrypt_download_subtitle">L’image chiffrée apparaîtra ici.</string>
+    <string name="encrypt_download_button_text">Télécharger l’image</string>
+
+    <!-- Decrypt Screen -->
+    <string name="decrypt_title">Extraire et déchiffrer un message</string>
+    <string name="decrypt_subtitle">Extraire et déchiffrer les messages cachés dans les images.</string>
+    <string name="decrypt_button_text_loading">Déchiffrement en cours...</string>
+    <string name="decrypt_button_text">Extraire et déchiffrer</string>
+    <string name="decrypt_snackbar_success">Message extrait et déchiffré avec succès.</string>
+
+    <string name="decrypt_upload_image_label">Image chiffrée</string>
+    <string name="decrypt_upload_image_title">Téléverser une image</string>
+    <string name="decrypt_upload_image_types">PNG (max. 10 Mo)</string>
+    <string name="decrypt_change_image_title">Modifier l’image</string>
+
+    <string name="decrypt_message_length_title">Longueur du message (caractères)</string>
+    <string name="decrypt_message_length_placeholder">Entrez la longueur totale du message...</string>
+
+    <string name="decrypt_result_title">Message déchiffré</string>
+    <string name="decrypt_result_subtitle">Le message déchiffré apparaîtra ici.</string>
+</resources>

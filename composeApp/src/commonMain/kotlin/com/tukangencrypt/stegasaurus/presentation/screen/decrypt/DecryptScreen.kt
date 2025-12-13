@@ -1,5 +1,6 @@
 package com.tukangencrypt.stegasaurus.presentation.screen.decrypt
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -23,7 +24,13 @@ import com.tukangencrypt.stegasaurus.presentation.screen.decrypt.component.Decry
 import com.tukangencrypt.stegasaurus.presentation.screen.decrypt.component.DecryptedMessageCard
 import com.tukangencrypt.stegasaurus.presentation.screen.decrypt.component.MessageSizeCard
 import com.tukangencrypt.stegasaurus.presentation.screen.decrypt.component.UploadEncryptedImageCard
+import com.tukangencrypt.stegasaurus.utils.value
+import org.jetbrains.compose.resources.getString
 import org.koin.compose.viewmodel.koinViewModel
+import stegasaurus.composeapp.generated.resources.Res
+import stegasaurus.composeapp.generated.resources.decrypt_button_text
+import stegasaurus.composeapp.generated.resources.decrypt_button_text_loading
+import stegasaurus.composeapp.generated.resources.decrypt_snackbar_success
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class, ExperimentalMaterial3Api::class)
 @Composable
@@ -46,7 +53,7 @@ fun DecryptScreen(
 
     LaunchedEffect(state.isDecrypted) {
         if (state.isDecrypted) {
-            snackbarHostState.showSnackbar("Message decrypted successfully!")
+            snackbarHostState.showSnackbar(getString(Res.string.decrypt_snackbar_success))
         }
     }
 
@@ -103,13 +110,15 @@ fun DecryptScreen(
                                 .fillMaxWidth(),
                         )
 
-                        DecryptedMessageCard(
-                            decryptedMessage = state.decryptedMessage,
-                            hasDecryptedMessage = state.decryptedMessage != null,
-                            isLoading = state.isLoading,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                        )
+                        AnimatedVisibility(state.decryptedMessage != null) {
+                            DecryptedMessageCard(
+                                decryptedMessage = state.decryptedMessage,
+                                hasDecryptedMessage = state.decryptedMessage != null,
+                                isLoading = state.isLoading,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                            )
+                        }
 
                     }
                 } else {
@@ -184,7 +193,11 @@ fun DecryptScreen(
                         )
                     }
 
-                    Text(if (state.isLoading) "Decrypting..." else "Extract & Decrypt Message")
+                    Text(
+                        if (state.isLoading)
+                            Res.string.decrypt_button_text_loading.value
+                        else Res.string.decrypt_button_text.value,
+                    )
                 }
             }
         }

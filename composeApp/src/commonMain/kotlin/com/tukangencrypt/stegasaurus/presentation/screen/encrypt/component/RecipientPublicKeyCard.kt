@@ -8,6 +8,10 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.tukangencrypt.stegasaurus.utils.value
+import stegasaurus.composeapp.generated.resources.Res
+import stegasaurus.composeapp.generated.resources.recipient_public_key_label
+import stegasaurus.composeapp.generated.resources.recipient_public_key_placeholder
 
 @Composable
 fun RecipientPublicKeyCard(
@@ -28,7 +32,7 @@ fun RecipientPublicKeyCard(
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             Text(
-                text = "Recipient's Public Key",
+                text = Res.string.recipient_public_key_label.value,
                 style = MaterialTheme.typography.titleMedium
             )
 
@@ -38,7 +42,7 @@ fun RecipientPublicKeyCard(
             OutlinedTextField(
                 value = publicKey,
                 onValueChange = onPublicKeyChange,
-                placeholder = { Text("Enter recipient's public key...") },
+                placeholder = { Text(Res.string.recipient_public_key_placeholder.value) },
                 colors = OutlinedTextFieldDefaults.colors().copy(
                     unfocusedContainerColor = containerColor,
                     focusedContainerColor = containerColor,

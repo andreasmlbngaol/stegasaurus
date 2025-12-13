@@ -13,6 +13,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.tukangencrypt.stegasaurus.utils.value
+import stegasaurus.composeapp.generated.resources.Res
+import stegasaurus.composeapp.generated.resources.decrypt_message_length_placeholder
+import stegasaurus.composeapp.generated.resources.decrypt_message_length_title
 
 @Composable
 fun MessageSizeCard(
@@ -33,7 +37,7 @@ fun MessageSizeCard(
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             Text(
-                text = "Message Length (Character)",
+                text = Res.string.decrypt_message_length_title.value,
                 style = MaterialTheme.typography.titleMedium
             )
 
@@ -43,7 +47,7 @@ fun MessageSizeCard(
             OutlinedTextField(
                 value = messageSize,
                 onValueChange = onMessageSizeChange,
-                placeholder = { Text("Enter message size in bytes...") },
+                placeholder = { Text(Res.string.decrypt_message_length_placeholder.value) },
                 colors = OutlinedTextFieldDefaults.colors().copy(
                     unfocusedContainerColor = containerColor,
                     focusedContainerColor = containerColor,

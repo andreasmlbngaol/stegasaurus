@@ -40,6 +40,21 @@ Encrypt a text message using hybrid cryptography and hide it inside an image.
 
 Extract an embedded ciphertext from an image and decrypt it using the shared key.
 
+### 3. **Internationalization Support**
+
+Stegasaurus supports multiple languages. Currently available languages:
+
+- **English**
+- **Indonesian**
+- **German**
+- **Spanish**
+- **French**
+- **Italian**
+- **Japanese**
+- **Korean**
+- **Chinese (Simplified)**
+- **Portuguese (Portugal)**
+
 ---
 
 ## Installation

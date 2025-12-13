@@ -25,6 +25,14 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import com.tukangencrypt.stegasaurus.presentation.component.IconCard
+import com.tukangencrypt.stegasaurus.utils.value
+import stegasaurus.composeapp.generated.resources.Res
+import stegasaurus.composeapp.generated.resources.decrypt
+import stegasaurus.composeapp.generated.resources.encrypt
+import stegasaurus.composeapp.generated.resources.home_decrypt_menu_button_text
+import stegasaurus.composeapp.generated.resources.home_decrypt_menu_desc
+import stegasaurus.composeapp.generated.resources.home_encrypt_menu_button_text
+import stegasaurus.composeapp.generated.resources.home_encrypt_menu_desc
 
 @Composable
 fun HomeMainMenu(
@@ -47,9 +55,9 @@ fun HomeMainMenu(
                 onClick = onNavigateToEncrypt,
                 icon = Icons.Outlined.Lock,
                 iconContainer = MaterialTheme.colorScheme.primary,
-                title = "Encrypt",
-                desc = "Encrypt and hide your messages in images securely",
-                buttonText = "Start encryption"
+                title = Res.string.encrypt.value,
+                desc = Res.string.home_encrypt_menu_desc.value,
+                buttonText = Res.string.home_encrypt_menu_button_text.value
             )
 
             MenuCard(
@@ -57,9 +65,9 @@ fun HomeMainMenu(
                 onClick = onNavigateToDecrypt,
                 icon = Icons.Outlined.LockOpen,
                 iconContainer = MaterialTheme.colorScheme.tertiary,
-                title = "Decrypt",
-                desc = "Extract and decrypt messages hidden inside images",
-                buttonText = "Start decryption"
+                title = Res.string.decrypt.value,
+                desc = Res.string.home_decrypt_menu_desc.value,
+                buttonText = Res.string.home_decrypt_menu_button_text.value
             )
         }
     } else {
@@ -80,9 +88,9 @@ fun HomeMainMenu(
                 onClick = onNavigateToEncrypt,
                 icon = Icons.Outlined.Lock,
                 iconContainer = MaterialTheme.colorScheme.primary,
-                title = "Encrypt",
-                desc = "Encrypt and hide your messages in images securely",
-                buttonText = "Start encryption"
+                title = Res.string.encrypt.value,
+                desc = Res.string.home_encrypt_menu_desc.value,
+                buttonText = Res.string.home_encrypt_menu_button_text.value
             )
 
             MenuCard(
@@ -98,9 +106,9 @@ fun HomeMainMenu(
                 onClick = onNavigateToDecrypt,
                 icon = Icons.Outlined.LockOpen,
                 iconContainer = MaterialTheme.colorScheme.tertiary,
-                title = "Decrypt",
-                desc = "Extract and decrypt messages hidden inside images",
-                buttonText = "Start decryption"
+                title = Res.string.decrypt.value,
+                desc = Res.string.home_decrypt_menu_desc.value,
+                buttonText = Res.string.home_decrypt_menu_button_text.value
             )
         }
     }

@@ -16,6 +16,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.tukangencrypt.stegasaurus.presentation.component.Center
+import com.tukangencrypt.stegasaurus.utils.value
+import stegasaurus.composeapp.generated.resources.Res
+import stegasaurus.composeapp.generated.resources.decrypt_result_subtitle
+import stegasaurus.composeapp.generated.resources.decrypt_result_title
 
 @Composable
 fun DecryptedMessageCard(
@@ -45,11 +49,11 @@ fun DecryptedMessageCard(
                         verticalArrangement = Arrangement.spacedBy(4.dp)
                     ) {
                         Text(
-                            text = "Decrypted Message",
+                            text = Res.string.decrypt_result_title.value,
                             style = MaterialTheme.typography.titleMedium
                         )
                         Text(
-                            text = "Encrypted Message will be appeared here",
+                            text = Res.string.decrypt_result_subtitle.value,
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
@@ -63,7 +67,7 @@ fun DecryptedMessageCard(
                         verticalArrangement = Arrangement.spacedBy(16.dp)
                     ) {
                         Text(
-                            text = "Decrypted Message",
+                            text = Res.string.decrypt_result_title.value,
                             style = MaterialTheme.typography.titleMedium
                         )
 

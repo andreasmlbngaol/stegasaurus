@@ -1,0 +1,72 @@
+<resources>
+    <string name="app_name">Stegasaurus</string>
+
+    <!-- Home Screen -->
+    <string name="home_subtitle">Protege tus mensajes con tecnologías avanzadas de esteganografía y cifrado.</string>
+    <string name="home_fab_text">Ver clave pública</string>
+
+    <string name="encrypt">Cifrar</string>
+    <string name="home_encrypt_menu_desc">Cifra y oculta mensajes dentro de imágenes de forma segura.</string>
+    <string name="home_encrypt_menu_button_text">Iniciar cifrado</string>
+
+    <string name="decrypt">Descifrar</string>
+    <string name="home_decrypt_menu_desc">Extrae y descifra mensajes ocultos dentro de imágenes.</string>
+    <string name="home_decrypt_menu_button_text">Iniciar descifrado</string>
+
+    <string name="home_generate_key_title">Generar par de claves</string>
+    <string name="home_generate_key_subtitle">Crea una clave pública y una clave privada para una comunicación segura.</string>
+
+    <string name="home_info_card_1_title">Cifrado sólido</string>
+    <string name="home_info_card_1_desc">Algoritmos criptográficos modernos para máxima seguridad.</string>
+
+    <string name="home_info_card_2_title">Esteganografía</string>
+    <string name="home_info_card_2_desc">Oculta mensajes dentro de imágenes sin ser detectados.</string>
+
+    <string name="home_info_card_3_title">Gestión de claves</string>
+    <string name="home_info_card_3_desc">Genera y administra claves de cifrado fácilmente.</string>
+
+    <string name="public_key_dialog_title">Tu clave pública</string>
+    <string name="public_key_dialog_content">Comparte esta clave pública con las personas que quieran enviarte mensajes cifrados.</string>
+    <string name="public_key_dialog_copy_button_text">Copiar al portapapeles</string>
+
+    <!-- Encrypt Screen -->
+    <string name="encrypt_title">Cifrar e incrustar mensaje</string>
+    <string name="encrypt_subtitle">Cifra y oculta mensajes dentro de imágenes de forma segura.</string>
+    <string name="encrypt_button_text_loading">Cifrando...</string>
+    <string name="encrypt_button_text">Cifrar y ocultar</string>
+    <string name="encrypt_snackbar_success">Mensaje cifrado e incrustado correctamente.</string>
+
+    <string name="recipient_public_key_label">Clave pública del destinatario</string>
+    <string name="recipient_public_key_placeholder">Introduce la clave pública del destinatario...</string>
+
+    <string name="encrypt_upload_image_label">Imagen para esteganografía</string>
+    <string name="encrypt_upload_image_title">Subir imagen</string>
+    <string name="encrypt_upload_image_types">PNG, JPG (máx. 10 MB)</string>
+    <string name="encrypt_change_image_title">Cambiar imagen</string>
+
+    <string name="encrypt_message_label">Mensaje</string>
+    <string name="encrypt_message_placeholder">Escribe el mensaje que deseas cifrar...</string>
+    <string name="encrypt_message_support_text">%1$d caracteres</string>
+
+    <string name="encrypt_download_title">Imagen cifrada</string>
+    <string name="encrypt_download_subtitle">La imagen cifrada aparecerá aquí.</string>
+    <string name="encrypt_download_button_text">Descargar imagen</string>
+
+    <!-- Decrypt Screen -->
+    <string name="decrypt_title">Extraer y descifrar mensaje</string>
+    <string name="decrypt_subtitle">Extrae y descifra mensajes ocultos en imágenes.</string>
+    <string name="decrypt_button_text_loading">Descifrando...</string>
+    <string name="decrypt_button_text">Extraer y descifrar</string>
+    <string name="decrypt_snackbar_success">Mensaje extraído y descifrado correctamente.</string>
+
+    <string name="decrypt_upload_image_label">Imagen cifrada</string>
+    <string name="decrypt_upload_image_title">Subir imagen</string>
+    <string name="decrypt_upload_image_types">PNG (máx. 10 MB)</string>
+    <string name="decrypt_change_image_title">Cambiar imagen</string>
+
+    <string name="decrypt_message_length_title">Longitud del mensaje (caracteres)</string>
+    <string name="decrypt_message_length_placeholder">Introduce la longitud total del mensaje...</string>
+
+    <string name="decrypt_result_title">Mensaje descifrado</string>
+    <string name="decrypt_result_subtitle">El mensaje descifrado aparecerá aquí.</string>
+</resources>

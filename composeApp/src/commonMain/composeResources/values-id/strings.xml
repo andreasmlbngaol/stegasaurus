@@ -1,0 +1,72 @@
+<resources>
+    <string name="app_name">Stegasaurus</string>
+
+    <!-- Home Screen -->
+    <string name="home_subtitle">Amankan pesan Anda menggunakan steganografi dan enkripsi tingkat lanjut.</string>
+    <string name="home_fab_text">Lihat Kunci Publik</string>
+
+    <string name="encrypt">Enkripsi</string>
+    <string name="home_encrypt_menu_desc">Enkripsi dan sembunyikan pesan di dalam gambar secara aman.</string>
+    <string name="home_encrypt_menu_button_text">Mulai Enkripsi</string>
+
+    <string name="decrypt">Dekripsi</string>
+    <string name="home_decrypt_menu_desc">Ekstrak dan dekripsi pesan tersembunyi di dalam gambar.</string>
+    <string name="home_decrypt_menu_button_text">Mulai Dekripsi</string>
+
+    <string name="home_generate_key_title">Buat Pasangan Kunci</string>
+    <string name="home_generate_key_subtitle">Buat kunci publik dan privat untuk pengiriman pesan yang aman.</string>
+
+    <string name="home_info_card_1_title">Enkripsi Kuat</string>
+    <string name="home_info_card_1_desc">Algoritma kriptografi modern untuk keamanan maksimal.</string>
+
+    <string name="home_info_card_2_title">Steganografi</string>
+    <string name="home_info_card_2_desc">Sembunyikan pesan di dalam gambar tanpa terdeteksi.</string>
+
+    <string name="home_info_card_3_title">Manajemen Kunci</string>
+    <string name="home_info_card_3_desc">Buat dan kelola kunci enkripsi dengan mudah.</string>
+
+    <string name="public_key_dialog_title">Kunci Publik Anda</string>
+    <string name="public_key_dialog_content">Bagikan kunci publik ini kepada orang yang ingin mengirim pesan terenkripsi.</string>
+    <string name="public_key_dialog_copy_button_text">Salin ke Clipboard</string>
+
+    <!-- Encrypt Screen -->
+    <string name="encrypt_title">Enkripsi dan Sematkan Pesan</string>
+    <string name="encrypt_subtitle">Enkripsi dan sembunyikan pesan di dalam gambar secara aman.</string>
+    <string name="encrypt_button_text_loading">Mengenkripsi...</string>
+    <string name="encrypt_button_text">Enkripsi &amp; Sembunyikan Pesan</string>
+    <string name="encrypt_snackbar_success">Pesan berhasil dienkripsi dan disematkan.</string>
+
+    <string name="recipient_public_key_label">Kunci Publik Penerima</string>
+    <string name="recipient_public_key_placeholder">Masukkan kunci publik penerima...</string>
+
+    <string name="encrypt_upload_image_label">Gambar untuk Steganografi</string>
+    <string name="encrypt_upload_image_title">Unggah Gambar</string>
+    <string name="encrypt_upload_image_types">PNG, JPG (maks. 10MB)</string>
+    <string name="encrypt_change_image_title">Klik untuk Mengganti Gambar</string>
+
+    <string name="encrypt_message_label">Pesan</string>
+    <string name="encrypt_message_placeholder">Tulis pesan yang ingin dienkripsi...</string>
+    <string name="encrypt_message_support_text">%1$d karakter</string>
+
+    <string name="encrypt_download_title">Gambar Terenkripsi</string>
+    <string name="encrypt_download_subtitle">Gambar terenkripsi akan muncul di sini.</string>
+    <string name="encrypt_download_button_text">Unduh Gambar</string>
+
+    <!-- Decrypt Screen -->
+    <string name="decrypt_title">Ekstrak dan Dekripsi Pesan</string>
+    <string name="decrypt_subtitle">Ekstrak dan dekripsi pesan tersembunyi dari gambar secara aman.</string>
+    <string name="decrypt_button_text_loading">Mendekripsi...</string>
+    <string name="decrypt_button_text">Ekstrak &amp; Dekripsi Pesan</string>
+    <string name="decrypt_snackbar_success">Pesan berhasil diekstrak dan didekripsi.</string>
+
+    <string name="decrypt_upload_image_label">Gambar Terenkripsi</string>
+    <string name="decrypt_upload_image_title">Unggah Gambar</string>
+    <string name="decrypt_upload_image_types">PNG (maks. 10MB)</string>
+    <string name="decrypt_change_image_title">Klik untuk Mengganti Gambar</string>
+
+    <string name="decrypt_message_length_title">Panjang Pesan (Karakter)</string>
+    <string name="decrypt_message_length_placeholder">Masukkan total panjang pesan...</string>
+
+    <string name="decrypt_result_title">Pesan Terdekripsi</string>
+    <string name="decrypt_result_subtitle">Pesan terdekripsi akan muncul di sini.</string>
+</resources>

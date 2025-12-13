@@ -12,6 +12,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.tukangencrypt.stegasaurus.presentation.component.IconCard
+import com.tukangencrypt.stegasaurus.utils.value
+import stegasaurus.composeapp.generated.resources.Res
+import stegasaurus.composeapp.generated.resources.home_generate_key_subtitle
+import stegasaurus.composeapp.generated.resources.home_generate_key_title
 
 @Composable
 fun HomeGenerateKeyCard(
@@ -35,19 +39,19 @@ fun HomeGenerateKeyCard(
         )
 
         Text(
-            text = "Generate Key Pair",
+            text = Res.string.home_generate_key_title.value,
             style = MaterialTheme.typography.headlineSmall
         )
 
         Text(
-            text = "Generate a public and private key pair to encrypt messages securely",
+            text = Res.string.home_generate_key_subtitle.value,
             style = MaterialTheme.typography.bodyLarge
         )
 
         TextButton(
             onClick = onGenerateKeyPair
         ) {
-            Text("Generate Public Key")
+            Text(Res.string.home_generate_key_title.value)
         }
     }
 }

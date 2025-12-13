@@ -22,9 +22,11 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.tukangencrypt.stegasaurus.presentation.component.calculateWindowSize
 import com.tukangencrypt.stegasaurus.presentation.screen.home.component.*
-import org.jetbrains.compose.resources.painterResource
+import com.tukangencrypt.stegasaurus.utils.value
 import org.koin.compose.viewmodel.koinViewModel
 import stegasaurus.composeapp.generated.resources.Res
+import stegasaurus.composeapp.generated.resources.app_name
+import stegasaurus.composeapp.generated.resources.home_subtitle
 import stegasaurus.composeapp.generated.resources.ic_launcher
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
@@ -59,7 +61,7 @@ fun HomeScreen(
             verticalArrangement = Arrangement.Center
         ) {
             Image(
-                painter = painterResource(Res.drawable.ic_launcher),
+                painter = Res.drawable.ic_launcher.value,
                 contentDescription = "Stegasaurus Logo",
                 modifier = Modifier
                     .size(80.dp)
@@ -70,14 +72,14 @@ fun HomeScreen(
             Spacer(Modifier.size(16.dp))
 
             Text(
-                text = "Stegasaurus",
+                text = Res.string.app_name.value,
                 style = MaterialTheme.typography.displayMedium,
                 textAlign = TextAlign.Center
             )
             Spacer(Modifier.size(16.dp))
 
             Text(
-                text = "Secure your messages with advanced steganography and encryption technology.",
+                text = Res.string.home_subtitle.value,
                 style = MaterialTheme.typography.titleMedium,
                 textAlign = TextAlign.Center
             )
@@ -103,7 +105,6 @@ fun HomeScreen(
 
             HomeInfoCards(isCompactWidth = isCompactWidth)
             Spacer(Modifier.size(64.dp))
-
         }
 
         if(state.pubKeyDialogVisible) {

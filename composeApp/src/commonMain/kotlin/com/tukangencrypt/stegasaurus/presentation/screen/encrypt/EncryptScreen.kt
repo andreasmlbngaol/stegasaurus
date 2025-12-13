@@ -2,6 +2,7 @@
 
 package com.tukangencrypt.stegasaurus.presentation.screen.encrypt
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -24,10 +25,16 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.tukangencrypt.stegasaurus.presentation.component.TopBar
 import com.tukangencrypt.stegasaurus.presentation.component.calculateWindowSize
 import com.tukangencrypt.stegasaurus.presentation.screen.encrypt.component.*
+import com.tukangencrypt.stegasaurus.utils.value
 import io.github.vinceglb.filekit.FileKit
 import io.github.vinceglb.filekit.dialogs.deprecated.openFileSaver
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.getString
 import org.koin.compose.viewmodel.koinViewModel
+import stegasaurus.composeapp.generated.resources.Res
+import stegasaurus.composeapp.generated.resources.encrypt_button_text
+import stegasaurus.composeapp.generated.resources.encrypt_button_text_loading
+import stegasaurus.composeapp.generated.resources.encrypt_snackbar_success
 
 @OptIn(
     ExperimentalMaterial3Api::class,
@@ -38,7 +45,6 @@ fun EncryptScreen(
     modifier: Modifier = Modifier,
     viewModel: EncryptViewModel = koinViewModel()
 ) {
-    val scope = rememberCoroutineScope()
     val state by viewModel.state.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
@@ -54,7 +60,9 @@ fun EncryptScreen(
 
     LaunchedEffect(state.isEncrypted) {
         if (state.isEncrypted) {
-            snackbarHostState.showSnackbar("Message encrypted successfully!")
+            snackbarHostState.showSnackbar(
+                getString(Res.string.encrypt_snackbar_success)
+            )
         }
     }
 
@@ -91,98 +99,21 @@ fun EncryptScreen(
                 EncryptTitleSection()
 
                 if (isCompactWidth) {
-                    Column(
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalArrangement = Arrangement.spacedBy(16.dp)
-                    ) {
-                        RecipientPublicKeyCard(
-                            publicKey = state.recipientPublicKey,
-                            onPublicKeyChange = viewModel::onRecipientPublicKeyChanged,
-                            modifier = Modifier.fillMaxWidth(),
-                        )
-
-                        UploadImageCard(
-                            selectedImageSize = state.selectedImageBytes?.size?.toLong() ?: 0L,
-                            selectedImageName = state.selectedImageName,
-                            onUploadImage = viewModel::pickImage,
-                            modifier = Modifier.fillMaxWidth(),
-                            enabled = !state.isLoading
-                        )
-
-                        EncryptMessageCard(
-                            message = state.message,
-                            onMessageChange = viewModel::onMessageChanged,
-                            modifier = Modifier.fillMaxWidth(),
-                        )
-
-                        EncryptedImageDownloadCard(
-                            enabled = state.embeddedImageBytes != null && !state.isLoading,
-                            isLoading = state.isLoading,
-                            onDownload = {
-                                scope.launch {
-                                    FileKit.openFileSaver(state.embeddedImageBytes, "stega_encrypted", "png")
-                                }
-                            },
-                            hasEncryptedImage = state.embeddedImageBytes != null,
-                            encryptedImageSize = state.embeddedImageBytes?.size?.toLong(),
-                            modifier = Modifier.fillMaxWidth()
-                        )
-                    }
+                    EncryptCompactScreen(
+                        state = state,
+                        onPublicKeyChange = viewModel::onRecipientPublicKeyChanged,
+                        onPickImage = viewModel::pickImage,
+                        onMessageChange = viewModel::onMessageChanged,
+                        modifier = Modifier.fillMaxWidth()
+                    )
                 } else {
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(16.dp),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                    ) {
-                        Column(
-                            modifier = Modifier
-                                .weight(1f),
-                            verticalArrangement = Arrangement.spacedBy(16.dp)
-                        ) {
-                            RecipientPublicKeyCard(
-                                publicKey = state.recipientPublicKey,
-                                onPublicKeyChange = viewModel::onRecipientPublicKeyChanged,
-                                modifier = Modifier
-                                    .fillMaxWidth(),
-                            )
-
-                            UploadImageCard(
-                                selectedImageSize = state.selectedImageBytes?.size?.toLong() ?: 0L,
-                                selectedImageName = state.selectedImageName,
-                                onUploadImage = viewModel::pickImage,
-                                modifier = Modifier
-                                    .fillMaxWidth(),
-                                enabled = !state.isLoading
-                            )
-                        }
-
-                        Column(
-                            modifier = Modifier
-                                .weight(1f),
-                            verticalArrangement = Arrangement.spacedBy(16.dp)
-                        ) {
-                            EncryptMessageCard(
-                                message = state.message,
-                                onMessageChange = viewModel::onMessageChanged,
-                                modifier = Modifier
-                                    .fillMaxWidth(),
-                            )
-
-                            EncryptedImageDownloadCard(
-                                enabled = state.embeddedImageBytes != null && !state.isLoading,
-                                isLoading = state.isLoading,
-                                onDownload = {
-                                    scope.launch {
-                                        FileKit.openFileSaver(state.embeddedImageBytes, "stega_encrypted", "png")
-                                    }
-                                },
-                                hasEncryptedImage = state.embeddedImageBytes != null,
-                                encryptedImageSize = state.embeddedImageBytes?.size?.toLong(),
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                            )
-                        }
-                    }
+                    EncryptExpandedScreen(
+                        state = state,
+                        onPublicKeyChange = viewModel::onRecipientPublicKeyChanged,
+                        onPickImage = viewModel::pickImage,
+                        oMessageChange = viewModel::onMessageChanged,
+                        modifier = Modifier.fillMaxWidth()
+                    )
                 }
             }
 
@@ -213,9 +144,129 @@ fun EncryptScreen(
                         )
                     }
 
-                    Text(if (state.isLoading) "Encrypting..." else "Encrypt & Hide Message")
+                    Text(
+                        if (state.isLoading)
+                            Res.string.encrypt_button_text_loading.value
+                        else Res.string.encrypt_button_text.value,
+                    )
                 }
             }
+        }
+    }
+}
+
+@Composable
+private fun EncryptCompactScreen(
+    state: EncryptState,
+    onPublicKeyChange: (String) -> Unit,
+    onPickImage: () -> Unit,
+    onMessageChange: (String) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val scope = rememberCoroutineScope()
+
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        RecipientPublicKeyCard(
+            publicKey = state.recipientPublicKey,
+            onPublicKeyChange = onPublicKeyChange,
+            modifier = Modifier.fillMaxWidth(),
+        )
+
+        UploadImageCard(
+            selectedImageSize = state.selectedImageBytes?.size?.toLong() ?: 0L,
+            selectedImageName = state.selectedImageName,
+            onUploadImage = onPickImage,
+            modifier = Modifier.fillMaxWidth(),
+            enabled = !state.isLoading
+        )
+
+        EncryptMessageCard(
+            message = state.message,
+            onMessageChange = onMessageChange,
+            modifier = Modifier.fillMaxWidth(),
+        )
+
+        AnimatedVisibility(visible = state.embeddedImageBytes != null) {
+            EncryptedImageDownloadCard(
+                enabled = state.embeddedImageBytes != null && !state.isLoading,
+                isLoading = state.isLoading,
+                onDownload = {
+                    scope.launch {
+                        FileKit.openFileSaver(state.embeddedImageBytes, "stega_encrypted", "png")
+                    }
+                },
+                hasEncryptedImage = state.embeddedImageBytes != null,
+                encryptedImageSize = state.embeddedImageBytes?.size?.toLong(),
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
+    }
+}
+
+@Composable
+private fun EncryptExpandedScreen(
+    state: EncryptState,
+    onPublicKeyChange: (String) -> Unit,
+    onPickImage: () -> Unit,
+    oMessageChange: (String) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val scope = rememberCoroutineScope()
+
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
+        modifier = modifier
+    ) {
+        Column(
+            modifier = Modifier
+                .weight(1f),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            RecipientPublicKeyCard(
+                publicKey = state.recipientPublicKey,
+                onPublicKeyChange = onPublicKeyChange,
+                modifier = Modifier
+                    .fillMaxWidth(),
+            )
+
+            UploadImageCard(
+                selectedImageSize = state.selectedImageBytes?.size?.toLong() ?: 0L,
+                selectedImageName = state.selectedImageName,
+                onUploadImage = onPickImage,
+                modifier = Modifier
+                    .fillMaxWidth(),
+                enabled = !state.isLoading
+            )
+        }
+
+        Column(
+            modifier = Modifier
+                .weight(1f),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            EncryptMessageCard(
+                message = state.message,
+                onMessageChange = oMessageChange,
+                modifier = Modifier
+                    .fillMaxWidth(),
+            )
+
+            EncryptedImageDownloadCard(
+                enabled = state.embeddedImageBytes != null && !state.isLoading,
+                isLoading = state.isLoading,
+                onDownload = {
+                    scope.launch {
+                        FileKit.openFileSaver(state.embeddedImageBytes, "stega_encrypted", "png")
+                    }
+                },
+                hasEncryptedImage = state.embeddedImageBytes != null,
+                encryptedImageSize = state.embeddedImageBytes?.size?.toLong(),
+                modifier = Modifier
+                    .fillMaxWidth()
+            )
         }
     }
 }

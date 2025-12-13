@@ -1,0 +1,72 @@
+<resources>
+    <string name="app_name">Stegasaurus</string>
+
+    <!-- Home Screen -->
+    <string name="home_subtitle">Schützen Sie Ihre Nachrichten mit fortschrittlicher Steganografie und Verschlüsselung.</string>
+    <string name="home_fab_text">Öffentlichen Schlüssel anzeigen</string>
+
+    <string name="encrypt">Verschlüsseln</string>
+    <string name="home_encrypt_menu_desc">Nachrichten sicher in Bildern verschlüsseln und verbergen.</string>
+    <string name="home_encrypt_menu_button_text">Verschlüsselung starten</string>
+
+    <string name="decrypt">Entschlüsseln</string>
+    <string name="home_decrypt_menu_desc">In Bildern versteckte Nachrichten extrahieren und entschlüsseln.</string>
+    <string name="home_decrypt_menu_button_text">Entschlüsselung starten</string>
+
+    <string name="home_generate_key_title">Schlüsselpaar erstellen</string>
+    <string name="home_generate_key_subtitle">Erstellen Sie ein öffentliches und privates Schlüsselpaar für sichere Kommunikation.</string>
+
+    <string name="home_info_card_1_title">Starke Verschlüsselung</string>
+    <string name="home_info_card_1_desc">Moderne kryptografische Algorithmen für maximale Sicherheit.</string>
+
+    <string name="home_info_card_2_title">Steganografie</string>
+    <string name="home_info_card_2_desc">Nachrichten unbemerkt in Bildern verbergen.</string>
+
+    <string name="home_info_card_3_title">Schlüsselverwaltung</string>
+    <string name="home_info_card_3_desc">Verschlüsselungsschlüssel einfach erstellen und verwalten.</string>
+
+    <string name="public_key_dialog_title">Ihr öffentlicher Schlüssel</string>
+    <string name="public_key_dialog_content">Teilen Sie diesen öffentlichen Schlüssel mit Personen, die Ihnen verschlüsselte Nachrichten senden möchten.</string>
+    <string name="public_key_dialog_copy_button_text">In die Zwischenablage kopieren</string>
+
+    <!-- Encrypt Screen -->
+    <string name="encrypt_title">Nachricht verschlüsseln und einbetten</string>
+    <string name="encrypt_subtitle">Nachrichten sicher in Bildern verschlüsseln und verbergen.</string>
+    <string name="encrypt_button_text_loading">Verschlüsselung läuft...</string>
+    <string name="encrypt_button_text">Verschlüsseln &amp; verbergen</string>
+    <string name="encrypt_snackbar_success">Nachricht erfolgreich verschlüsselt und eingebettet.</string>
+
+    <string name="recipient_public_key_label">Öffentlicher Schlüssel des Empfängers</string>
+    <string name="recipient_public_key_placeholder">Öffentlichen Schlüssel des Empfängers eingeben...</string>
+
+    <string name="encrypt_upload_image_label">Bild für Steganografie</string>
+    <string name="encrypt_upload_image_title">Bild hochladen</string>
+    <string name="encrypt_upload_image_types">PNG, JPG (max. 10 MB)</string>
+    <string name="encrypt_change_image_title">Bild ändern</string>
+
+    <string name="encrypt_message_label">Nachricht</string>
+    <string name="encrypt_message_placeholder">Geben Sie die zu verschlüsselnde Nachricht ein...</string>
+    <string name="encrypt_message_support_text">%1$d Zeichen</string>
+
+    <string name="encrypt_download_title">Verschlüsseltes Bild</string>
+    <string name="encrypt_download_subtitle">Das verschlüsselte Bild wird hier angezeigt.</string>
+    <string name="encrypt_download_button_text">Bild herunterladen</string>
+
+    <!-- Decrypt Screen -->
+    <string name="decrypt_title">Nachricht extrahieren und entschlüsseln</string>
+    <string name="decrypt_subtitle">Versteckte Nachrichten aus Bildern extrahieren und entschlüsseln.</string>
+    <string name="decrypt_button_text_loading">Entschlüsselung läuft...</string>
+    <string name="decrypt_button_text">Extrahieren &amp; entschlüsseln</string>
+    <string name="decrypt_snackbar_success">Nachricht erfolgreich extrahiert und entschlüsselt.</string>
+
+    <string name="decrypt_upload_image_label">Verschlüsseltes Bild</string>
+    <string name="decrypt_upload_image_title">Bild hochladen</string>
+    <string name="decrypt_upload_image_types">PNG (max. 10 MB)</string>
+    <string name="decrypt_change_image_title">Bild ändern</string>
+
+    <string name="decrypt_message_length_title">Nachrichtenlänge (Zeichen)</string>
+    <string name="decrypt_message_length_placeholder">Gesamte Nachrichtenlänge eingeben...</string>
+
+    <string name="decrypt_result_title">Entschlüsselte Nachricht</string>
+    <string name="decrypt_result_subtitle">Die entschlüsselte Nachricht wird hier angezeigt.</string>
+</resources>

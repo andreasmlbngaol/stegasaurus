@@ -7,6 +7,9 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import com.tukangencrypt.stegasaurus.utils.value
+import stegasaurus.composeapp.generated.resources.Res
+import stegasaurus.composeapp.generated.resources.home_fab_text
 
 @Composable
 fun HomeFloatingActionButton(
@@ -20,13 +23,13 @@ fun HomeFloatingActionButton(
         icon = {
             Icon(
                 imageVector = Icons.Outlined.Visibility,
-                contentDescription = "View Public Key",
+                contentDescription = Res.string.home_fab_text.value,
                 tint = MaterialTheme.colorScheme.background
             )
         },
         text = {
             Text(
-                "View Public Key",
+                Res.string.home_fab_text.value,
                 color = MaterialTheme.colorScheme.background
             )
         }

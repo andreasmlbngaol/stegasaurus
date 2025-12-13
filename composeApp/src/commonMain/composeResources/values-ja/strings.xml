@@ -1,0 +1,72 @@
+<resources>
+    <string name="app_name">Stegasaurus</string>
+
+    <!-- Home Screen -->
+    <string name="home_subtitle">高度なステガノグラフィと暗号化技術でメッセージを保護します。</string>
+    <string name="home_fab_text">公開鍵を表示</string>
+
+    <string name="encrypt">暗号化</string>
+    <string name="home_encrypt_menu_desc">メッセージを画像に安全に暗号化して隠します。</string>
+    <string name="home_encrypt_menu_button_text">暗号化を開始</string>
+
+    <string name="decrypt">復号</string>
+    <string name="home_decrypt_menu_desc">画像に隠されたメッセージを抽出して復号します。</string>
+    <string name="home_decrypt_menu_button_text">復号を開始</string>
+
+    <string name="home_generate_key_title">鍵ペアを生成</string>
+    <string name="home_generate_key_subtitle">安全なメッセージ送信のための公開鍵と秘密鍵を生成します。</string>
+
+    <string name="home_info_card_1_title">強力な暗号化</string>
+    <string name="home_info_card_1_desc">最大限の安全性を実現する最新の暗号アルゴリズム。</string>
+
+    <string name="home_info_card_2_title">ステガノグラフィ</string>
+    <string name="home_info_card_2_desc">検出されることなくメッセージを画像に隠します。</string>
+
+    <string name="home_info_card_3_title">鍵管理</string>
+    <string name="home_info_card_3_desc">暗号鍵を簡単に生成・管理できます。</string>
+
+    <string name="public_key_dialog_title">あなたの公開鍵</string>
+    <string name="public_key_dialog_content">暗号化されたメッセージを送信したい相手とこの公開鍵を共有してください。</string>
+    <string name="public_key_dialog_copy_button_text">クリップボードにコピー</string>
+
+    <!-- Encrypt Screen -->
+    <string name="encrypt_title">メッセージの暗号化と埋め込み</string>
+    <string name="encrypt_subtitle">メッセージを暗号化して画像に安全に隠します。</string>
+    <string name="encrypt_button_text_loading">暗号化中...</string>
+    <string name="encrypt_button_text">暗号化して隠す</string>
+    <string name="encrypt_snackbar_success">メッセージが正常に暗号化され、埋め込まれました。</string>
+
+    <string name="recipient_public_key_label">受信者の公開鍵</string>
+    <string name="recipient_public_key_placeholder">受信者の公開鍵を入力してください...</string>
+
+    <string name="encrypt_upload_image_label">ステガノグラフィ用画像</string>
+    <string name="encrypt_upload_image_title">画像をアップロード</string>
+    <string name="encrypt_upload_image_types">PNG, JPG（最大10MB）</string>
+    <string name="encrypt_change_image_title">画像を変更</string>
+
+    <string name="encrypt_message_label">メッセージ</string>
+    <string name="encrypt_message_placeholder">暗号化するメッセージを入力してください...</string>
+    <string name="encrypt_message_support_text">%1$d文字</string>
+
+    <string name="encrypt_download_title">暗号化された画像</string>
+    <string name="encrypt_download_subtitle">暗号化された画像がここに表示されます。</string>
+    <string name="encrypt_download_button_text">画像をダウンロード</string>
+
+    <!-- Decrypt Screen -->
+    <string name="decrypt_title">メッセージの抽出と復号</string>
+    <string name="decrypt_subtitle">画像から隠されたメッセージを抽出して復号します。</string>
+    <string name="decrypt_button_text_loading">復号中...</string>
+    <string name="decrypt_button_text">抽出して復号</string>
+    <string name="decrypt_snackbar_success">メッセージが正常に抽出され、復号されました。</string>
+
+    <string name="decrypt_upload_image_label">暗号化された画像</string>
+    <string name="decrypt_upload_image_title">画像をアップロード</string>
+    <string name="decrypt_upload_image_types">PNG（最大10MB）</string>
+    <string name="decrypt_change_image_title">画像を変更</string>
+
+    <string name="decrypt_message_length_title">メッセージの長さ（文字数）</string>
+    <string name="decrypt_message_length_placeholder">メッセージの合計文字数を入力してください...</string>
+
+    <string name="decrypt_result_title">復号されたメッセージ</string>
+    <string name="decrypt_result_subtitle">復号されたメッセージがここに表示されます。</string>
+</resources>

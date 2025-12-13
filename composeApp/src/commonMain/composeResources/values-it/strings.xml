@@ -1,0 +1,72 @@
+<resources>
+    <string name="app_name">Stegasaurus</string>
+
+    <!-- Home Screen -->
+    <string name="home_subtitle">Proteggi i tuoi messaggi con tecnologie avanzate di steganografia e crittografia.</string>
+    <string name="home_fab_text">Visualizza chiave pubblica</string>
+
+    <string name="encrypt">Crittografa</string>
+    <string name="home_encrypt_menu_desc">Crittografa e nascondi i messaggi all'interno delle immagini in modo sicuro.</string>
+    <string name="home_encrypt_menu_button_text">Avvia crittografia</string>
+
+    <string name="decrypt">Decrittografa</string>
+    <string name="home_decrypt_menu_desc">Estrai e decrittografa i messaggi nascosti nelle immagini.</string>
+    <string name="home_decrypt_menu_button_text">Avvia decrittografia</string>
+
+    <string name="home_generate_key_title">Genera coppia di chiavi</string>
+    <string name="home_generate_key_subtitle">Crea una chiave pubblica e una chiave privata per comunicazioni sicure.</string>
+
+    <string name="home_info_card_1_title">Crittografia avanzata</string>
+    <string name="home_info_card_1_desc">Algoritmi crittografici moderni per la massima sicurezza.</string>
+
+    <string name="home_info_card_2_title">Steganografia</string>
+    <string name="home_info_card_2_desc">Nascondi messaggi all'interno delle immagini senza essere rilevato.</string>
+
+    <string name="home_info_card_3_title">Gestione delle chiavi</string>
+    <string name="home_info_card_3_desc">Genera e gestisci facilmente le chiavi di crittografia.</string>
+
+    <string name="public_key_dialog_title">La tua chiave pubblica</string>
+    <string name="public_key_dialog_content">Condividi questa chiave pubblica con chi desidera inviarti messaggi crittografati.</string>
+    <string name="public_key_dialog_copy_button_text">Copia negli appunti</string>
+
+    <!-- Encrypt Screen -->
+    <string name="encrypt_title">Crittografa e incorpora messaggio</string>
+    <string name="encrypt_subtitle">Crittografa e nascondi i messaggi all'interno delle immagini in modo sicuro.</string>
+    <string name="encrypt_button_text_loading">Crittografia in corso...</string>
+    <string name="encrypt_button_text">Crittografa e nascondi</string>
+    <string name="encrypt_snackbar_success">Messaggio crittografato e incorporato con successo.</string>
+
+    <string name="recipient_public_key_label">Chiave pubblica del destinatario</string>
+    <string name="recipient_public_key_placeholder">Inserisci la chiave pubblica del destinatario...</string>
+
+    <string name="encrypt_upload_image_label">Immagine per steganografia</string>
+    <string name="encrypt_upload_image_title">Carica immagine</string>
+    <string name="encrypt_upload_image_types">PNG, JPG (max 10 MB)</string>
+    <string name="encrypt_change_image_title">Cambia immagine</string>
+
+    <string name="encrypt_message_label">Messaggio</string>
+    <string name="encrypt_message_placeholder">Scrivi il messaggio da crittografare...</string>
+    <string name="encrypt_message_support_text">%1$d caratteri</string>
+
+    <string name="encrypt_download_title">Immagine crittografata</string>
+    <string name="encrypt_download_subtitle">L'immagine crittografata apparirà qui.</string>
+    <string name="encrypt_download_button_text">Scarica immagine</string>
+
+    <!-- Decrypt Screen -->
+    <string name="decrypt_title">Estrai e decrittografa messaggio</string>
+    <string name="decrypt_subtitle">Estrai e decrittografa i messaggi nascosti nelle immagini.</string>
+    <string name="decrypt_button_text_loading">Decrittografia in corso...</string>
+    <string name="decrypt_button_text">Estrai e decrittografa</string>
+    <string name="decrypt_snackbar_success">Messaggio estratto e decrittografato con successo.</string>
+
+    <string name="decrypt_upload_image_label">Immagine crittografata</string>
+    <string name="decrypt_upload_image_title">Carica immagine</string>
+    <string name="decrypt_upload_image_types">PNG (max 10 MB)</string>
+    <string name="decrypt_change_image_title">Cambia immagine</string>
+
+    <string name="decrypt_message_length_title">Lunghezza del messaggio (caratteri)</string>
+    <string name="decrypt_message_length_placeholder">Inserisci la lunghezza totale del messaggio...</string>
+
+    <string name="decrypt_result_title">Messaggio decrittografato</string>
+    <string name="decrypt_result_subtitle">Il messaggio decrittografato apparirà qui.</string>
+</resources>

@@ -13,6 +13,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.tukangencrypt.stegasaurus.presentation.component.IconCard
+import com.tukangencrypt.stegasaurus.utils.value
+import stegasaurus.composeapp.generated.resources.Res
+import stegasaurus.composeapp.generated.resources.encrypt_subtitle
+import stegasaurus.composeapp.generated.resources.encrypt_title
 
 @Composable
 fun EncryptTitleSection() {
@@ -34,11 +38,11 @@ fun EncryptTitleSection() {
             horizontalAlignment = Alignment.Start
         ) {
             Text(
-                text = "Encrypt Message",
+                text = Res.string.encrypt_title.value,
                 style = MaterialTheme.typography.headlineMedium
             )
             Text(
-                text = "Encrypt and hide your messages in images securely.",
+                text = Res.string.encrypt_subtitle.value,
                 style = MaterialTheme.typography.bodyMedium
             )
         }

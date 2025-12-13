@@ -13,6 +13,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.tukangencrypt.stegasaurus.presentation.component.IconCard
+import com.tukangencrypt.stegasaurus.utils.value
+import stegasaurus.composeapp.generated.resources.Res
+import stegasaurus.composeapp.generated.resources.decrypt_subtitle
+import stegasaurus.composeapp.generated.resources.decrypt_title
 
 @Composable
 fun DecryptTitleSection() {
@@ -34,11 +38,11 @@ fun DecryptTitleSection() {
             horizontalAlignment = Alignment.Start
         ) {
             Text(
-                text = "Decrypt Message",
+                text = Res.string.decrypt_title.value,
                 style = MaterialTheme.typography.headlineMedium
             )
             Text(
-                text = "Extract and decrypt your hidden messages from images securely.",
+                text = Res.string.decrypt_subtitle.value,
                 style = MaterialTheme.typography.bodyMedium
             )
         }

@@ -1,0 +1,72 @@
+<resources>
+    <string name="app_name">Stegasaurus</string>
+
+    <!-- Home Screen -->
+    <string name="home_subtitle">使用先进的隐写术和加密技术保护您的消息。</string>
+    <string name="home_fab_text">查看公钥</string>
+
+    <string name="encrypt">加密</string>
+    <string name="home_encrypt_menu_desc">将消息安全地加密并隐藏在图片中。</string>
+    <string name="home_encrypt_menu_button_text">开始加密</string>
+
+    <string name="decrypt">解密</string>
+    <string name="home_decrypt_menu_desc">从图片中提取并解密隐藏的消息。</string>
+    <string name="home_decrypt_menu_button_text">开始解密</string>
+
+    <string name="home_generate_key_title">生成密钥对</string>
+    <string name="home_generate_key_subtitle">生成用于安全通信的公钥和私钥。</string>
+
+    <string name="home_info_card_1_title">强加密</string>
+    <string name="home_info_card_1_desc">采用现代加密算法，提供最高级别的安全性。</string>
+
+    <string name="home_info_card_2_title">隐写术</string>
+    <string name="home_info_card_2_desc">将消息隐藏在图片中而不被察觉。</string>
+
+    <string name="home_info_card_3_title">密钥管理</string>
+    <string name="home_info_card_3_desc">轻松生成和管理加密密钥。</string>
+
+    <string name="public_key_dialog_title">您的公钥</string>
+    <string name="public_key_dialog_content">将此公钥分享给想要向您发送加密消息的人。</string>
+    <string name="public_key_dialog_copy_button_text">复制到剪贴板</string>
+
+    <!-- Encrypt Screen -->
+    <string name="encrypt_title">加密并嵌入消息</string>
+    <string name="encrypt_subtitle">将消息加密并安全地隐藏在图片中。</string>
+    <string name="encrypt_button_text_loading">正在加密...</string>
+    <string name="encrypt_button_text">加密并隐藏</string>
+    <string name="encrypt_snackbar_success">消息已成功加密并嵌入。</string>
+
+    <string name="recipient_public_key_label">接收方公钥</string>
+    <string name="recipient_public_key_placeholder">请输入接收方的公钥...</string>
+
+    <string name="encrypt_upload_image_label">用于隐写的图片</string>
+    <string name="encrypt_upload_image_title">上传图片</string>
+    <string name="encrypt_upload_image_types">PNG、JPG（最大 10MB）</string>
+    <string name="encrypt_change_image_title">更换图片</string>
+
+    <string name="encrypt_message_label">消息</string>
+    <string name="encrypt_message_placeholder">请输入要加密的消息...</string>
+    <string name="encrypt_message_support_text">%1$d 个字符</string>
+
+    <string name="encrypt_download_title">加密后的图片</string>
+    <string name="encrypt_download_subtitle">加密后的图片将显示在此处。</string>
+    <string name="encrypt_download_button_text">下载图片</string>
+
+    <!-- Decrypt Screen -->
+    <string name="decrypt_title">提取并解密消息</string>
+    <string name="decrypt_subtitle">从图片中提取并解密隐藏的消息。</string>
+    <string name="decrypt_button_text_loading">正在解密...</string>
+    <string name="decrypt_button_text">提取并解密</string>
+    <string name="decrypt_snackbar_success">消息已成功提取并解密。</string>
+
+    <string name="decrypt_upload_image_label">加密后的图片</string>
+    <string name="decrypt_upload_image_title">上传图片</string>
+    <string name="decrypt_upload_image_types">PNG（最大 10MB）</string>
+    <string name="decrypt_change_image_title">更换图片</string>
+
+    <string name="decrypt_message_length_title">消息长度（字符数）</string>
+    <string name="decrypt_message_length_placeholder">请输入消息的总字符数...</string>
+
+    <string name="decrypt_result_title">解密后的消息</string>
+    <string name="decrypt_result_subtitle">解密后的消息将显示在此处。</string>
+</resources>

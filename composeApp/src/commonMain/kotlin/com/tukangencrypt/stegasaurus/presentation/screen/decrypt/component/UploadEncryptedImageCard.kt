@@ -20,6 +20,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import com.tukangencrypt.stegasaurus.presentation.component.IconCard
 import com.tukangencrypt.stegasaurus.utils.formatFileSize
+import com.tukangencrypt.stegasaurus.utils.value
+import stegasaurus.composeapp.generated.resources.Res
+import stegasaurus.composeapp.generated.resources.decrypt_change_image_title
+import stegasaurus.composeapp.generated.resources.decrypt_upload_image_label
+import stegasaurus.composeapp.generated.resources.decrypt_upload_image_title
+import stegasaurus.composeapp.generated.resources.decrypt_upload_image_types
 
 @Composable
 fun UploadEncryptedImageCard(
@@ -42,7 +48,7 @@ fun UploadEncryptedImageCard(
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             Text(
-                text = "Select Encrypted Image",
+                text = Res.string.decrypt_upload_image_label.value,
                 style = MaterialTheme.typography.titleMedium
             )
 
@@ -77,11 +83,11 @@ fun UploadEncryptedImageCard(
                     ) {
                         if (imageName == null) {
                             Text(
-                                text = "Upload Encrypted Image",
+                                text = Res.string.decrypt_upload_image_title.value,
                                 style = MaterialTheme.typography.titleMedium
                             )
                             Text(
-                                text = "PNG, JPG, up to 10MB",
+                                text = Res.string.decrypt_upload_image_types.value,
                                 style = MaterialTheme.typography.bodyMedium
                             )
                         } else {
@@ -90,7 +96,7 @@ fun UploadEncryptedImageCard(
                                 style = MaterialTheme.typography.titleMedium
                             )
                             Text(
-                                text = "Click to change image",
+                                text = Res.string.decrypt_change_image_title.value,
                                 style = MaterialTheme.typography.bodyMedium
                             )
                             if (selectedImageSize != null) {

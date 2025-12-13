@@ -12,6 +12,11 @@ import androidx.compose.ui.unit.dp
 import com.tukangencrypt.stegasaurus.presentation.component.Center
 import com.tukangencrypt.stegasaurus.presentation.component.IconCard
 import com.tukangencrypt.stegasaurus.utils.formatFileSize
+import com.tukangencrypt.stegasaurus.utils.value
+import stegasaurus.composeapp.generated.resources.Res
+import stegasaurus.composeapp.generated.resources.encrypt_download_button_text
+import stegasaurus.composeapp.generated.resources.encrypt_download_subtitle
+import stegasaurus.composeapp.generated.resources.encrypt_download_title
 
 @Composable
 fun EncryptedImageDownloadCard(
@@ -50,11 +55,11 @@ fun EncryptedImageDownloadCard(
                         verticalArrangement = Arrangement.spacedBy(4.dp)
                     ) {
                         Text(
-                            text = "Encrypted Image",
+                            text = Res.string.encrypt_download_title.value,
                             style = MaterialTheme.typography.titleMedium
                         )
                         Text(
-                            text = "Encrypted image akan muncul disini",
+                            text = Res.string.encrypt_download_subtitle.value,
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
@@ -68,7 +73,7 @@ fun EncryptedImageDownloadCard(
                         verticalArrangement = Arrangement.spacedBy(16.dp)
                     ) {
                         Text(
-                            text = "Encrypted Image",
+                            text = Res.string.encrypt_download_title.value,
                             style = MaterialTheme.typography.titleMedium
                         )
 
@@ -86,7 +91,7 @@ fun EncryptedImageDownloadCard(
                                     imageVector = Icons.Outlined.Download,
                                     contentDescription = "Download"
                                 )
-                                Text("Download Image")
+                                Text(Res.string.encrypt_download_button_text.value)
                             }
                         }
 

@@ -13,6 +13,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.tukangencrypt.stegasaurus.utils.value
+import org.jetbrains.compose.resources.stringResource
+import stegasaurus.composeapp.generated.resources.Res
+import stegasaurus.composeapp.generated.resources.encrypt_message_label
+import stegasaurus.composeapp.generated.resources.encrypt_message_placeholder
+import stegasaurus.composeapp.generated.resources.encrypt_message_support_text
 
 @Composable
 fun EncryptMessageCard(
@@ -33,7 +39,7 @@ fun EncryptMessageCard(
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             Text(
-                text = "Message",
+                text = Res.string.encrypt_message_label.value,
                 style = MaterialTheme.typography.titleMedium
             )
 
@@ -43,7 +49,7 @@ fun EncryptMessageCard(
             OutlinedTextField(
                 value = message,
                 onValueChange = onMessageChange,
-                placeholder = { Text("Write the message you want to encrypt...") },
+                placeholder = { Text(Res.string.encrypt_message_placeholder.value) },
                 colors = OutlinedTextFieldDefaults.colors().copy(
                     unfocusedContainerColor = containerColor,
                     focusedContainerColor = containerColor,
@@ -57,7 +63,7 @@ fun EncryptMessageCard(
             )
 
             Text(
-                text = "${message.length} characters",
+                text = stringResource(Res.string.encrypt_message_support_text, message.length),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )

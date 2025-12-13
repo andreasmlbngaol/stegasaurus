@@ -31,7 +31,12 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.tukangencrypt.stegasaurus.utils.toClipEntry
+import com.tukangencrypt.stegasaurus.utils.value
 import kotlinx.coroutines.launch
+import stegasaurus.composeapp.generated.resources.Res
+import stegasaurus.composeapp.generated.resources.public_key_dialog_content
+import stegasaurus.composeapp.generated.resources.public_key_dialog_copy_button_text
+import stegasaurus.composeapp.generated.resources.public_key_dialog_title
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -72,7 +77,7 @@ fun PublicKeyDialog(
                 }
 
                 Text(
-                    text = "Your Public Key",
+                    text = Res.string.public_key_dialog_title.value,
                     style = MaterialTheme.typography.headlineSmall,
                     modifier = Modifier
                         .weight(1f)
@@ -97,7 +102,7 @@ fun PublicKeyDialog(
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 Text(
-                    text = "Share this public key with people who want to send you encrypted messages.",
+                    text = Res.string.public_key_dialog_content.value,
                     style = MaterialTheme.typography.bodyMedium
                 )
 
@@ -154,7 +159,7 @@ fun PublicKeyDialog(
                             contentDescription = "Copy to Clipboard"
                         )
                         Text(
-                            text = "Copy to Clipboard"
+                            text = Res.string.public_key_dialog_copy_button_text.value
                         )
                     }
                 }

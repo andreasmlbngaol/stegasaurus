@@ -20,6 +20,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import com.tukangencrypt.stegasaurus.presentation.component.IconCard
 import com.tukangencrypt.stegasaurus.utils.formatFileSize
+import com.tukangencrypt.stegasaurus.utils.value
+import stegasaurus.composeapp.generated.resources.Res
+import stegasaurus.composeapp.generated.resources.encrypt_change_image_title
+import stegasaurus.composeapp.generated.resources.encrypt_upload_image_label
+import stegasaurus.composeapp.generated.resources.encrypt_upload_image_types
 
 @Composable
 fun UploadImageCard(
@@ -42,7 +47,7 @@ fun UploadImageCard(
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             Text(
-                text = "Select Image for Steganography",
+                text = Res.string.encrypt_upload_image_label.value,
                 style = MaterialTheme.typography.titleMedium
             )
 
@@ -77,11 +82,11 @@ fun UploadImageCard(
                     ) {
                         if (imageName == null) {
                             Text(
-                                text = "Upload Image",
+                                text = Res.string.encrypt_upload_image_label.value,
                                 style = MaterialTheme.typography.titleMedium
                             )
                             Text(
-                                text = "PNG, JPG, up to 10MB",
+                                text = Res.string.encrypt_upload_image_types.value,
                                 style = MaterialTheme.typography.bodyMedium
                             )
                         } else {
@@ -90,7 +95,7 @@ fun UploadImageCard(
                                 style = MaterialTheme.typography.titleMedium
                             )
                             Text(
-                                text = "Click to change image",
+                                text = Res.string.encrypt_change_image_title.value,
                                 style = MaterialTheme.typography.bodyMedium
                             )
                             if (selectedImageSize != null) {

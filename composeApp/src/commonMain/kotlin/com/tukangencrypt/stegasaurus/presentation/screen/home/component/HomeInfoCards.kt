@@ -24,6 +24,14 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import com.tukangencrypt.stegasaurus.presentation.component.IconCard
+import com.tukangencrypt.stegasaurus.utils.value
+import stegasaurus.composeapp.generated.resources.Res
+import stegasaurus.composeapp.generated.resources.home_info_card_1_desc
+import stegasaurus.composeapp.generated.resources.home_info_card_1_title
+import stegasaurus.composeapp.generated.resources.home_info_card_2_desc
+import stegasaurus.composeapp.generated.resources.home_info_card_2_title
+import stegasaurus.composeapp.generated.resources.home_info_card_3_desc
+import stegasaurus.composeapp.generated.resources.home_info_card_3_title
 
 @Composable
 fun HomeInfoCards(
@@ -42,23 +50,22 @@ fun HomeInfoCards(
         ) {
             InfoCardItem(
                 icon = Icons.Outlined.Lock,
-                title = "Strong Encryption",
-                desc = "Modern encryption algorithms for maximum security"
+                title = Res.string.home_info_card_1_title.value,
+                desc = Res.string.home_info_card_1_desc.value,
             )
 
             InfoCardItem(
                 icon = Icons.Outlined.Visibility,
-                title = "Steganography",
-                desc = "Hide messages inside images without being detected"
+                title = Res.string.home_info_card_2_title.value,
+                desc = Res.string.home_info_card_2_desc.value,
             )
 
             InfoCardItem(
                 icon = Icons.Outlined.Key,
-                title = "Key Management",
-                desc = "Generate and manage encryption keys easily"
+                title = Res.string.home_info_card_3_title.value,
+                desc = Res.string.home_info_card_3_desc.value,
             )
         }
-
     } else {
         // === REGULAR → 3 columns, equal height ===
         Row(
@@ -67,8 +74,8 @@ fun HomeInfoCards(
         ) {
             InfoCardMeasured(
                 icon = Icons.Outlined.Lock,
-                title = "Strong Encryption",
-                desc = "Modern encryption algorithms for maximum security",
+                title = Res.string.home_info_card_1_title.value,
+                desc = Res.string.home_info_card_1_desc.value,
                 modifier = Modifier
                     .weight(1f)
                     .heightIn(min = maxContentCardHeight)
@@ -80,8 +87,8 @@ fun HomeInfoCards(
 
             InfoCardMeasured(
                 icon = Icons.Outlined.Visibility,
-                title = "Steganography",
-                desc = "Hide messages inside images without being detected",
+                title = Res.string.home_info_card_2_title.value,
+                desc = Res.string.home_info_card_2_desc.value,
                 modifier = Modifier
                     .weight(1f)
                     .heightIn(min = maxContentCardHeight)
@@ -93,8 +100,8 @@ fun HomeInfoCards(
 
             InfoCardMeasured(
                 icon = Icons.Outlined.Key,
-                title = "Key Management",
-                desc = "Generate and manage encryption keys easily",
+                title = Res.string.home_info_card_3_title.value,
+                desc = Res.string.home_info_card_3_desc.value,
                 modifier = Modifier
                     .weight(1f)
                     .heightIn(min = maxContentCardHeight)
