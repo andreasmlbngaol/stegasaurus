@@ -55,7 +55,7 @@ fun main() {
             state = windowState,
             icon = painterResource(Res.drawable.ic_launcher),
             undecorated = true,
-            transparent = true
+            transparent = false
         ) {
             StegasaurusTheme {
                 Column(
