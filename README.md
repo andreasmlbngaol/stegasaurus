@@ -34,7 +34,7 @@ On Android and Desktop, the app uses **Java Bouncy Castle**. The Web version use
 
 ### 1. **Encrypt & Embed**
 
-Encrypt a text message using hybrid cryptography and hide it inside an image.
+Encrypt a text message using cryptography and hide it inside an image.
 
 ### 2. **Extract & Decrypt**
 
@@ -70,7 +70,7 @@ Available builds:
 * `.msi` — Windows Desktop
 
 **Web version:**
-[**Stegasaurus**](https://stegasaurus.pages.dev/)
+[**Stegasaurus**](https://stegasaurus.pages.dev/) (Don't use open this, contain so many bugs)
 
 ---
 
