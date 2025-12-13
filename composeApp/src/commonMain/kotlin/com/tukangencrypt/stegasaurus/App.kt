@@ -12,7 +12,6 @@ import androidx.navigation3.ui.NavDisplay
 import com.tukangencrypt.stegasaurus.presentation.navigation.Navigator
 import com.tukangencrypt.stegasaurus.presentation.navigation.popAnimation
 import com.tukangencrypt.stegasaurus.presentation.navigation.pushAnimation
-import com.tukangencrypt.stegasaurus.presentation.theme.StegasaurusTheme
 import org.koin.compose.koinInject
 import org.koin.compose.navigation3.koinEntryProvider
 import org.koin.core.annotation.KoinExperimentalAPI
@@ -21,26 +20,24 @@ import org.koin.core.annotation.KoinExperimentalAPI
 @Composable
 @Preview
 fun App() {
-    StegasaurusTheme {
-        val entryProvider = koinEntryProvider()
-        val navigator = koinInject<Navigator>()
+    val entryProvider = koinEntryProvider()
+    val navigator = koinInject<Navigator>()
 
-        Surface(
-            color = MaterialTheme.colorScheme.primaryContainer,
-            modifier = Modifier.fillMaxSize()
-        ) {
-            NavDisplay(
-                backStack = navigator.backstack,
-                onBack = navigator::goBack,
-                entryProvider = entryProvider,
-                entryDecorators = listOf(
-                    rememberSaveableStateHolderNavEntryDecorator(),
-                    rememberViewModelStoreNavEntryDecorator()
-                ),
-                transitionSpec = { pushAnimation },
-                popTransitionSpec = { popAnimation },
-                predictivePopTransitionSpec = { popAnimation }
-            )
-        }
+    Surface(
+        color = MaterialTheme.colorScheme.primaryContainer,
+        modifier = Modifier.fillMaxSize()
+    ) {
+        NavDisplay(
+            backStack = navigator.backstack,
+            onBack = navigator::goBack,
+            entryProvider = entryProvider,
+            entryDecorators = listOf(
+                rememberSaveableStateHolderNavEntryDecorator(),
+                rememberViewModelStoreNavEntryDecorator()
+            ),
+            transitionSpec = { pushAnimation },
+            popTransitionSpec = { popAnimation },
+            predictivePopTransitionSpec = { popAnimation }
+        )
     }
 }
