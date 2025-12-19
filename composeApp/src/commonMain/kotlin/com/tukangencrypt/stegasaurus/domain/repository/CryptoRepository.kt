@@ -19,7 +19,8 @@ interface CryptoRepository {
     suspend fun encrypt(
         plainMessage: String,
         recipientPublicKey: String,
-        senderPrivateKey: String
+        senderPrivateKey: String,
+        senderPublicKey: String
     ): ByteArray
 
     /**

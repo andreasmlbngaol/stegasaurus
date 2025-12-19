@@ -48,6 +48,9 @@ class DecryptViewModel(
 
     fun extractAndDecrypt() {
         _state.value = _state.value.copy(
+            decryptedMessage = null,
+            errorMessage = null,
+            isDecrypted = false,
             isLoading = true
         )
 
@@ -111,7 +114,7 @@ class DecryptViewModel(
                 )
             } catch (e: Exception) {
                 _state.value = _state.value.copy(
-                    errorMessage = "Failed: ${e.message}",
+                    errorMessage = e.message,
                 )
             } finally {
                 _state.value = _state.value.copy(

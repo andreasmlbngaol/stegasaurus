@@ -35,7 +35,8 @@ actual class CryptoRepositoryImpl actual constructor(private val keyRepository: 
     actual override suspend fun encrypt(
         plainMessage: String,
         recipientPublicKey: String,
-        senderPrivateKey: String
+        senderPrivateKey: String,
+        senderPublicKey: String
     ): ByteArray {
         val result = CryptoJs.encrypt(plainMessage, recipientPublicKey, senderPrivateKey)
 

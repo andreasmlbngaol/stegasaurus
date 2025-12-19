@@ -49,14 +49,16 @@ actual class CryptoRepositoryImpl actual constructor(private val keyRepository: 
     actual override suspend fun encrypt(
         plainMessage: String,
         recipientPublicKey: String,
-        senderPrivateKey: String
+        senderPrivateKey: String,
+        senderPublicKey: String
     ): ByteArray = withContext(Dispatchers.Default) {
         try {
+
             val senderPriv = parsePrivateKey(senderPrivateKey)
-            val senderPub = senderPriv.generatePublicKey()
+            val senderPub = parsePublicKey(senderPublicKey)
             val recipientPub = parsePublicKey(recipientPublicKey)
 
-            // 1. Shared Secret
+                    // 1. Shared Secret
             val sharedSecret = generateSharedSecret(senderPriv, recipientPub)
 
             // 2. Derive Key + nonce
@@ -82,7 +84,7 @@ actual class CryptoRepositoryImpl actual constructor(private val keyRepository: 
 
             return@withContext finalCiphertext
         } catch (e: Exception) {
-            throw IllegalStateException("Encryption failed: ${e.message}", e)
+            throw IllegalStateException("Decryption failed: ${e.message}. Check the message length again!", e)
         }
     }
 
@@ -147,6 +149,7 @@ actual class CryptoRepositoryImpl actual constructor(private val keyRepository: 
 
     private fun deriveKeyAndNonce(sharedSecret: ByteArray, info: ByteArray): Pair<ByteArray, ByteArray> {
         val hkdf = HKDFBytesGenerator(SHA256Digest())
+
         hkdf.init(
             HKDFParameters(
                 sharedSecret,
@@ -157,6 +160,7 @@ actual class CryptoRepositoryImpl actual constructor(private val keyRepository: 
 
         val derivedKey = ByteArray(32 + 12)
         hkdf.generateBytes(derivedKey, 0, derivedKey.size)
+
         val encryptionKey = derivedKey.copyOfRange(0, 32)
         val nonce = derivedKey.copyOfRange(32, 44)
         return encryptionKey to nonce

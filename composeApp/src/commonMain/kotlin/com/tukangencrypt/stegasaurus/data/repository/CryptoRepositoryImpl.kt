@@ -11,7 +11,8 @@ expect class CryptoRepositoryImpl(
     override suspend fun encrypt(
         plainMessage: String,
         recipientPublicKey: String,
-        senderPrivateKey: String
+        senderPrivateKey: String,
+        senderPublicKey: String
     ): ByteArray
 
     override suspend fun decrypt(

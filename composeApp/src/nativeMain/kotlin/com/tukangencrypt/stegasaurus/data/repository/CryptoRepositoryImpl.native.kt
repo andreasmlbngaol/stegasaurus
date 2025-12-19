@@ -12,7 +12,8 @@ actual class CryptoRepositoryImpl actual constructor(keyRepository: KeyRepositor
     actual override suspend fun encrypt(
         plainMessage: String,
         recipientPublicKey: String,
-        senderPrivateKey: String
+        senderPrivateKey: String,
+        senderPublicKey: String
     ): ByteArray {
         TODO("Not yet implemented")
     }

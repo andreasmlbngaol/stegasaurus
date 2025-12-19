@@ -54,6 +54,9 @@ class EncryptViewModel(
 
     fun encryptAndEmbed() {
         _state.value = _state.value.copy(
+            embeddedImageBytes = null,
+            errorMessage = null,
+            isEncrypted = false,
             isLoading = true
         )
 

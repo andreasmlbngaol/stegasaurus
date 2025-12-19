@@ -22,7 +22,8 @@ class EncryptAndEmbedUseCase(
             val encryptedMessage = cryptoRepository.encrypt(
                 plainMessage = plainMessage,
                 recipientPublicKey = recipientPublicKey,
-                senderPrivateKey = keyRepository.getPrivateKey() ?: throw IllegalStateException("Private key not found")
+                senderPrivateKey = keyRepository.getPrivateKey() ?: throw IllegalStateException("Private key not found"),
+                senderPublicKey = keyRepository.getPublicKey() ?: throw IllegalStateException("Public key not found")
             )
 
             // Step 2: Embed encrypted message ke image
