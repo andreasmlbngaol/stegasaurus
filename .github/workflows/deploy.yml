@@ -86,7 +86,7 @@ jobs:
 
       - name: Build DEB (Linux)
         if: runner.os == 'Linux'
-        run: ./gradlew packageDeb
+        run: ./gradlew packageReleaseDeb
 
       - name: Rename DEB
         if: runner.os == 'Linux'
@@ -96,7 +96,7 @@ jobs:
 
       - name: Build MSI (Windows)
         if: runner.os == 'Windows'
-        run: .\gradlew packageMsi
+        run: .\gradlew packageReleaseMsi
 
       - name: Rename MSI
         if: runner.os == 'Windows'

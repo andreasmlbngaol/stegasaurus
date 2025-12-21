@@ -1,23 +1,33 @@
 package com.tukangencrypt.stegasaurus.presentation.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.snapshots.SnapshotStateList
-import androidx.navigation3.runtime.NavKey
-import kotlin.time.ExperimentalTime
+import androidx.compose.runtime.remember
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 
-class Navigator(startDestination: NavKey) {
-    val backstack: SnapshotStateList<NavKey> = mutableStateListOf(startDestination)
-
+class Navigator(
+    val navController: NavHostController
+) {
     val canGoBack: Boolean
         @Composable
-        get() = backstack.size > 1
+        get() = navController.previousBackStackEntry != null
 
-
-    fun navigateTo(destination: NavKey) {
-        backstack.add(destination)
+    fun navigateTo(route: Screen) {
+        navController.navigate(route) {
+            launchSingleTop = true
+        }
     }
 
-    @OptIn(ExperimentalTime::class)
-    fun goBack() = runCatching { backstack.removeLastOrNull() }
+    fun goBack() {
+        navController.navigateUp()
+    }
+}
+
+@Composable
+fun rememberNavigator(
+    navController: NavHostController = rememberNavController()
+): Navigator {
+    return remember(navController) {
+        Navigator(navController)
+    }
 }

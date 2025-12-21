@@ -3,41 +3,59 @@ package com.tukangencrypt.stegasaurus
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
-import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
-import androidx.navigation3.ui.NavDisplay
-import com.tukangencrypt.stegasaurus.presentation.navigation.Navigator
-import com.tukangencrypt.stegasaurus.presentation.navigation.popAnimation
-import com.tukangencrypt.stegasaurus.presentation.navigation.pushAnimation
-import org.koin.compose.koinInject
-import org.koin.compose.navigation3.koinEntryProvider
-import org.koin.core.annotation.KoinExperimentalAPI
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.tukangencrypt.stegasaurus.presentation.navigation.*
+import com.tukangencrypt.stegasaurus.presentation.screen.decrypt.DecryptScreen
+import com.tukangencrypt.stegasaurus.presentation.screen.encrypt.EncryptScreen
+import com.tukangencrypt.stegasaurus.presentation.screen.home.HomeScreen
 
-@OptIn(KoinExperimentalAPI::class)
 @Composable
 @Preview
 fun App() {
-    val entryProvider = koinEntryProvider()
-    val navigator = koinInject<Navigator>()
+    val navController = rememberNavController()
+    val navigator = rememberNavigator(navController)
 
     Surface(
         color = MaterialTheme.colorScheme.primaryContainer,
         modifier = Modifier.fillMaxSize()
     ) {
-        NavDisplay(
-            backStack = navigator.backstack,
-            onBack = navigator::goBack,
-            entryProvider = entryProvider,
-            entryDecorators = listOf(
-                rememberSaveableStateHolderNavEntryDecorator(),
-                rememberViewModelStoreNavEntryDecorator()
-            ),
-            transitionSpec = { pushAnimation },
-            popTransitionSpec = { popAnimation },
-            predictivePopTransitionSpec = { popAnimation }
-        )
+        NavHost(
+            navController = navController,
+            startDestination = Screen.Home,
+        ) {
+            composable<Screen.Home> {
+                HomeScreen(
+                    onNavigateToEncrypt = {
+                        navigator.navigateTo(Screen.Encrypt)
+                    },
+                    onNavigateToDecrypt = {
+                        navigator.navigateTo(Screen.Decrypt)
+                    }
+                )
+            }
+
+            composable<Screen.Encrypt>(
+                enterTransition = { pushAnimationLeftToRight.first },
+                exitTransition = { pushAnimationLeftToRight.second },
+                popEnterTransition = { popAnimationLeftToRight.first },
+                popExitTransition = { popAnimationLeftToRight.second }
+            ) {
+                EncryptScreen(navigator)
+            }
+
+            composable<Screen.Decrypt>(
+                enterTransition = { pushAnimationRightToLeft.first },
+                exitTransition = { pushAnimationRightToLeft.second },
+                popEnterTransition = { popAnimationRightToLeft.first },
+                popExitTransition = { popAnimationRightToLeft.second }
+            ) {
+                DecryptScreen(navigator)
+            }
+        }
     }
 }

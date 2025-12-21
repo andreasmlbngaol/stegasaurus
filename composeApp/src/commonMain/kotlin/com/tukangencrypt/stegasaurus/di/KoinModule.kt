@@ -1,19 +1,13 @@
 package com.tukangencrypt.stegasaurus.di
 
 import com.russhwolf.settings.Settings
-import com.tukangencrypt.stegasaurus.data.repository.KeyRepositoryImpl
 import com.tukangencrypt.stegasaurus.data.repository.CryptoRepositoryImpl
 import com.tukangencrypt.stegasaurus.data.repository.ImageRepositoryImpl
-import com.tukangencrypt.stegasaurus.domain.repository.KeyRepository
+import com.tukangencrypt.stegasaurus.data.repository.KeyRepositoryImpl
 import com.tukangencrypt.stegasaurus.domain.repository.CryptoRepository
 import com.tukangencrypt.stegasaurus.domain.repository.ImageRepository
-import com.tukangencrypt.stegasaurus.domain.use_case.EmbedUseCase
-import com.tukangencrypt.stegasaurus.domain.use_case.EncryptAndEmbedUseCase
-import com.tukangencrypt.stegasaurus.domain.use_case.ExtractAndDecryptUseCase
-import com.tukangencrypt.stegasaurus.domain.use_case.ExtractUseCase
-import com.tukangencrypt.stegasaurus.domain.use_case.GenerateKeyPairUseCase
-import com.tukangencrypt.stegasaurus.domain.use_case.KeyPairUseCase
-import com.tukangencrypt.stegasaurus.presentation.navigation.navigationModule
+import com.tukangencrypt.stegasaurus.domain.repository.KeyRepository
+import com.tukangencrypt.stegasaurus.domain.use_case.*
 import com.tukangencrypt.stegasaurus.presentation.screen.decrypt.DecryptViewModel
 import com.tukangencrypt.stegasaurus.presentation.screen.encrypt.EncryptViewModel
 import com.tukangencrypt.stegasaurus.presentation.screen.home.HomeViewModel
@@ -49,7 +43,10 @@ fun initKoin(
         config?.invoke(this)
         modules(
             mainModules,
-            navigationModule
+            /**
+             * Add this if you want to use the nav3 instead which is can't be build as release for desktop
+             */
+//            navigationModule
         )
     }
 }

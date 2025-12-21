@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.tukangencrypt.stegasaurus.presentation.component.TopBar
 import com.tukangencrypt.stegasaurus.presentation.component.calculateWindowSize
+import com.tukangencrypt.stegasaurus.presentation.navigation.Navigator
 import com.tukangencrypt.stegasaurus.presentation.screen.decrypt.component.DecryptTitleSection
 import com.tukangencrypt.stegasaurus.presentation.screen.decrypt.component.DecryptedMessageCard
 import com.tukangencrypt.stegasaurus.presentation.screen.decrypt.component.MessageSizeCard
@@ -35,6 +36,7 @@ import stegasaurus.composeapp.generated.resources.decrypt_snackbar_success
 @OptIn(ExperimentalMaterial3ExpressiveApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun DecryptScreen(
+    navigator: Navigator,
     modifier: Modifier = Modifier,
     viewModel: DecryptViewModel = koinViewModel()
 ) {
@@ -66,6 +68,7 @@ fun DecryptScreen(
         modifier = modifier,
         topBar = {
             TopBar(
+                navigator = navigator,
                 containerColor = Color.Transparent,
                 scrollBehavior = scrollBehavior
             )

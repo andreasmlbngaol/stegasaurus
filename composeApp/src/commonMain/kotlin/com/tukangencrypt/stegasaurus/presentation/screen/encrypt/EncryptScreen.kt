@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.tukangencrypt.stegasaurus.presentation.component.TopBar
 import com.tukangencrypt.stegasaurus.presentation.component.calculateWindowSize
+import com.tukangencrypt.stegasaurus.presentation.navigation.Navigator
 import com.tukangencrypt.stegasaurus.presentation.screen.encrypt.component.*
 import com.tukangencrypt.stegasaurus.utils.value
 import io.github.vinceglb.filekit.FileKit
@@ -42,6 +43,7 @@ import stegasaurus.composeapp.generated.resources.encrypt_snackbar_success
 )
 @Composable
 fun EncryptScreen(
+    navigator: Navigator,
     modifier: Modifier = Modifier,
     viewModel: EncryptViewModel = koinViewModel()
 ) {
@@ -75,6 +77,7 @@ fun EncryptScreen(
         modifier = modifier,
         topBar = {
             TopBar(
+                navigator = navigator,
                 scrollBehavior = scrollBehavior,
                 containerColor = Color.Transparent
             )

@@ -1,4 +1,6 @@
-package com.tukangencrypt.stegasaurus.presentation.navigation
+@file:Suppress("unused")
+
+package com.tukangencrypt.stegasaurus.presentation.navigation3
 
 import com.tukangencrypt.stegasaurus.presentation.screen.decrypt.DecryptScreen
 import com.tukangencrypt.stegasaurus.presentation.screen.encrypt.EncryptScreen
@@ -9,24 +11,24 @@ import org.koin.dsl.navigation3.navigation
 
 @OptIn(KoinExperimentalAPI::class)
 val navigationModule = module {
-    single { Navigator(Screen.Home) }
+    single { Navigator3(Screen3.Home) }
 
-    navigation<Screen.Home> {
+    navigation<Screen3.Home> {
         HomeScreen(
             onNavigateToEncrypt = {
-                get<Navigator>().navigateTo(Screen.Encrypt)
+                get<Navigator3>().navigateTo(Screen3.Encrypt)
             },
             onNavigateToDecrypt = {
-                get<Navigator>().navigateTo(Screen.Decrypt)
+                get<Navigator3>().navigateTo(Screen3.Decrypt)
             }
         )
     }
 
-    navigation<Screen.Encrypt> {
-        EncryptScreen()
+    navigation<Screen3.Encrypt> {
+        EncryptScreen(get())
     }
 
-    navigation<Screen.Decrypt> {
-        DecryptScreen()
+    navigation<Screen3.Decrypt> {
+        DecryptScreen(get())
     }
 }

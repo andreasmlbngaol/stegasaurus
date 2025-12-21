@@ -21,6 +21,7 @@ kotlin {
             jvmTarget.set(JvmTarget.JVM_11)
         }
     }
+
     
     listOf(
         iosArm64(),
@@ -68,6 +69,7 @@ kotlin {
 
             implementation(libs.navigation3.ui)
             implementation(libs.navigation3.viewmodel)
+            implementation(libs.navigation.compose)
 
             implementation(project.dependencies.platform(libs.koin.bom))
             implementation(libs.koin.core)
@@ -99,7 +101,7 @@ kotlin {
         }
         nativeMain.dependencies {
         }
-        val jsMain by getting {
+        jsMain {
             dependencies {
                 dependencies {
                     implementation(npm("@stablelib/chacha20poly1305", "2.0.1"))
@@ -121,8 +123,8 @@ android {
         applicationId = "com.tukangencrypt.stegasaurus"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = 5
-        versionName = "2.2.2"
+        versionCode = 6
+        versionName = "2.3.0"
     }
     packaging {
         resources {
@@ -167,7 +169,7 @@ compose.desktop {
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
             packageName = "Stegasaurus"
-            packageVersion = "2.2.2"
+            packageVersion = "2.3.0"
 
             modules("jdk.security.auth")
 

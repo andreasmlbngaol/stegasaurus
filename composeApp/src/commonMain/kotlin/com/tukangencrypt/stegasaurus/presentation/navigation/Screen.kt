@@ -1,16 +1,13 @@
 package com.tukangencrypt.stegasaurus.presentation.navigation
 
 import kotlinx.serialization.Serializable
-import androidx.navigation3.runtime.NavKey
 
 @Serializable
 sealed class Screen {
     @Serializable
-    data object  Home: NavKey
-
+    data object Home : Screen()
     @Serializable
-    data object Encrypt: NavKey
-
+    data object Encrypt : Screen()
     @Serializable
-    data object Decrypt: NavKey
+    data object Decrypt : Screen()
 }

@@ -54,17 +54,17 @@ fun main() {
             title = "Stegasaurus",
             state = windowState,
             icon = painterResource(Res.drawable.ic_launcher),
-            undecorated = true,
+//            undecorated = true,
             transparent = false
         ) {
             StegasaurusTheme {
                 Column(
                     modifier = Modifier.fillMaxSize()
                 ) {
-                    DesktopTitleBar(
-                        windowState = windowState,
-                        onExit = ::exitApplication
-                    )
+//                    DesktopTitleBar(
+//                        windowState = windowState,
+//                        onExit = ::exitApplication
+//                    )
                     App()
                 }
             }
