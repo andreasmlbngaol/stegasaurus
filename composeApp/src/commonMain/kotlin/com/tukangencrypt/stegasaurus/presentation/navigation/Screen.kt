@@ -10,4 +10,6 @@ sealed class Screen {
     data object Encrypt : Screen()
     @Serializable
     data object Decrypt : Screen()
+    @Serializable
+    data object Benchmark : Screen()
 }

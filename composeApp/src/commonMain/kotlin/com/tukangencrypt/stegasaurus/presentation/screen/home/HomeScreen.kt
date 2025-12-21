@@ -34,6 +34,7 @@ import stegasaurus.composeapp.generated.resources.ic_launcher
 fun HomeScreen(
     onNavigateToEncrypt: () -> Unit,
     onNavigateToDecrypt: () -> Unit,
+    onNavigateToBenchmark: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = koinViewModel()
 ) {
@@ -103,7 +104,9 @@ fun HomeScreen(
             }
             Spacer(Modifier.size(64.dp))
 
-            HomeInfoCards(isCompactWidth = isCompactWidth)
+            HomeBenchmarkCard(
+                onNavigateToBenchmark = onNavigateToBenchmark,
+            )
             Spacer(Modifier.size(64.dp))
         }
 

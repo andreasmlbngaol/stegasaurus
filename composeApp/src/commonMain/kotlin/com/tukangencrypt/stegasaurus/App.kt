@@ -10,6 +10,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.tukangencrypt.stegasaurus.presentation.navigation.*
+import com.tukangencrypt.stegasaurus.presentation.screen.benchmark.BenchmarkScreen
 import com.tukangencrypt.stegasaurus.presentation.screen.decrypt.DecryptScreen
 import com.tukangencrypt.stegasaurus.presentation.screen.encrypt.EncryptScreen
 import com.tukangencrypt.stegasaurus.presentation.screen.home.HomeScreen
@@ -35,6 +36,9 @@ fun App() {
                     },
                     onNavigateToDecrypt = {
                         navigator.navigateTo(Screen.Decrypt)
+                    },
+                    onNavigateToBenchmark = {
+                        navigator.navigateTo(Screen.Benchmark)
                     }
                 )
             }
@@ -55,6 +59,15 @@ fun App() {
                 popExitTransition = { popAnimationRightToLeft.second }
             ) {
                 DecryptScreen(navigator)
+            }
+
+            composable<Screen.Benchmark>(
+                enterTransition = { pushAnimationBottomToTop.first },
+                exitTransition = { pushAnimationBottomToTop.second },
+                popEnterTransition = { popAnimationBottomToTop.first },
+                popExitTransition = { popAnimationBottomToTop.second }
+            ) {
+                BenchmarkScreen(navigator)
             }
         }
     }

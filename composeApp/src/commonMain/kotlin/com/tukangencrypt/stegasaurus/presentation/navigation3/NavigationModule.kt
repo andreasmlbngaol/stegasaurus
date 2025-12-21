@@ -20,7 +20,11 @@ val navigationModule = module {
             },
             onNavigateToDecrypt = {
                 get<Navigator3>().navigateTo(Screen3.Decrypt)
+            },
+            onNavigateToBenchmark = {
+                get<Navigator3>().navigateTo(Screen3.Home)
             }
+
         )
     }
 

@@ -4,36 +4,43 @@ import com.russhwolf.settings.Settings
 import com.tukangencrypt.stegasaurus.data.repository.CryptoRepositoryImpl
 import com.tukangencrypt.stegasaurus.data.repository.ImageRepositoryImpl
 import com.tukangencrypt.stegasaurus.data.repository.KeyRepositoryImpl
+import com.tukangencrypt.stegasaurus.data.repository.BenchmarkRepositoryImpl
+import com.tukangencrypt.stegasaurus.domain.repository.BenchmarkRepository
 import com.tukangencrypt.stegasaurus.domain.repository.CryptoRepository
 import com.tukangencrypt.stegasaurus.domain.repository.ImageRepository
 import com.tukangencrypt.stegasaurus.domain.repository.KeyRepository
 import com.tukangencrypt.stegasaurus.domain.use_case.*
+import com.tukangencrypt.stegasaurus.presentation.screen.benchmark.BenchmarkViewModel
 import com.tukangencrypt.stegasaurus.presentation.screen.decrypt.DecryptViewModel
 import com.tukangencrypt.stegasaurus.presentation.screen.encrypt.EncryptViewModel
 import com.tukangencrypt.stegasaurus.presentation.screen.home.HomeViewModel
 import org.koin.core.KoinApplication
 import org.koin.core.context.startKoin
+import org.koin.core.module.dsl.bind
+import org.koin.core.module.dsl.factoryOf
+import org.koin.core.module.dsl.singleOf
+import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 
 val mainModules = module {
-    single<Settings> { Settings() }
+    singleOf(::Settings)
+    singleOf(::ImageRepositoryImpl) { bind<ImageRepository>() }
+    singleOf(::CryptoRepositoryImpl) { bind<CryptoRepository>() }
+    singleOf(::KeyRepositoryImpl) { bind<KeyRepository>() }
+    singleOf(::BenchmarkRepositoryImpl) { bind<BenchmarkRepository>() }
 
-    single<ImageRepository> { ImageRepositoryImpl() }
-    single<CryptoRepository> { CryptoRepositoryImpl(get()) }
-    single<KeyRepository> { KeyRepositoryImpl(get()) }
+    factoryOf(::BenchmarkUseCase)
+    factoryOf(::EmbedUseCase)
+    factoryOf(::EncryptAndEmbedUseCase)
+    factoryOf(::ExtractUseCase)
+    factoryOf(::ExtractAndDecryptUseCase)
+    factoryOf(::GenerateKeyPairUseCase)
+    factoryOf(::KeyPairUseCase)
 
-    single<EmbedUseCase> { EmbedUseCase(get()) }
-    single<ExtractUseCase> { ExtractUseCase(get()) }
-
-
-    factory { EncryptAndEmbedUseCase(get(), get(), get()) }
-    factory { ExtractAndDecryptUseCase(get(), get(), get()) }
-    factory { GenerateKeyPairUseCase(get()) }
-    factory { KeyPairUseCase(get(), get()) }
-
-    factory { HomeViewModel(get()) }
-    factory { EncryptViewModel(get(), get()) }
-    factory { DecryptViewModel(get(), get()) }
+    viewModelOf(::HomeViewModel)
+    viewModelOf(::EncryptViewModel)
+    viewModelOf(::DecryptViewModel)
+    viewModelOf(::BenchmarkViewModel)
 }
 
 fun initKoin(

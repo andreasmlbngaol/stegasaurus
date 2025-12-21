@@ -69,4 +69,27 @@
 
     <string name="decrypt_result_title">Pesan Terdekripsi</string>
     <string name="decrypt_result_subtitle">Pesan terdekripsi akan muncul di sini.</string>
+
+    <!-- Benchmark Screen -->
+    <string name="benchmark_title">Benchmark Performa</string>
+    <string name="benchmark_subtitle">Mengukur performa operasi kriptografi</string>
+
+    <string name="iterations_label">Jumlah Iterasi</string>
+    <string name="run_benchmark_title">Jalankan Benchmark</string>
+
+    <string name="running_benchmark_button_text">Sedang berjalan...</string>
+    <string name="run_all_benchmark_button_text">Jalankan Semua Benchmark</string>
+    <string name="clear_results_button_text">Bersihkan Hasil</string>
+
+    <string name="results_title">Hasil</string>
+    <string name="no_benchmark_description">
+        Belum ada hasil benchmark. Jalankan benchmark untuk melihat hasil.
+    </string>
+
+    <string name="total_time_label">Total Waktu</string>
+    <string name="average_label">Rata-rata</string>
+
+    <string name="summary_title">Ringkasan</string>
+    <string name="combined_time_label">Total Waktu Gabungan</string>
+    <string name="combined_average_label">Rata-rata Gabungan</string>
 </resources>

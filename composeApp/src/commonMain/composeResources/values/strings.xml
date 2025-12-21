@@ -69,4 +69,25 @@
 
     <string name="decrypt_result_title">Decrypted Message</string>
     <string name="decrypt_result_subtitle">The decrypted message will appear here.</string>
+
+    <!-- Benchmark Screen -->
+    <string name="benchmark_title">Performance Benchmark</string>
+    <string name="benchmark_subtitle">Measure cryptographic operations performance</string>
+
+    <string name="iterations_label">Iterations</string>
+    <string name="run_benchmark_title">Run Benchmarks</string>
+
+    <string name="running_benchmark_button_text">Running...</string>
+    <string name="run_all_benchmark_button_text">Run All Benchmarks</string>
+    <string name="clear_results_button_text">Clear Results</string>
+
+    <string name="results_title">Results</string>
+    <string name="no_benchmark_description">No benchmark results yet. Run a benchmark to see results.</string>
+
+    <string name="total_time_label">Total time</string>
+    <string name="average_label">Average</string>
+
+    <string name="summary_title">Summary</string>
+    <string name="combined_time_label">Combined Time</string>
+    <string name="combined_average_label">Combined Average</string>
 </resources>

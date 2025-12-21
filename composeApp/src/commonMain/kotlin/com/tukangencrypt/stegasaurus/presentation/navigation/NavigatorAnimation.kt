@@ -9,7 +9,9 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.slideOutVertically
 
 val pushAnimationRightToLeft: Pair<EnterTransition, ExitTransition> = Pair(
     slideInHorizontally(
@@ -63,6 +65,34 @@ val popAnimationRightToLeft: Pair<EnterTransition, ExitTransition> = Pair(
     ) + fadeIn(animationSpec = tween(400)),
     slideOutHorizontally(
         targetOffsetX = { it }, // Keluar ke kanan
+        animationSpec = tween(400, easing = FastOutSlowInEasing)
+    ) + fadeOut(animationSpec = tween(200)) + scaleOut(
+        targetScale = 0.95f,
+        animationSpec = tween(400)
+    )
+)
+
+val pushAnimationBottomToTop: Pair<EnterTransition, ExitTransition> = Pair(
+    slideInVertically(
+        initialOffsetY = { it }, // masuk dari bawah
+        animationSpec = tween(400, easing = FastOutSlowInEasing)
+    ) + fadeIn(animationSpec = tween(400)) + scaleIn(
+        initialScale = 0.95f,
+        animationSpec = tween(400)
+    ),
+    slideOutVertically(
+        targetOffsetY = { -it / 2 }, // keluar ke atas
+        animationSpec = tween(400, easing = FastOutSlowInEasing)
+    ) + fadeOut(animationSpec = tween(200))
+)
+
+val popAnimationBottomToTop: Pair<EnterTransition, ExitTransition> = Pair(
+    slideInVertically(
+        initialOffsetY = { -it / 2 }, // masuk dari atas sedikit
+        animationSpec = tween(400, easing = FastOutSlowInEasing)
+    ) + fadeIn(animationSpec = tween(400)),
+    slideOutVertically(
+        targetOffsetY = { it }, // keluar ke bawah
         animationSpec = tween(400, easing = FastOutSlowInEasing)
     ) + fadeOut(animationSpec = tween(200)) + scaleOut(
         targetScale = 0.95f,

@@ -42,7 +42,7 @@ fun DecryptScreen(
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
-    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
 
     val windowSizeClass = calculateWindowSize()
     val isCompactWidth = windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact
