@@ -92,7 +92,7 @@ actual class BenchmarkRepositoryImpl : BenchmarkRepository {
         val (_, otherPubKey) = generateKeyPair()
         val sharedSecret = generateSharedSecret(privKey, otherPubKey)
         val (encryptionKey, nonce) = deriveKeyAndNonce(sharedSecret, "test".encodeToByteArray())
-        val plainMessage = "Hello World! This is a test message."
+        val plainMessage = "a".repeat(1024)
 
         val totalNanos = measureNanoTime {
             repeat(iterations) {
