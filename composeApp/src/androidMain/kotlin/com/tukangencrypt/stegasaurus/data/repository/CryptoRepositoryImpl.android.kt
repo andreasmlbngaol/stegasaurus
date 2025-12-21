@@ -16,12 +16,30 @@ import org.bouncycastle.crypto.params.ParametersWithIV
 import org.bouncycastle.crypto.params.X25519PrivateKeyParameters
 import org.bouncycastle.crypto.params.X25519PublicKeyParameters
 import java.security.SecureRandom
+import kotlin.system.measureNanoTime
 
 actual class CryptoRepositoryImpl actual constructor(private val keyRepository: KeyRepository) : CryptoRepository {
     private val secureRandom = SecureRandom()
 
     actual override suspend fun generateKeyPair(): KeyPair = withContext(Dispatchers.Default) {
         try {
+//            lateinit var privKeyParams: X25519PrivateKeyParameters
+//            lateinit var pubKeyParams: X25519PublicKeyParameters
+//
+//            var totalTime = 0L
+//            repeat(101) {
+//                val time = measureNanoTime {
+//                    privKeyParams = X25519PrivateKeyParameters(secureRandom)
+//                    pubKeyParams = privKeyParams.generatePublicKey()
+//                }
+//
+//                println("Time: $time ns")
+//
+//                if(it != 0) totalTime += time
+//            }
+//
+//            println("Average time: ${totalTime / 100} ns")
+
             val privKeyParams = X25519PrivateKeyParameters(secureRandom)
             val pubKeyParams = privKeyParams.generatePublicKey()
 

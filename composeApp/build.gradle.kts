@@ -123,8 +123,8 @@ android {
         applicationId = "com.tukangencrypt.stegasaurus"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = 6
-        versionName = "2.3.0"
+        versionCode = 7
+        versionName = "2.3.1"
     }
     packaging {
         resources {
@@ -169,7 +169,7 @@ compose.desktop {
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
             packageName = "Stegasaurus"
-            packageVersion = "2.3.0"
+            packageVersion = "2.3.1"
 
             modules("jdk.security.auth")
 
