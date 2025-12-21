@@ -35,10 +35,12 @@ import com.tukangencrypt.stegasaurus.di.initKoin
 import com.tukangencrypt.stegasaurus.presentation.theme.StegasaurusTheme
 import com.tukangencrypt.stegasaurus.utils.value
 import io.github.vinceglb.filekit.FileKit
+import org.bouncycastle.jce.provider.BouncyCastleProvider
 import org.jetbrains.compose.resources.painterResource
 import stegasaurus.composeapp.generated.resources.Res
 import stegasaurus.composeapp.generated.resources.app_name
 import stegasaurus.composeapp.generated.resources.ic_launcher
+import java.security.Security
 
 fun main() {
     initKoin()

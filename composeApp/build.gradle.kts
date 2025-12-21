@@ -123,16 +123,12 @@ android {
         applicationId = "com.tukangencrypt.stegasaurus"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = 7
-        versionName = "2.3.1"
+        versionCode = 8
+        versionName = "2.3.2"
     }
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
-            excludes += listOf(
-                "META-INF/versions/9/OSGI-INF/MANIFEST.MF"
-            )
-
         }
     }
 
@@ -164,18 +160,37 @@ dependencies {
 
 compose.desktop {
     application {
+        buildTypes.release {
+            proguard {
+                isEnabled.set(false)
+            }
+        }
         mainClass = "com.tukangencrypt.stegasaurus.MainKt"
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
             packageName = "Stegasaurus"
-            packageVersion = "2.3.1"
+            packageVersion = "2.3.2"
 
-            modules("jdk.security.auth")
+            val buildType = project.findProperty("compose.desktop.buildType") ?: "release"
+            if (buildType == "release") {
+                includeAllModules = false
+            }
+
+            modules(
+                "java.desktop",           // UI
+                "java.sql",               // Database jika pakai
+                "jdk.crypto.ec",          // Elliptic Curve crypto
+                "jdk.crypto.cryptoki"     // Crypto provider
+                // Hapus jdk.security.auth jika tidak pakai JAAS
+            )
+            includeAllModules = false  // Important! Jangan bundle semua
 
             description = "Stegasaurus — Steganography signcryption tool"
             vendor = "TukangEncrypt"
             copyright = "© 2025"
+
+            appResourcesRootDir.set(project.layout.projectDirectory.dir("resources"))
 
             linux {
                 iconFile.set(project.file("src/commonMain/composeResources/drawable/ic_launcher.png"))
@@ -189,7 +204,21 @@ compose.desktop {
                 menuGroup = "Stegasaurus"
                 shortcut = true
                 iconFile.set(project.file("src/commonMain/composeResources/drawable/ic_launcher.png"))
+                perUserInstall = true
+                dirChooser = true
             }
         }
     }
+}
+
+tasks.withType<Jar> {
+    exclude("META-INF/*.SF", "META-INF/*.DSA", "META-INF/*.RSA")
+
+    // Exclude unused files
+    exclude("META-INF/maven/**")
+    exclude("META-INF/proguard/**")
+    exclude("**/*.kotlin_metadata")
+    exclude("**/*.kotlin_builtins")
+
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
