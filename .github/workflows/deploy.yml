@@ -92,7 +92,7 @@ jobs:
         if: runner.os == 'Linux'
         run: |
           VERSION=${GITHUB_REF#refs/tags/}
-          mv composeApp/build/compose/binaries/main/deb/*.deb "composeApp/build/compose/binaries/main/deb/stegasaurus-${VERSION}.deb"
+          mv composeApp/build/compose/binaries/main-release/deb/*.deb "composeApp/build/compose/binaries/main-release/deb/stegasaurus-${VERSION}.deb"
 
       - name: Build MSI (Windows)
         if: runner.os == 'Windows'
@@ -102,14 +102,14 @@ jobs:
         if: runner.os == 'Windows'
         run: |
           $VERSION = $env:GITHUB_REF -replace 'refs/tags/', ''
-          Get-ChildItem "composeApp\build\compose\binaries\main\msi\*.msi" | Rename-Item -NewName "stegasaurus-${VERSION}.msi"
+          Get-ChildItem "composeApp\build\compose\binaries\main-release\msi\*.msi" | Rename-Item -NewName "stegasaurus-${VERSION}.msi"
 
       - name: Upload artifacts to Release
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            composeApp/build/compose/binaries/main/deb/stegasaurus-*.deb
-            composeApp/build/compose/binaries/main/msi/stegasaurus-*.msi
+            composeApp/build/compose/binaries/main-release/deb/stegasaurus-*.deb
+            composeApp/build/compose/binaries/main-release/msi/stegasaurus-*.msi
           tag_name: ${{ github.ref_name }}
           prerelease: ${{ needs.check-release-type.outputs.is-prerelease }}
         env:
