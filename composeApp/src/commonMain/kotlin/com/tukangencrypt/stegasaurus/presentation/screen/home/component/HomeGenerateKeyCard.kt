@@ -1,6 +1,5 @@
 package com.tukangencrypt.stegasaurus.presentation.screen.home.component
 
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Key
@@ -19,12 +18,12 @@ import stegasaurus.composeapp.generated.resources.home_generate_key_title
 
 @Composable
 fun HomeGenerateKeyCard(
-    onGenerateKeyPair: () -> Unit
+    onGenerateKeyPair: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     ClickableContentCard(
-        modifier = Modifier
-            .widthIn(max = 850.dp)
-            .fillMaxWidth(),
+        modifier = modifier
+            .widthIn(max = 850.dp),
         onClick = onGenerateKeyPair,
         colors = CardDefaults.cardColors().copy(
             containerColor = MaterialTheme.colorScheme.background

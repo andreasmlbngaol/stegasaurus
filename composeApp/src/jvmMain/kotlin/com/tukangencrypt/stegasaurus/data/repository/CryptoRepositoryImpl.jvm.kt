@@ -64,7 +64,9 @@ actual class CryptoRepositoryImpl actual constructor(private val keyRepository: 
             // 2. Derive Key + nonce
             val kdfInfo = senderPub.encoded + recipientPub.encoded
 
-            val (encryptionKey, nonce) = deriveKeyAndNonce(sharedSecret, kdfInfo)
+//            val (encryptionKey, nonce) = deriveKeyAndNonce(sharedSecret, kdfInfo)
+            val encryptionKey = deriveKey(sharedSecret, kdfInfo)
+            val nonce = generateNonce()
 
             // 3. Encrypt plaintext
             val cipher = ChaCha20Poly1305()
@@ -84,7 +86,7 @@ actual class CryptoRepositoryImpl actual constructor(private val keyRepository: 
 
             return@withContext finalCiphertext
         } catch (e: Exception) {
-            throw IllegalStateException("Encryption failed: ${e.message}", e)
+            throw IllegalStateException("Decryption failed: ${e.message}. Check the message length again!", e)
         }
     }
 
@@ -110,7 +112,9 @@ actual class CryptoRepositoryImpl actual constructor(private val keyRepository: 
 
             // 3. Derive key
             val kdfInfo = senderPub.encoded + recipientPub.encoded
-            val (key, _) = deriveKeyAndNonce(sharedSecret, kdfInfo)
+//            val (key, _) = deriveKeyAndNonce(sharedSecret, kdfInfo)
+            val key = deriveKey(sharedSecret, kdfInfo)
+
             val cipher = ChaCha20Poly1305()
             cipher.init(
                 false,
@@ -126,7 +130,7 @@ actual class CryptoRepositoryImpl actual constructor(private val keyRepository: 
 
             return@withContext plainBytes.decodeToString()
         } catch (e: Exception) {
-            throw IllegalStateException("Decryption failed: ${e.message}. Check the message length again!", e)
+            throw IllegalStateException("Decryption failed: ${e.message}", e)
         }
     }
 
@@ -145,6 +149,20 @@ actual class CryptoRepositoryImpl actual constructor(private val keyRepository: 
         agreement.init(privateKey)
         agreement.calculateAgreement(publicKey, secret, 0)
         return secret
+    }
+
+    private fun deriveKey(sharedSecret: ByteArray, info: ByteArray): ByteArray {
+        val hkdf = HKDFBytesGenerator(SHA256Digest())
+        hkdf.init(HKDFParameters(sharedSecret, null, info))
+        val derivedKey = ByteArray(32)
+        hkdf.generateBytes(derivedKey, 0, derivedKey.size)
+        return derivedKey
+    }
+
+    private fun generateNonce(): ByteArray {
+        val nonce = ByteArray(12)
+        secureRandom.nextBytes(nonce)
+        return nonce
     }
 
     private fun deriveKeyAndNonce(sharedSecret: ByteArray, info: ByteArray): Pair<ByteArray, ByteArray> {

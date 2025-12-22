@@ -1,6 +1,5 @@
 package com.tukangencrypt.stegasaurus.presentation.screen.home
 
-import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -86,23 +85,18 @@ fun HomeScreen(
             )
             Spacer(Modifier.size(64.dp))
 
-            AnimatedContent(state.keyPairExists) { exists ->
-                if (exists) {
-                    HomeMainMenu(
-                        onNavigateToEncrypt = onNavigateToEncrypt,
-                        onNavigateToDecrypt = onNavigateToDecrypt,
-                        isCompactWidth = isCompactWidth
-                    )
-                } else {
-                    HomeGenerateKeyCard(
-                        onGenerateKeyPair = {
-                            viewModel.generateKeyPair()
-                            viewModel.showPubKeyDialog()
-                        }
-                    )
-                }
-            }
-            Spacer(Modifier.size(64.dp))
+            HomeMainMenu(
+                keyPairExist = state.keyPairExists,
+                onNavigateToEncrypt = onNavigateToEncrypt,
+                onNavigateToDecrypt = onNavigateToDecrypt,
+                onGenerateKeyPair = {
+                    viewModel.generateKeyPair()
+                    viewModel.showPubKeyDialog()
+                },
+                isCompactWidth = isCompactWidth
+            )
+
+            Spacer(Modifier.size(32.dp))
 
             HomeBenchmarkCard(
                 onNavigateToBenchmark = onNavigateToBenchmark,

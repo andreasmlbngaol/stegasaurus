@@ -23,23 +23,6 @@ actual class CryptoRepositoryImpl actual constructor(private val keyRepository: 
 
     actual override suspend fun generateKeyPair(): KeyPair = withContext(Dispatchers.Default) {
         try {
-//            lateinit var privKeyParams: X25519PrivateKeyParameters
-//            lateinit var pubKeyParams: X25519PublicKeyParameters
-//
-//            var totalTime = 0L
-//            repeat(101) {
-//                val time = measureNanoTime {
-//                    privKeyParams = X25519PrivateKeyParameters(secureRandom)
-//                    pubKeyParams = privKeyParams.generatePublicKey()
-//                }
-//
-//                println("Time: $time ns")
-//
-//                if(it != 0) totalTime += time
-//            }
-//
-//            println("Average time: ${totalTime / 100} ns")
-
             val privKeyParams = X25519PrivateKeyParameters(secureRandom)
             val pubKeyParams = privKeyParams.generatePublicKey()
 
@@ -76,13 +59,15 @@ actual class CryptoRepositoryImpl actual constructor(private val keyRepository: 
             val senderPub = parsePublicKey(senderPublicKey)
             val recipientPub = parsePublicKey(recipientPublicKey)
 
-                    // 1. Shared Secret
+            // 1. Shared Secret
             val sharedSecret = generateSharedSecret(senderPriv, recipientPub)
 
             // 2. Derive Key + nonce
             val kdfInfo = senderPub.encoded + recipientPub.encoded
 
-            val (encryptionKey, nonce) = deriveKeyAndNonce(sharedSecret, kdfInfo)
+//            val (encryptionKey, nonce) = deriveKeyAndNonce(sharedSecret, kdfInfo)
+            val encryptionKey = deriveKey(sharedSecret, kdfInfo)
+            val nonce = generateNonce()
 
             // 3. Encrypt plaintext
             val cipher = ChaCha20Poly1305()
@@ -128,7 +113,9 @@ actual class CryptoRepositoryImpl actual constructor(private val keyRepository: 
 
             // 3. Derive key
             val kdfInfo = senderPub.encoded + recipientPub.encoded
-            val (key, _) = deriveKeyAndNonce(sharedSecret, kdfInfo)
+//            val (key, _) = deriveKeyAndNonce(sharedSecret, kdfInfo)
+            val key = deriveKey(sharedSecret, kdfInfo)
+
             val cipher = ChaCha20Poly1305()
             cipher.init(
                 false,
@@ -163,6 +150,20 @@ actual class CryptoRepositoryImpl actual constructor(private val keyRepository: 
         agreement.init(privateKey)
         agreement.calculateAgreement(publicKey, secret, 0)
         return secret
+    }
+
+    private fun deriveKey(sharedSecret: ByteArray, info: ByteArray): ByteArray {
+        val hkdf = HKDFBytesGenerator(SHA256Digest())
+        hkdf.init(HKDFParameters(sharedSecret, null, info))
+        val derivedKey = ByteArray(32)
+        hkdf.generateBytes(derivedKey, 0, derivedKey.size)
+        return derivedKey
+    }
+
+    private fun generateNonce(): ByteArray {
+        val nonce = ByteArray(12)
+        secureRandom.nextBytes(nonce)
+        return nonce
     }
 
     private fun deriveKeyAndNonce(sharedSecret: ByteArray, info: ByteArray): Pair<ByteArray, ByteArray> {

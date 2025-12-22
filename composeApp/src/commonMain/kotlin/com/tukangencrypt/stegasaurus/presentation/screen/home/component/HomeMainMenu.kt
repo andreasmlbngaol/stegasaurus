@@ -1,5 +1,6 @@
 package com.tukangencrypt.stegasaurus.presentation.screen.home.component
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -36,8 +37,10 @@ import stegasaurus.composeapp.generated.resources.home_encrypt_menu_desc
 
 @Composable
 fun HomeMainMenu(
+    keyPairExist: Boolean,
     onNavigateToEncrypt: () -> Unit,
     onNavigateToDecrypt: () -> Unit,
+    onGenerateKeyPair: () -> Unit,
     isCompactWidth: Boolean = false
 ) {
     val density = LocalDensity.current
@@ -50,32 +53,62 @@ fun HomeMainMenu(
             modifier = layoutModifier,
             verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {
-            MenuCard(
+            if(keyPairExist) {
+                MenuCard(
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = onNavigateToEncrypt,
+                    icon = Icons.Outlined.Lock,
+                    iconContainer = MaterialTheme.colorScheme.primary,
+                    title = Res.string.encrypt.value,
+                    desc = Res.string.home_encrypt_menu_desc.value,
+                    buttonText = Res.string.home_encrypt_menu_button_text.value
+                )
+            }
+
+            if(keyPairExist) {
+                MenuCard(
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = onNavigateToDecrypt,
+                    icon = Icons.Outlined.LockOpen,
+                    iconContainer = MaterialTheme.colorScheme.tertiary,
+                    title = Res.string.decrypt.value,
+                    desc = Res.string.home_decrypt_menu_desc.value,
+                    buttonText = Res.string.home_decrypt_menu_button_text.value
+                )
+            }
+
+            HomeGenerateKeyCard(
                 modifier = Modifier.fillMaxWidth(),
-                onClick = onNavigateToEncrypt,
-                icon = Icons.Outlined.Lock,
-                iconContainer = MaterialTheme.colorScheme.primary,
-                title = Res.string.encrypt.value,
-                desc = Res.string.home_encrypt_menu_desc.value,
-                buttonText = Res.string.home_encrypt_menu_button_text.value
+                onGenerateKeyPair = onGenerateKeyPair
             )
 
-            MenuCard(
-                modifier = Modifier.fillMaxWidth(),
-                onClick = onNavigateToDecrypt,
-                icon = Icons.Outlined.LockOpen,
-                iconContainer = MaterialTheme.colorScheme.tertiary,
-                title = Res.string.decrypt.value,
-                desc = Res.string.home_decrypt_menu_desc.value,
-                buttonText = Res.string.home_decrypt_menu_button_text.value
-            )
         }
     } else {
         Row(
             modifier = layoutModifier,
             horizontalArrangement = Arrangement.spacedBy(24.dp)
         ) {
-            MenuCard(
+            if(keyPairExist) {
+                MenuCard(
+                    modifier = Modifier
+                        .weight(1f)
+                        .heightIn(min = maxClickableContentCardHeight)
+                        .onGloballyPositioned { coordinates ->
+                            val height = with(density) { coordinates.size.height.toDp() }
+                            if (height > maxClickableContentCardHeight) {
+                                maxClickableContentCardHeight = height
+                            }
+                        },
+                    onClick = onNavigateToEncrypt,
+                    icon = Icons.Outlined.Lock,
+                    iconContainer = MaterialTheme.colorScheme.primary,
+                    title = Res.string.encrypt.value,
+                    desc = Res.string.home_encrypt_menu_desc.value,
+                    buttonText = Res.string.home_encrypt_menu_button_text.value
+                )
+            }
+
+            HomeGenerateKeyCard(
                 modifier = Modifier
                     .weight(1f)
                     .heightIn(min = maxClickableContentCardHeight)
@@ -85,31 +118,28 @@ fun HomeMainMenu(
                             maxClickableContentCardHeight = height
                         }
                     },
-                onClick = onNavigateToEncrypt,
-                icon = Icons.Outlined.Lock,
-                iconContainer = MaterialTheme.colorScheme.primary,
-                title = Res.string.encrypt.value,
-                desc = Res.string.home_encrypt_menu_desc.value,
-                buttonText = Res.string.home_encrypt_menu_button_text.value
+                onGenerateKeyPair = onGenerateKeyPair
             )
 
-            MenuCard(
-                modifier = Modifier
-                    .weight(1f)
-                    .heightIn(min = maxClickableContentCardHeight)
-                    .onGloballyPositioned { coordinates ->
-                        val height = with(density) { coordinates.size.height.toDp() }
-                        if (height > maxClickableContentCardHeight) {
-                            maxClickableContentCardHeight = height
-                        }
-                    },
-                onClick = onNavigateToDecrypt,
-                icon = Icons.Outlined.LockOpen,
-                iconContainer = MaterialTheme.colorScheme.tertiary,
-                title = Res.string.decrypt.value,
-                desc = Res.string.home_decrypt_menu_desc.value,
-                buttonText = Res.string.home_decrypt_menu_button_text.value
-            )
+            if(keyPairExist) {
+                MenuCard(
+                    modifier = Modifier
+                        .weight(1f)
+                        .heightIn(min = maxClickableContentCardHeight)
+                        .onGloballyPositioned { coordinates ->
+                            val height = with(density) { coordinates.size.height.toDp() }
+                            if (height > maxClickableContentCardHeight) {
+                                maxClickableContentCardHeight = height
+                            }
+                        },
+                    onClick = onNavigateToDecrypt,
+                    icon = Icons.Outlined.LockOpen,
+                    iconContainer = MaterialTheme.colorScheme.tertiary,
+                    title = Res.string.decrypt.value,
+                    desc = Res.string.home_decrypt_menu_desc.value,
+                    buttonText = Res.string.home_decrypt_menu_button_text.value
+                )
+            }
         }
     }
 }
