@@ -16,7 +16,6 @@ import org.bouncycastle.crypto.params.ParametersWithIV
 import org.bouncycastle.crypto.params.X25519PrivateKeyParameters
 import org.bouncycastle.crypto.params.X25519PublicKeyParameters
 import java.security.SecureRandom
-import kotlin.system.measureNanoTime
 
 actual class CryptoRepositoryImpl actual constructor(private val keyRepository: KeyRepository) : CryptoRepository {
     private val secureRandom = SecureRandom()
@@ -54,7 +53,6 @@ actual class CryptoRepositoryImpl actual constructor(private val keyRepository: 
         senderPublicKey: String
     ): ByteArray = withContext(Dispatchers.Default) {
         try {
-
             val senderPriv = parsePrivateKey(senderPrivateKey)
             val senderPub = parsePublicKey(senderPublicKey)
             val recipientPub = parsePublicKey(recipientPublicKey)
@@ -87,7 +85,7 @@ actual class CryptoRepositoryImpl actual constructor(private val keyRepository: 
 
             return@withContext finalCiphertext
         } catch (e: Exception) {
-            throw IllegalStateException("Decryption failed: ${e.message}. Check the message length again!", e)
+            throw IllegalStateException("Encryption failed: ${e.message}!", e)
         }
     }
 
@@ -166,24 +164,24 @@ actual class CryptoRepositoryImpl actual constructor(private val keyRepository: 
         return nonce
     }
 
-    private fun deriveKeyAndNonce(sharedSecret: ByteArray, info: ByteArray): Pair<ByteArray, ByteArray> {
-        val hkdf = HKDFBytesGenerator(SHA256Digest())
-
-        hkdf.init(
-            HKDFParameters(
-                sharedSecret,
-                null,
-                info
-            )
-        )
-
-        val derivedKey = ByteArray(32 + 12)
-        hkdf.generateBytes(derivedKey, 0, derivedKey.size)
-
-        val encryptionKey = derivedKey.copyOfRange(0, 32)
-        val nonce = derivedKey.copyOfRange(32, 44)
-        return encryptionKey to nonce
-    }
+//    private fun deriveKeyAndNonce(sharedSecret: ByteArray, info: ByteArray): Pair<ByteArray, ByteArray> {
+//        val hkdf = HKDFBytesGenerator(SHA256Digest())
+//
+//        hkdf.init(
+//            HKDFParameters(
+//                sharedSecret,
+//                null,
+//                info
+//            )
+//        )
+//
+//        val derivedKey = ByteArray(32 + 12)
+//        hkdf.generateBytes(derivedKey, 0, derivedKey.size)
+//
+//        val encryptionKey = derivedKey.copyOfRange(0, 32)
+//        val nonce = derivedKey.copyOfRange(32, 44)
+//        return encryptionKey to nonce
+//    }
 }
 
 private fun ByteArray.toHex() = joinToString("") { "%02x".format(it) }

@@ -20,8 +20,8 @@ private class AndroidBitmap(
     override val height: Int get() = bitmap.height
 
     override fun getPixel(x: Int, y: Int): Int = bitmap[x, y]
-    override fun setPixel(x: Int, y: Int, argb: Int) {
-        bitmap[x, y] = argb
+    override fun setPixel(x: Int, y: Int, rgb: Int) {
+        bitmap[x, y] = rgb
     }
 
     override fun encodePng(): ByteArray {

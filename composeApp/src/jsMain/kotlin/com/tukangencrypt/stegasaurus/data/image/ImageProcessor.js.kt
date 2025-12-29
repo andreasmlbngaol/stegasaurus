@@ -70,14 +70,14 @@ private class JsBitmap(
     }
 
     @OptIn(ExperimentalWasmJsInterop::class)
-    override fun setPixel(x: Int, y: Int, argb: Int) {
+    override fun setPixel(x: Int, y: Int, rgb: Int) {
         val index = (y * width + x) * 4
         val data = imageData.data
 
-        val r = ((argb shr 16) and 0xFF).toByte()
-        val g = ((argb shr 8) and 0xFF).toByte()
-        val b = (argb and 0xFF).toByte()
-        val a = ((argb shr 24) and 0xFF).toByte()
+        val r = ((rgb shr 16) and 0xFF).toByte()
+        val g = ((rgb shr 8) and 0xFF).toByte()
+        val b = (rgb and 0xFF).toByte()
+        val a = ((rgb shr 24) and 0xFF).toByte()
 
         val pixelBytes: Array<Byte> = arrayOf(r, g, b, a)
         data.set(pixelBytes, index)

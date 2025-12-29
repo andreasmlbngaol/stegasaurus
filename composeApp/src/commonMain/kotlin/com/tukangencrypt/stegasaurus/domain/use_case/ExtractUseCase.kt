@@ -8,7 +8,6 @@ class ExtractUseCase(private val repository: ImageRepository) {
         imageBytes: ByteArray,
         msgSize: Int
     ): ByteArray {
-        // Validate inputs
         if (imageBytes.isEmpty()) {
             throw IllegalArgumentException("Image cannot be empty")
         }

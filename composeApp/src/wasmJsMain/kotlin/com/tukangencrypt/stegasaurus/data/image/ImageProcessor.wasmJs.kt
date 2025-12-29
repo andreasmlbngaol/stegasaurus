@@ -72,7 +72,7 @@ private class WasmBitmap(
     }
 
     @OptIn(ExperimentalWasmJsInterop::class)
-    override fun setPixel(x: Int, y: Int, argb: Int) {
+    override fun setPixel(x: Int, y: Int, rgb: Int) {
         TODO()
     }
 

@@ -5,6 +5,6 @@ interface PlatformBitmap {
     val height: Int
 
     fun getPixel(x: Int, y: Int): Int
-    fun setPixel(x: Int, y: Int, argb: Int)
+    fun setPixel(x: Int, y: Int, rgb: Int)
     fun encodePng(): ByteArray
 }

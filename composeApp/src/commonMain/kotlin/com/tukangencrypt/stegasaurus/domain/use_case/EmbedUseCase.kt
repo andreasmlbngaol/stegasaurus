@@ -36,8 +36,7 @@ class EmbedUseCase(private val repository: ImageRepository) {
 
                 val pixel = bitmap.getPixel(x, y)
 
-                // Extract ARGB channels
-                val a = (pixel shr 24) and 0xFF
+                // Extract RGB channels
                 val r = (pixel shr 16) and 0xFF
                 val g = (pixel shr 8) and 0xFF
                 val b = pixel and 0xFF
@@ -59,7 +58,7 @@ class EmbedUseCase(private val repository: ImageRepository) {
                 val newG = (g and 0xFFFFFFFE.toInt()) or bits[1]
                 val newB = (b and 0xFFFFFFFE.toInt()) or bits[2]
 
-                val newPixel = (a shl 24) or (newR shl 16) or (newG shl 8) or newB
+                val newPixel = (newR shl 16) or (newG shl 8) or newB
                 bitmap.setPixel(x, y, newPixel)
             }
         }
