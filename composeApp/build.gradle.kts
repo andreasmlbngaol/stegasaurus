@@ -182,6 +182,13 @@ compose.desktop {
 //            )
 //            includeAllModules = false  // Important! Jangan bundle semua
 //
+            modules(
+                "java.desktop",
+                "java.sql",
+                "jdk.security.auth",
+                "jdk.crypto.ec",
+                "jdk.crypto.cryptoki"
+            )
             description = "Stegasaurus — Steganography signcryption tool"
             vendor = "TukangEncrypt"
             copyright = "© 2025"
