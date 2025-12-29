@@ -123,8 +123,8 @@ android {
         applicationId = "com.tukangencrypt.stegasaurus"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = 13
-        versionName = "2.5.2"
+        versionCode = 14
+        versionName = "2.5.3"
     }
     packaging {
         resources {
@@ -165,7 +165,7 @@ compose.desktop {
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
             packageName = "Stegasaurus"
-            packageVersion = "2.5.2"
+            packageVersion = "2.5.3"
 
 //            val buildType = project.findProperty("compose.desktop.buildType") ?: "release"
 //            if (buildType == "release") {
