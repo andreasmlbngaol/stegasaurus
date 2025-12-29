@@ -181,7 +181,8 @@ compose.desktop {
                 "java.desktop",           // UI
                 "java.sql",               // Database jika pakai
                 "jdk.crypto.ec",          // Elliptic Curve crypto
-                "jdk.crypto.cryptoki"     // Crypto provider
+                "jdk.crypto.cryptoki",     // Crypto provider
+                "jdk.security.auth"
                 // Hapus jdk.security.auth jika tidak pakai JAAS
             )
             includeAllModules = false  // Important! Jangan bundle semua
